@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>30-Day Discipline & Routine Tracker</title>
+  <title>30-Day & Lifetime Discipline Tracker</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -17,12 +17,6 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              emerald: '#10b981',
-              emeraldDark: '#059669',
-            },
           },
         },
       },
@@ -41,35 +35,35 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.3);
+      background: rgba(148, 163, 184, 0.35);
       border-radius: 9999px;
     }
     .check-pop {
-      animation: popScale 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: popScale 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     @keyframes popScale {
       0% { transform: scale(0.85); }
       50% { transform: scale(1.14); }
       100% { transform: scale(1); }
     }
+    .gold-glow {
+      box-shadow: 0 0 28px -6px rgba(245, 158, 11, 0.35);
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
-  <!-- Toast Notification Container (No alert/confirm used) -->
+  <!-- Toast Notification Banner (Replaces alert) -->
   <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 w-11/12 max-w-sm"></div>
 
-  <!-- Universal Custom Modal (Confirmations, PIN Prompt, Backup/Restore, Add Habit) -->
+  <!-- Custom Modal (Confirmations, PIN Prompt, Add Habit, Backup/Restore) -->
   <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
     <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
       <div>
         <h3 id="modal-title" class="text-lg font-extrabold text-slate-900 dark:text-white">Modal Title</h3>
         <p id="modal-desc" class="text-xs sm:text-sm text-slate-600 dark:text-gray-400 mt-1"></p>
       </div>
-
-      <!-- Dynamic Modal Body -->
       <div id="modal-body" class="space-y-3"></div>
-
       <div class="flex justify-end gap-2.5 pt-2">
         <button id="modal-cancel" type="button" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
           Cancel
@@ -82,18 +76,18 @@
   </div>
 
   <!-- =========================================================
-       SCREEN 1: MULTI-USER AUTH / LOGIN & PROFILE CREATION SCREEN
+       VIEW 1: MULTI-USER LOGIN & PROFILE CREATION SCREEN
        ========================================================= -->
   <section id="auth-screen" class="min-h-screen flex flex-col justify-between px-4 py-6 sm:py-10">
-    <!-- Top Bar on Auth Screen -->
+    <!-- Top Header -->
     <div class="max-w-lg mx-auto w-full flex items-center justify-between">
       <div class="flex items-center gap-2.5">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-xl">
           🏃‍♂️
         </div>
         <div>
-          <span class="font-extrabold text-base tracking-tight block leading-none">30-Day Streak</span>
-          <span class="text-[11px] text-slate-500 dark:text-gray-400">Personal Discipline Tracker</span>
+          <span class="font-extrabold text-base tracking-tight block leading-none">Discipline OS</span>
+          <span class="text-[11px] text-slate-500 dark:text-gray-400">30-Day Foundation → Lifetime ∞</span>
         </div>
       </div>
 
@@ -102,46 +96,47 @@
       </button>
     </div>
 
-    <!-- Main Auth Card -->
+    <!-- Main Auth Container -->
     <div class="max-w-lg mx-auto w-full my-6 space-y-5">
-      <div class="text-center space-y-1.5">
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Start Your 30-Day Challenge</h1>
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-[11px] font-bold">
+          <span>🏆 Complete 30 Days</span>
+          <span>→</span>
+          <span>👑 Unlock Lifetime Mode ∞</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Start Your Streak Today</h1>
         <p class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 max-w-md mx-auto">
-          Day 1 begins on the exact date you join. 100% private & saved directly on this device.
+          Day 1 begins the moment you join. Every user gets their own profile, daily ✅ checklist, and permanent progress saved locally.
         </p>
       </div>
 
-      <!-- Existing Profiles Section (Shown if profiles exist in localStorage) -->
-      <div id="saved-profiles-box" class="hidden bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-            👤 Existing Profiles on This Device
-          </h2>
-          <span id="profile-count-badge" class="text-[11px] font-semibold text-slate-400">0 users</span>
-        </div>
-        <div id="saved-profiles-list" class="space-y-2.5">
-          <!-- Populated dynamically -->
-        </div>
+      <!-- Auth Mode Switcher Tabs (New Profile / Sign In) -->
+      <div class="grid grid-cols-2 gap-1.5 bg-slate-200/75 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
+        <button id="auth-tab-register" type="button" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
+          ✨ New Profile (Day 1)
+        </button>
+        <button id="auth-tab-signin" type="button" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          👤 Sign In (<span id="auth-user-count">0</span>)
+        </button>
       </div>
 
-      <!-- Create New Profile / Login Tabs -->
-      <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+      <!-- PANEL A: CREATE NEW PROFILE -->
+      <div id="auth-panel-register" class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-3">
           <div>
-            <h2 class="text-base sm:text-lg font-extrabold">Create New Profile</h2>
-            <p class="text-xs text-slate-500 dark:text-gray-400">Everyone can create their own profile & start today</p>
+            <h2 class="text-base sm:text-lg font-extrabold">Create Your Profile</h2>
+            <p class="text-xs text-slate-500 dark:text-gray-400">Your 30-day journey starts from your selected Day 1 date</p>
           </div>
-          <span class="text-xl">✨</span>
+          <span class="text-xl">🚀</span>
         </div>
 
-        <form id="register-form" class="space-y-3.5">
+        <form id="register-form" class="space-y-3.5" novalidate>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label for="reg-name" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Full Name / Nickname *</label>
               <input
                 id="reg-name"
                 type="text"
-                required
                 maxlength="24"
                 placeholder="e.g., Arjun"
                 class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
@@ -152,7 +147,6 @@
               <input
                 id="reg-username"
                 type="text"
-                required
                 maxlength="18"
                 placeholder="e.g., arjun_run"
                 class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
@@ -166,7 +160,6 @@
               <input
                 id="reg-start-date"
                 type="date"
-                required
                 class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
               />
             </div>
@@ -176,9 +169,8 @@
                 id="reg-pin"
                 type="password"
                 inputmode="numeric"
-                pattern="[0-9]*"
                 maxlength="4"
-                placeholder="e.g., 1234 (or leave blank)"
+                placeholder="e.g., 1234 (or blank)"
                 class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
               />
             </div>
@@ -186,35 +178,51 @@
 
           <button
             type="submit"
-            class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 mt-2"
+            id="btn-start-day1"
+            class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 mt-1"
           >
-            <span>🚀 Start My Day 1 Now</span>
+            <span>Start My Day 1 Now 🚀</span>
           </button>
+
+          <!-- Inline Validation Error Box -->
+          <div id="auth-error-msg" class="hidden rounded-xl bg-rose-500/15 border border-rose-500/35 px-3.5 py-2.5 text-xs font-semibold text-rose-600 dark:text-rose-400"></div>
         </form>
 
-        <!-- Restore from JSON Backup Option -->
         <div class="pt-2 border-t border-slate-100 dark:border-gray-800 flex items-center justify-between text-xs">
-          <span class="text-slate-500 dark:text-gray-400">Have a backup file?</span>
+          <span class="text-slate-500 dark:text-gray-400">Already have a JSON backup?</span>
           <button id="btn-auth-import" type="button" class="font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
-            📥 Import Backup JSON
+            📥 Import Backup
           </button>
         </div>
+      </div>
+
+      <!-- PANEL B: EXISTING PROFILES SIGN IN -->
+      <div id="auth-panel-signin" class="hidden bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold">Saved Profiles on Device</h2>
+            <p class="text-xs text-slate-500 dark:text-gray-400">Select your profile to continue your streak</p>
+          </div>
+          <span class="text-xl">🔐</span>
+        </div>
+
+        <div id="saved-profiles-list" class="space-y-2.5"></div>
       </div>
     </div>
 
     <footer class="text-center text-[11px] text-slate-400 dark:text-gray-600">
-      All profiles & checklists are stored locally in your browser's localStorage.
+      100% Offline-Capable • Stored privately in your browser's localStorage
     </footer>
   </section>
 
   <!-- =========================================================
-       SCREEN 2: MAIN TRACKER DASHBOARD (LOGGED IN VIEW)
+       VIEW 2: MAIN TRACKER DASHBOARD (LOGGED IN)
        ========================================================= -->
   <section id="app-screen" class="hidden pb-24">
-    <!-- Sticky App Header -->
+    <!-- Sticky Header -->
     <header class="sticky top-0 z-30 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-slate-200 dark:border-gray-800">
       <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-        <!-- User Identity Pill -->
+        <!-- User Info -->
         <div class="flex items-center gap-2.5 min-w-0">
           <div id="header-avatar" class="w-10 h-10 rounded-xl bg-emerald-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0 shadow-sm">
             AR
@@ -230,7 +238,7 @@
           </div>
         </div>
 
-        <!-- Right Controls -->
+        <!-- Header Buttons -->
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button id="btn-today" type="button" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition">
             Today
@@ -247,15 +255,13 @@
 
     <main class="max-w-3xl mx-auto px-4 pt-5 space-y-5">
 
-      <!-- Lifetime Mode Status & Unlock Gate Banner -->
-      <section id="lifetime-banner" class="rounded-2xl p-4 sm:p-5 border shadow-sm transition-all duration-300 bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-800">
-        <!-- Populated dynamically for Stage 1 (Progress to Unlock) or Stage 2 (Lifetime Member Pass) -->
-      </section>
+      <!-- Stage 1 -> Stage 2 Lifetime Unlock Banner -->
+      <section id="lifetime-banner" class="rounded-2xl p-4 sm:p-5 border shadow-sm transition-all duration-300 bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-800"></section>
 
-      <!-- Top 4-Card Dashboard Stats Strip -->
+      <!-- 4-Card Summary Stats -->
       <section class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-sm">
-          <div id="stat-label-1" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400">30-Day Progress</div>
+          <div id="stat-label-1" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400">30-Day Score</div>
           <div class="flex items-baseline justify-between mt-1">
             <span id="stat-percent" class="text-xl sm:text-2xl font-extrabold text-emerald-500">0%</span>
             <span id="stat-tasks-ratio" class="text-[11px] font-semibold text-slate-400">0/150</span>
@@ -280,7 +286,7 @@
             <span id="stat-perfect-days" class="text-xl sm:text-2xl font-extrabold">0</span>
             <span id="stat-denom-3" class="text-sm font-bold text-emerald-500">/ 22 goal</span>
           </div>
-          <div id="stat-sub-3" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Needed for Lifetime</div>
+          <div id="stat-sub-3" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Unlocks Lifetime Mode</div>
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-sm">
@@ -289,20 +295,23 @@
             <span id="stat-current-day" class="text-xl sm:text-2xl font-extrabold text-amber-500">Day 1</span>
             <span id="stat-denom-4" class="text-xs text-slate-400">of 30</span>
           </div>
-          <div id="stat-days-left" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Stage 1 Trial</div>
+          <div id="stat-days-left" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Stage 1 Foundation</div>
         </div>
       </section>
 
-      <!-- Navigation Tabs -->
-      <nav class="grid grid-cols-3 gap-1.5 bg-slate-200/70 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
-        <button data-tab="checklist" type="button" class="tab-btn py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
+      <!-- Navigation Tabs (4 Tabs) -->
+      <nav class="grid grid-cols-4 gap-1.5 bg-slate-200/70 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
+        <button data-tab="checklist" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
           ✅ Checklist
         </button>
-        <button data-tab="grid" type="button" class="tab-btn py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
-          📅 Progress Map
+        <button data-tab="grid" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          🗺️ Map
         </button>
-        <button data-tab="timetable" type="button" class="tab-btn py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+        <button data-tab="timetable" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
           ⏰ Timetable
+        </button>
+        <button data-tab="settings" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          💾 Backup
         </button>
       </nav>
 
@@ -310,9 +319,8 @@
            TAB 1: DAILY CHECKLIST VIEW
            ===================================== -->
       <div id="view-checklist" class="space-y-4">
-        <!-- Stage 1 Week Selector OR Stage 2 Lifetime Rolling Block Selector -->
+        <!-- Stage 1 Week Selector OR Stage 2 Lifetime Block Selector -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
-          <!-- Stage 1 Week Buttons -->
           <div id="stage1-week-controls" class="grid grid-cols-4 gap-1.5">
             <button data-week="1" type="button" class="week-btn py-2 rounded-xl text-xs font-bold border transition">Week 1</button>
             <button data-week="2" type="button" class="week-btn py-2 rounded-xl text-xs font-bold border transition">Week 2</button>
@@ -320,17 +328,16 @@
             <button data-week="4" type="button" class="week-btn py-2 rounded-xl text-xs font-bold border transition">Week 4</button>
           </div>
 
-          <!-- Stage 2 Lifetime Block Navigation (Shown when Lifetime Mode is unlocked) -->
           <div id="stage2-block-controls" class="hidden flex items-center justify-between gap-2">
             <button id="btn-prev-block" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
-              ◀ Prev 10 Days
+              ◀ Prev 10
             </button>
             <div class="text-center">
               <span id="lifetime-block-label" class="text-xs sm:text-sm font-extrabold text-amber-500">Days 31 – 40</span>
               <span class="block text-[10px] text-slate-400">Lifetime Unlimited Tracking ∞</span>
             </div>
             <button id="btn-next-block" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
-              Next 10 Days ▶
+              Next 10 ▶
             </button>
           </div>
 
@@ -348,7 +355,6 @@
 
         <!-- Active Day Checklist Card -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
-          <!-- Day Header + Day Progress Bar -->
           <div class="space-y-3 border-b border-slate-100 dark:border-gray-800 pb-4">
             <div class="flex items-center justify-between gap-2">
               <div>
@@ -374,16 +380,16 @@
               </div>
             </div>
 
-            <!-- Selected Day Mini Progress Bar -->
+            <!-- Day Progress Bar -->
             <div class="w-full h-2 bg-slate-100 dark:bg-gray-800 rounded-full overflow-hidden">
               <div id="day-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
 
-          <!-- Habit List Container -->
+          <!-- Habit List -->
           <div id="task-list" class="space-y-2.5"></div>
 
-          <!-- Action Row: Add Custom Habit & Complete All -->
+          <!-- Custom Habit & Complete All -->
           <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
             <button id="btn-add-habit" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-200 hover:border-emerald-500/40 border border-transparent transition">
               ➕ Add Custom Habit
@@ -393,15 +399,15 @@
             </button>
           </div>
 
-          <!-- Daily Journal / Running Log -->
+          <!-- Daily Journal / Notes -->
           <div class="pt-3 border-t border-slate-100 dark:border-gray-800">
             <label for="daily-note" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1.5">
-              📝 Daily Run & Study Log (Auto-saved)
+              📝 Daily Run, Study & Mood Log (Auto-saved)
             </label>
             <textarea
               id="daily-note"
               rows="2"
-              placeholder="e.g., Ran 2.0 km at 5:30 AM! Completed Maths revision before 8:45 PM..."
+              placeholder="e.g., Ran 2.2 km at 5:30 AM! Finished Maths revision before 8:45 PM..."
               class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 p-3 text-sm text-slate-800 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-emerald-500 transition"
             ></textarea>
           </div>
@@ -409,22 +415,22 @@
       </div>
 
       <!-- =====================================
-           TAB 2: 30-DAY & LIFETIME VISUAL PROGRESS MAP
+           TAB 2: VISUAL PROGRESS MAP & BADGES
            ===================================== -->
       <div id="view-grid" class="hidden space-y-4">
-        <!-- Milestone Badges Showcase (Especially exciting in Stage 2) -->
+        <!-- Milestone Badges -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
             <div>
-              <h2 class="text-sm sm:text-base font-extrabold">🏅 Discipline Milestone Badges</h2>
-              <p class="text-[11px] text-slate-500 dark:text-gray-400">Earn permanent badges by logging strong days (≥80% habits)</p>
+              <h2 class="text-sm sm:text-base font-extrabold">🏅 Permanent Discipline Badges</h2>
+              <p class="text-[11px] text-slate-500 dark:text-gray-400">Earned by completing strong days (≥80% habits)</p>
             </div>
             <span id="badge-unlocked-count" class="text-xs font-bold text-amber-500">0/5 Earned</span>
           </div>
           <div id="milestone-badges-grid" class="grid grid-cols-5 gap-2"></div>
         </div>
 
-        <!-- Heatmap / Calendar Grid -->
+        <!-- Calendar Heatmap Grid -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -438,11 +444,10 @@
             </div>
           </div>
 
-          <!-- Filter pills in Lifetime Mode -->
           <div id="map-filter-bar" class="hidden flex flex-wrap items-center gap-1.5">
             <button data-mapfilter="all" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white">All Days</button>
-            <button data-mapfilter="foundation" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Stage 1 (Days 1–30)</button>
-            <button data-mapfilter="lifetime" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Stage 2 Lifetime (Day 31+)</button>
+            <button data-mapfilter="foundation" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Stage 1 (1–30)</button>
+            <button data-mapfilter="lifetime" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Lifetime (31+)</button>
           </div>
 
           <div id="calendar-grid" class="grid grid-cols-5 sm:grid-cols-6 gap-2.5"></div>
@@ -450,14 +455,14 @@
       </div>
 
       <!-- =====================================
-           TAB 3: TIMETABLE & PROGRESSION GUIDE
+           TAB 3: FULL DAY TIMETABLE REFERENCE
            ===================================== -->
       <div id="view-timetable" class="hidden space-y-4">
         <!-- Weekday Schedule -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
             <h2 class="text-base sm:text-lg font-extrabold text-emerald-600 dark:text-emerald-400">🏫 School Days (Mon – Fri)</h2>
-            <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Daily Routine</span>
+            <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Core Routine</span>
           </div>
           <div class="divide-y divide-slate-100 dark:divide-gray-800 text-xs sm:text-sm">
             <div class="py-2.5 flex justify-between gap-3">
@@ -486,11 +491,11 @@
             </div>
             <div class="py-2.5 flex justify-between gap-3">
               <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">8:45 – 9:45 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">💬 Personal / Chill Time (Strict 9:45 PM Cut-off)</span>
+              <span class="text-slate-700 dark:text-gray-300 text-right">💬 Lover / Mag Time (Strict 9:45 PM Cut-off)</span>
             </div>
             <div class="py-2.5 flex justify-between gap-3">
               <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">9:45 – 10:15 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🍽️ Dinner + Pack Bag & Running Shoes</span>
+              <span class="text-slate-700 dark:text-gray-300 text-right">🍽️ Dinner + Pack School Bag & Running Gear</span>
             </div>
             <div class="py-2.5 flex justify-between gap-3">
               <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">10:15 – 10:30 PM</span>
@@ -526,53 +531,157 @@
         </div>
       </div>
 
-      <!-- Profile Settings & Backup Footer -->
-      <footer class="pt-4 pb-8 flex flex-wrap items-center justify-between gap-2.5 border-t border-slate-200 dark:border-gray-800">
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="btn-export-backup" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300 hover:border-emerald-500/50 transition">
-            📤 Export / Restore Backup
-          </button>
-          <button id="btn-change-start" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300 hover:border-emerald-500/50 transition">
-            📅 Change Start Date
-          </button>
-        </div>
+      <!-- =====================================
+           TAB 4: BACKUP, EXPORT & PROFILE SETTINGS
+           ===================================== -->
+      <div id="view-settings" class="hidden space-y-4">
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold">💾 Data Backup & Profile Controls</h2>
+            <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
+              All profiles, checklists, and Lifetime unlocks are stored in <code class="text-emerald-500">localStorage</code>. Export a JSON copy anytime to keep your streak safe across devices.
+            </p>
+          </div>
 
-        <button id="btn-reset-user" type="button" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 transition">
-          🗑️ Reset My Progress
-        </button>
-      </footer>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="btn-export-backup" type="button" class="p-4 rounded-2xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 text-left transition space-y-1">
+              <div class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">📤 Export / Restore JSON</div>
+              <p class="text-xs text-slate-500 dark:text-gray-400">Copy or paste your full multi-user backup code.</p>
+            </button>
+
+            <button id="btn-change-start" type="button" class="p-4 rounded-2xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 text-left transition space-y-1">
+              <div class="text-sm font-extrabold text-slate-800 dark:text-gray-200">📅 Change Day 1 Start Date</div>
+              <p class="text-xs text-slate-500 dark:text-gray-400">Adjust the calendar date when your Day 1 started.</p>
+            </button>
+
+            <button id="btn-switch-from-settings" type="button" class="p-4 rounded-2xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-amber-500/50 text-left transition space-y-1">
+              <div class="text-sm font-extrabold text-amber-500">👥 Switch User / Add Profile</div>
+              <p class="text-xs text-slate-500 dark:text-gray-400">Log out to sign in as another person or create a new user.</p>
+            </button>
+
+            <button id="btn-reset-user" type="button" class="p-4 rounded-2xl bg-rose-500/5 border border-rose-500/25 hover:bg-rose-500/15 text-left transition space-y-1">
+              <div class="text-sm font-extrabold text-rose-600 dark:text-rose-400">🗑️ Reset My Progress</div>
+              <p class="text-xs text-slate-500 dark:text-gray-400">Clear all checkmarks and restart from Day 1.</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </main>
   </section>
 
   <script>
     // =========================================================
-    // 1. MULTI-USER DATABASE & DEFAULT HABITS (100% LOCALSTORAGE)
+    // 1. CORE CONSTANTS & CONFIGURATION
     // =========================================================
-    const DB_KEY = 'thirty_day_multiuser_tracker_db_v1';
+    const DB_KEY = 'routine_tracker_pro_v3';
     const STAGE1_DAYS = 30;
     const UNLOCK_MIN_PERCENT = 75;
-    const UNLOCK_MIN_STRONG_DAYS = 22; // >= 22 strong days (>=80% tasks) OR >= 75% overall 30-day score
+    const UNLOCK_MIN_STRONG_DAYS = 22;
 
-    // 5 Core Default Habits (adapts automatically to Weekday vs Weekend)
     const DEFAULT_HABITS = [
-// ... existing code ... -->
+      {
+        id: 'run',
+        emoji: '🏃‍♂️',
+        weekdayTitle: '5:30 AM Morning Run & Warm-up',
+        weekdayTime: '5:30 – 5:55 AM',
+        weekdaySub: '5 min warm-up walk + 15–20 min easy jog/run & stretch',
+        weekendTitle: '5:30 AM Longer Easy-Pace Run',
+        weekendTime: '5:30 – 6:05 AM',
+        weekendSub: '25–30 min steady run + full leg stretch'
+      },
+      {
+        id: 'school',
+        emoji: '🎒',
+        weekdayTitle: '8:00 AM School On-Time & Ready',
+        weekdayTime: '8:00 AM Sharp',
+        weekdaySub: 'Bath, healthy breakfast, uniform & bag ready on time',
+        weekendTitle: 'Morning Deep Study / Backlog Session',
+        weekendTime: '8:30 – 11:30 AM',
+        weekendSub: 'Clear tough topics, pending notes & revision'
+      },
+      {
+        id: 'study',
+        emoji: '📚',
+        weekdayTitle: '7:15 PM – 8:45 PM Focused Study',
+        weekdayTime: '7:15 – 8:45 PM',
+        weekdaySub: '1.5 hrs daily homework & revision (phone away)',
+        weekendTitle: 'Afternoon / Evening Revision & Practice',
+        weekendTime: '5:00 – 6:30 PM',
+        weekendSub: 'Quick review & prepare for upcoming school week'
+      },
+      {
+        id: 'chill',
+        emoji: '💬',
+        weekdayTitle: '9:45 PM Lover / Chill Cut-off',
+        weekdayTime: '8:45 – 9:45 PM',
+        weekdaySub: 'Dedicated personal/screen time — strict stop at 9:45 PM',
+        weekendTitle: 'Balanced Chill Time (10:00 PM Cut-off)',
+        weekendTime: 'Evening Chill',
+        weekendSub: 'Relax & unwind without hurting sleep schedule'
+      },
+      {
+        id: 'sleep',
+        emoji: '😴',
+        weekdayTitle: '10:30 PM Lights Out & Prep',
+        weekdayTime: 'Before 10:30 PM',
+        weekdaySub: 'Next day running gear ready + 7 hrs quality sleep',
+        weekendTitle: 'Early Sleep for 5:30 AM Run',
+        weekendTime: 'Before 10:30 PM',
+        weekendSub: 'Protect your 5:30 AM wake-up rhythm'
+      }
+    ];
+
+    const WEEK_MILESTONES = {
+      1: {
+        title: 'Week 1 (Days 1–7): Habit & Body Adjustment',
+        desc: 'Focus on waking up at 5:30 AM and showing up. Keep running slow & easy so your legs adapt without soreness.'
+      },
+      2: {
+        title: 'Week 2 (Days 8–14): Steady Evening Rhythm',
+        desc: 'Increase continuous jogging slightly. Lock in your 7:15–8:45 PM study block right after freshening up.'
+      },
+      3: {
+        title: 'Week 3 (Days 15–21): Consistency & Cut-off Control',
+        desc: '20–25 min comfortable run. Respect the 9:45 PM personal/screen cut-off so you always sleep before 10:30 PM.'
+      },
       4: {
         title: 'Week 4 (Days 22–30): Lock-in & Lifetime Gate',
-        desc: 'Final stretch of Stage 1! Hit ≥75% overall progress (or 22+ strong days) to permanently unlock Lifetime Mode ∞.'
+        desc: 'Final stretch of Stage 1! Hit ≥75% overall score (or 22+ strong days) to permanently unlock Lifetime Mode ∞.'
       }
     };
 
-    const LIFETIME_MILESTONES = [
-      { days: 30, icon: '🏆', title: '30 Days', desc: 'Foundation Unlocked' },
+    const BADGE_LEVELS = [
+      { days: 30, icon: '🏆', title: '30 Days', desc: 'Foundation Complete' },
       { days: 60, icon: '⚡', title: '60 Days', desc: 'Habit Forged' },
       { days: 90, icon: '🔥', title: '90 Days', desc: 'Quarter Legend' },
       { days: 180, icon: '💎', title: '180 Days', desc: 'Half-Year Iron' },
       { days: 365, icon: '👑', title: '365 Days', desc: '1-Year Titan' }
     ];
 
-    // Global Database State stored in localStorage
+    // =========================================================
+    // 2. SAFE LOCALSTORAGE + IN-MEMORY FALLBACK
+    // =========================================================
+    let memoryFallbackRaw = null;
+
+    function safeReadStorage(key) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch (err) {
+        return memoryFallbackRaw;
+      }
+    }
+
+    function safeWriteStorage(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (err) {
+        memoryFallbackRaw = value;
+      }
+    }
+
     let db = {
-      users: {}, // { username: { username, name, pin, startDate, lifetimeUnlocked, unlockedAt, habits, days, createdAt } }
+      users: {},
       activeUsername: null,
       theme: 'dark'
     };
@@ -580,11 +689,69 @@
     let selectedDay = 1;
     let mapFilter = 'all';
 
+    function saveDB() {
+      safeWriteStorage(DB_KEY, JSON.stringify(db));
+    }
+
+    function loadDB() {
+      try {
+        const raw = safeReadStorage(DB_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            db.users = parsed.users || {};
+            db.activeUsername = parsed.activeUsername || null;
+            db.theme = parsed.theme || 'dark';
+          }
+        }
+      } catch (err) {
+        console.warn('Could not parse storage:', err);
+      }
+    }
+
     // =========================================================
-    // 2. DATE & STORAGE UTILITIES
+    // 3. DATE & USER HELPERS
     // =========================================================
     function getTodayISO() {
-// ... existing code ... -->
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseLocalDate(isoStr) {
+      if (!isoStr || typeof isoStr !== 'string') {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }
+      const parts = isoStr.split('-').map(Number);
+      if (parts.length !== 3 || parts.some(isNaN)) {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    function getDateForUserDay(user, dayNum) {
+      const base = parseLocalDate(user.startDate);
+      base.setDate(base.getDate() + (dayNum - 1));
+      return base;
+    }
+
+    function formatDateShort(dateObj) {
+      return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function formatDateLong(dateObj) {
+      return dateObj.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+
     function getCurrentTimelineDay(user) {
       const start = parseLocalDate(user.startDate);
       const now = new Date();
@@ -598,12 +765,13 @@
     function getMaxAccessibleDay(user) {
       if (!user.lifetimeUnlocked) return STAGE1_DAYS;
       const timelineDay = getCurrentTimelineDay(user);
-      const loggedKeys = Object.keys(user.days || {}).map(Number);
+      const loggedKeys = Object.keys(user.days || {}).map(Number).filter((n) => !isNaN(n));
       const maxLogged = loggedKeys.length > 0 ? Math.max(...loggedKeys) : STAGE1_DAYS;
       return Math.max(STAGE1_DAYS + 10, timelineDay + 5, maxLogged);
     }
 
     function ensureDayExists(user, dayNum) {
+      if (!user.days) user.days = {};
       if (!user.days[dayNum]) {
         const taskMap = {};
         (user.habits || DEFAULT_HABITS).forEach((h) => {
@@ -613,135 +781,74 @@
       }
     }
 
-    function saveDB() {
-// ... existing code ... -->
-    function createNewUserObject(name, username, pin, startDate) {
-      const days = {};
-      for (let d = 1; d <= STAGE1_DAYS; d++) {
-        const taskMap = {};
-        DEFAULT_HABITS.forEach((h) => {
-          taskMap[h.id] = false;
-        });
-        days[d] = { tasks: taskMap, note: '' };
-      }
+    function getActiveUser() {
+      if (!db.activeUsername) return null;
+      return db.users[db.activeUsername] || null;
+    }
 
-      return {
-        name: name.trim(),
-        username: username.trim().toLowerCase(),
-        pin: pin.trim(),
+    function createNewUserObject(name, username, pin, startDate) {
+      const userObj = {
+        username,
+        name,
+        pin: pin || '',
         startDate: startDate || getTodayISO(),
         lifetimeUnlocked: false,
         unlockedAt: null,
         habits: JSON.parse(JSON.stringify(DEFAULT_HABITS)),
-        days,
+        days: {},
         createdAt: new Date().toISOString()
       };
-    }
-
-    function getActiveUser() {
-      if (!db.activeUsername) return null;
-      const user = db.users[db.activeUsername] || null;
-      if (user) {
-        if (typeof user.lifetimeUnlocked !== 'boolean') user.lifetimeUnlocked = false;
-        ensureDayExists(user, selectedDay);
+      for (let d = 1; d <= STAGE1_DAYS; d++) {
+        ensureDayExists(userObj, d);
       }
-      return user;
+      return userObj;
     }
 
-    function getWeekForDay(dayNum) {
-      if (dayNum <= 7) return 1;
-      if (dayNum <= 14) return 2;
-      if (dayNum <= 21) return 3;
-      return 4;
-    }
-
-    function getDaysInWeek(weekNum) {
-      if (weekNum === 1) return [1, 2, 3, 4, 5, 6, 7];
-      if (weekNum === 2) return [8, 9, 10, 11, 12, 13, 14];
-      if (weekNum === 3) return [15, 16, 17, 18, 19, 20, 21];
-      return [22, 23, 24, 25, 26, 27, 28, 29, 30];
-    }
-
-    function getLifetimeBlockDays(dayNum) {
-      // Groups days into 10-day blocks (e.g., 1-10, 11-20, 21-30, 31-40...)
-      const blockIndex = Math.floor((dayNum - 1) / 10);
-      const start = blockIndex * 10 + 1;
-      const end = start + 9;
-      const arr = [];
-      for (let d = start; d <= end; d++) arr.push(d);
-      return arr;
-    }
-
-    function getDayCompletionStats(user, dayNum) {
+    function computeUserStats(user) {
       const habits = user.habits || DEFAULT_HABITS;
-      const dayTasks = user.days[dayNum]?.tasks || {};
-      const total = habits.length;
-      let done = 0;
-      habits.forEach((h) => {
-        if (dayTasks[h.id]) done++;
-      });
-      const ratio = total > 0 ? done / total : 0;
-      return {
-        done,
-        total,
-        isFull: total > 0 && done === total,
-        isStrong: ratio >= 0.8 // >= 80% counts as a successful disciplined day
-      };
-    }
+      const totalHabitsPerDay = Math.max(1, habits.length);
+      const maxDay = getMaxAccessibleDay(user);
 
-    function evaluateStage1Metrics(user) {
-      let done30 = 0;
-      let total30 = 0;
-      let strongDays30 = 0;
-      let perfectDays30 = 0;
+      // Stage 1 (Days 1–30) Metrics
+      let stage1CompletedTasks = 0;
+      const stage1TotalTasks = STAGE1_DAYS * totalHabitsPerDay;
+      let stage1StrongDays = 0;
 
       for (let d = 1; d <= STAGE1_DAYS; d++) {
-        const st = getDayCompletionStats(user, d);
-        done30 += st.done;
-        total30 += st.total;
-        if (st.isStrong) strongDays30++;
-        if (st.isFull) perfectDays30++;
+        ensureDayExists(user, d);
+        const tasks = user.days[d].tasks || {};
+        let dayDone = 0;
+        habits.forEach((h) => {
+          if (tasks[h.id]) dayDone++;
+        });
+        stage1CompletedTasks += dayDone;
+        if (dayDone / totalHabitsPerDay >= 0.8) {
+          stage1StrongDays++;
+        }
       }
 
-      const percent30 = total30 > 0 ? Math.round((done30 / total30) * 100) : 0;
-      const isEligible = percent30 >= UNLOCK_MIN_PERCENT || strongDays30 >= UNLOCK_MIN_STRONG_DAYS;
-      const unlockProgressPct = Math.min(
-        100,
-        Math.round(
-          Math.max(
-            (percent30 / UNLOCK_MIN_PERCENT) * 100,
-            (strongDays30 / UNLOCK_MIN_STRONG_DAYS) * 100
-          )
-        )
-      );
+      const stage1Percent = Math.round((stage1CompletedTasks / stage1TotalTasks) * 100);
+      const isEligibleToUnlock =
+        stage1Percent >= UNLOCK_MIN_PERCENT || stage1StrongDays >= UNLOCK_MIN_STRONG_DAYS;
 
-      return {
-        done30,
-        total30,
-        percent30,
-        strongDays30,
-        perfectDays30,
-        isEligible,
-        unlockProgressPct
-      };
-    }
-
-    function evaluateLifetimeMetrics(user) {
-      const maxDay = Math.max(STAGE1_DAYS, getCurrentTimelineDay(user), ...Object.keys(user.days || {}).map(Number));
-      let totalDone = 0;
-      let totalPossible = 0;
-      let strongDays = 0;
+      // Overall Metrics (including Day 31+ if Lifetime Unlocked)
+      let allCompletedTasks = 0;
+      let allStrongDays = 0;
       let bestStreak = 0;
       let runningStreak = 0;
 
-      for (let d = 1; d <= maxDay; d++) {
-        const st = getDayCompletionStats(user, d);
-        if (d <= getCurrentTimelineDay(user) || st.done > 0) {
-          totalDone += st.done;
-          totalPossible += st.total;
-        }
-        if (st.isStrong) {
-          strongDays++;
+      const scanLimit = user.lifetimeUnlocked ? maxDay : STAGE1_DAYS;
+      for (let d = 1; d <= scanLimit; d++) {
+        ensureDayExists(user, d);
+        const tasks = user.days[d].tasks || {};
+        let dayDone = 0;
+        habits.forEach((h) => {
+          if (tasks[h.id]) dayDone++;
+        });
+        allCompletedTasks += dayDone;
+        const isStrong = dayDone / totalHabitsPerDay >= 0.8;
+        if (isStrong) {
+          allStrongDays++;
           runningStreak++;
           if (runningStreak > bestStreak) bestStreak = runningStreak;
         } else {
@@ -749,72 +856,60 @@
         }
       }
 
-      // Current active streak counting backwards from current timeline day
-      let currentStreak = 0;
-      const todayDay = getCurrentTimelineDay(user);
-      for (let d = todayDay; d >= 1; d--) {
-        const st = getDayCompletionStats(user, d);
-        if (st.isStrong) {
-          currentStreak++;
-        } else if (d < todayDay) {
-          break;
-        }
-      }
+      const activeJourneyDays = Math.max(1, getCurrentTimelineDay(user));
+      const allPossibleUpToToday = activeJourneyDays * totalHabitsPerDay;
+      const lifetimePercent = Math.min(
+        100,
+        Math.round((allCompletedTasks / Math.max(1, allPossibleUpToToday)) * 100)
+      );
 
-      const lifetimePct = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
       return {
-        maxDay,
-        totalDone,
-        totalPossible,
-        strongDays,
+        totalHabitsPerDay,
+        stage1CompletedTasks,
+        stage1TotalTasks,
+        stage1Percent,
+        stage1StrongDays,
+        isEligibleToUnlock,
+        allCompletedTasks,
+        allStrongDays,
         bestStreak,
-        currentStreak,
-        lifetimePct
+        lifetimePercent,
+        maxDay
       };
     }
 
-    function unlockLifetimeMode(user) {
-      if (user.lifetimeUnlocked) return;
-      user.lifetimeUnlocked = true;
-      user.unlockedAt = new Date().toISOString();
-      // Pre-initialize Days 31 to 40 so user can immediately explore beyond Day 30
-      for (let d = 31; d <= 40; d++) {
-        ensureDayExists(user, d);
+    // =========================================================
+    // 4. UI UTILITIES (THEME, TOAST, MODAL)
+    // =========================================================
+    function applyTheme() {
+      const htmlEl = document.documentElement;
+      const icons = document.querySelectorAll('.theme-icon-label');
+      if (db.theme === 'dark') {
+        htmlEl.classList.add('dark');
+        icons.forEach((el) => (el.textContent = '☀️'));
+      } else {
+        htmlEl.classList.remove('dark');
+        icons.forEach((el) => (el.textContent = '🌙'));
       }
-      saveDB();
-      renderDashboard();
-
-      openModal({
-        title: '🏆 LIFETIME MODE UNLOCKED!',
-        desc: `Congratulations ${user.name}! Your 30-Day Foundation discipline has unlocked Lifetime Mode (∞ Unlimited Days).`,
-        bodyHTML: `
-          <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 via-emerald-500/15 to-amber-500/10 border border-amber-500/40 text-center space-y-2">
-            <div class="text-4xl">👑</div>
-            <div class="text-sm font-extrabold text-amber-500 uppercase tracking-wider">Lifetime Member Pass Activated</div>
-            <p class="text-xs text-slate-600 dark:text-gray-300 leading-relaxed">
-              Your tracker now continues forever beyond Day 30 (Day 31, Day 32, Day 365+ ∞) with all-time streak tracking and milestone badges!
-            </p>
-          </div>
-        `,
-        confirmText: 'Enter Lifetime Mode ∞',
-        onConfirm: () => {
-          selectedDay = Math.max(31, getCurrentTimelineDay(user));
-          ensureDayExists(user, selectedDay);
-          renderDashboard();
-        }
-      });
     }
 
-    // =========================================================
-    // 3. CUSTOM TOAST & MODAL SYSTEM (ZERO ALERT/CONFIRM)
-    // =========================================================
+    function toggleTheme() {
+      db.theme = db.theme === 'dark' ? 'light' : 'dark';
+      saveDB();
+      applyTheme();
+    }
+
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      const style = type === 'error'
-        ? 'bg-rose-600 text-white'
-        : 'bg-gray-900 dark:bg-emerald-600 text-white border border-emerald-400/30';
-      toast.className = `${style} px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0 text-center`;
+      const colors =
+        type === 'error'
+          ? 'bg-rose-600 text-white'
+          : type === 'gold'
+          ? 'bg-amber-500 text-gray-950 font-extrabold'
+          : 'bg-gray-900 dark:bg-emerald-500 text-white dark:text-gray-950';
+
+      toast.className = `${colors} px-4 py-2.5 rounded-xl shadow-lg text-xs font-bold tracking-wide transition-all duration-300 transform translate-y-2 opacity-0 text-center`;
       toast.textContent = message;
       container.appendChild(toast);
 
@@ -825,23 +920,26 @@
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
-      }, 2500);
+      }, 2400);
     }
 
-    function openModal({ title, desc, bodyHTML = '', confirmText = 'Confirm', isDanger = false, onConfirm }) {
+    function openCustomModal({
+      title,
+      desc,
+      bodyHTML = '',
+      confirmText = 'Confirm',
+      confirmClass = 'bg-emerald-500 hover:bg-emerald-600 text-white',
+      onConfirm
+    }) {
       const modal = document.getElementById('custom-modal');
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-desc').textContent = desc;
-      const bodyEl = document.getElementById('modal-body');
-      bodyEl.innerHTML = bodyHTML;
+      document.getElementById('modal-body').innerHTML = bodyHTML;
 
       const confirmBtn = document.getElementById('modal-confirm');
       const cancelBtn = document.getElementById('modal-cancel');
-
       confirmBtn.textContent = confirmText;
-      confirmBtn.className = isDanger
-        ? 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 transition'
-        : 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 transition';
+      confirmBtn.className = `px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${confirmClass}`;
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -849,14 +947,16 @@
       const closeModal = () => {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-        confirmBtn.onclick = null;
-        cancelBtn.onclick = null;
       };
 
       cancelBtn.onclick = closeModal;
+      modal.onclick = (e) => {
+        if (e.target === modal) closeModal();
+      };
+
       confirmBtn.onclick = () => {
         if (onConfirm) {
-          const shouldClose = onConfirm(bodyEl);
+          const shouldClose = onConfirm();
           if (shouldClose === false) return;
         }
         closeModal();
@@ -864,116 +964,139 @@
     }
 
     // =========================================================
-    // 4. AUTHENTICATION & PROFILE SWITCHING LOGIC
+    // 5. AUTH SCREEN & LOGIN / PROFILE FLOW
     // =========================================================
-    function renderAuthScreen() {
-      const authScreen = document.getElementById('auth-screen');
-      const appScreen = document.getElementById('app-screen');
-      authScreen.classList.remove('hidden');
-      appScreen.classList.add('hidden');
+    function switchAuthPanel(mode) {
+      const regTab = document.getElementById('auth-tab-register');
+      const signTab = document.getElementById('auth-tab-signin');
+      const regPanel = document.getElementById('auth-panel-register');
+      const signPanel = document.getElementById('auth-panel-signin');
 
-      // Default start date input to today's local date
+      if (mode === 'signin') {
+        signTab.className =
+          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
+        regTab.className =
+          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
+        signPanel.classList.remove('hidden');
+        regPanel.classList.add('hidden');
+      } else {
+        regTab.className =
+          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
+        signTab.className =
+          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
+        regPanel.classList.remove('hidden');
+        signPanel.classList.add('hidden');
+      }
+    }
+
+    function renderAuthScreen() {
+      document.getElementById('auth-screen').classList.remove('hidden');
+      document.getElementById('app-screen').classList.add('hidden');
+
       const startInput = document.getElementById('reg-start-date');
-      if (!startInput.value) {
+      if (startInput && !startInput.value) {
         startInput.value = getTodayISO();
       }
 
-      const userKeys = Object.keys(db.users);
-      const profilesBox = document.getElementById('saved-profiles-box');
-      const profilesList = document.getElementById('saved-profiles-list');
-      const countBadge = document.getElementById('profile-count-badge');
+      const usernames = Object.keys(db.users);
+      document.getElementById('auth-user-count').textContent = usernames.length;
 
-      if (userKeys.length === 0) {
-        profilesBox.classList.add('hidden');
+      const listEl = document.getElementById('saved-profiles-list');
+      listEl.innerHTML = '';
+
+      if (usernames.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-6 space-y-2">
+            <div class="text-3xl">🌱</div>
+            <p class="text-xs sm:text-sm font-bold text-slate-700 dark:text-gray-300">No profiles on this device yet</p>
+            <p class="text-xs text-slate-500 dark:text-gray-400">Switch to "New Profile (Day 1)" to start your streak!</p>
+          </div>
+        `;
+        switchAuthPanel('register');
         return;
       }
 
-      profilesBox.classList.remove('hidden');
-      countBadge.textContent = `${userKeys.length} ${userKeys.length === 1 ? 'profile' : 'profiles'}`;
-      profilesList.innerHTML = '';
-
-      userKeys.forEach((uname) => {
+      usernames.forEach((uname) => {
         const u = db.users[uname];
-        const currentDay = getCurrentTimelineDay(u);
-        const initials = u.name.slice(0, 2).toUpperCase();
-        const s1 = evaluateStage1Metrics(u);
+        const stats = computeUserStats(u);
+        const initials = (u.name || uname).slice(0, 2).toUpperCase();
+        const isLifetime = Boolean(u.lifetimeUnlocked);
 
         const row = document.createElement('div');
-        row.className = 'flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 transition';
+        row.className =
+          'flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 transition';
 
         row.innerHTML = `
-          <button type="button" class="login-profile-btn flex items-center gap-3 text-left flex-1 min-w-0">
-            <div class="w-10 h-10 rounded-xl ${u.lifetimeUnlocked ? 'bg-amber-500/20 border-amber-500/40 text-amber-500' : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'} border font-extrabold text-sm flex items-center justify-center shrink-0">
-              ${u.lifetimeUnlocked ? '👑' : initials}
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl ${
+              isLifetime ? 'bg-amber-500 text-gray-950' : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+            } font-extrabold text-xs flex items-center justify-center shrink-0">
+              ${initials}
             </div>
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
-                <span class="font-bold text-sm truncate">${u.name}</span>
-                ${u.lifetimeUnlocked ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-500/20 text-amber-500">LIFETIME ∞</span>' : ''}
+                <span class="text-sm font-extrabold truncate">${u.name}</span>
                 ${u.pin ? '<span class="text-[11px]" title="PIN Protected">🔒</span>' : ''}
+                ${
+                  isLifetime
+                    ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-extrabold">👑 Lifetime ∞</span>'
+                    : '<span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 text-[10px] font-bold">Stage 1</span>'
+                }
               </div>
-              <div class="text-[11px] text-slate-500 dark:text-gray-400 truncate">
-                @${u.username} • ${u.lifetimeUnlocked ? `Day ${currentDay} ∞` : `Stage 1: ${s1.percent30}%`}
-              </div>
+              <p class="text-[11px] text-slate-500 dark:text-gray-400 truncate">
+                @${u.username} • Day ${getCurrentTimelineDay(u)} • ${stats.allStrongDays} strong days
+              </p>
             </div>
-          </button>
+          </div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <button type="button" class="login-profile-btn px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition">
-              Enter
+            <button type="button" class="login-user-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-emerald-500 hover:bg-emerald-600 text-white transition">
+              Enter ▶
             </button>
-            <button type="button" class="delete-profile-btn p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition" title="Delete Profile">
+            <button type="button" class="delete-user-btn p-2 rounded-xl text-xs text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition" title="Delete Profile">
               🗑️
             </button>
           </div>
         `;
 
-        row.querySelectorAll('.login-profile-btn').forEach((btn) => {
-          btn.onclick = () => attemptLogin(uname);
-        });
-
-        row.querySelector('.delete-profile-btn').onclick = () => {
-          openModal({
-            title: `Delete "${u.name}" Profile?`,
-            desc: `This will permanently remove @${u.username} and all 30 days of progress from this device.`,
-            confirmText: 'Delete Profile',
-            isDanger: true,
+        row.querySelector('.login-user-btn').onclick = () => attemptLoginUser(uname);
+        row.querySelector('.delete-user-btn').onclick = () => {
+          openCustomModal({
+            title: `Delete "${u.name}"?`,
+            desc: 'This will permanently erase this user profile and all saved checkmarks on this browser.',
+            confirmText: 'Yes, Delete',
+            confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
             onConfirm: () => {
               delete db.users[uname];
               if (db.activeUsername === uname) db.activeUsername = null;
               saveDB();
               renderAuthScreen();
-              showToast(`Profile @${uname} deleted.`, 'error');
+              showToast('Profile deleted.');
             }
           });
         };
 
-        profilesList.appendChild(row);
+        listEl.appendChild(row);
       });
     }
 
-    function attemptLogin(username) {
+    function attemptLoginUser(username) {
       const user = db.users[username];
       if (!user) return;
 
-      if (user.pin && user.pin.length > 0) {
-        openModal({
-          title: `🔒 Enter PIN for ${user.name}`,
-          desc: 'Enter your 4-digit PIN to unlock your 30-day tracker.',
+      if (user.pin) {
+        openCustomModal({
+          title: `Enter 4-Digit PIN for ${user.name}`,
+          desc: 'This profile is protected with a personal PIN.',
           bodyHTML: `
-            <input
-              id="modal-pin-input"
-              type="password"
-              inputmode="numeric"
-              maxlength="4"
-              placeholder="••••"
-              class="w-full text-center tracking-[0.5em] text-xl font-extrabold rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 py-3 focus:outline-none focus:border-emerald-500"
-            />
+            <input id="modal-pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••"
+              class="w-full text-center tracking-[0.5em] text-lg font-extrabold rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-4 py-3 focus:outline-none focus:border-emerald-500" />
+            <p id="modal-pin-error" class="text-xs font-semibold text-rose-500 hidden">Incorrect PIN. Try again.</p>
           `,
-          confirmText: 'Unlock',
-          onConfirm: (bodyEl) => {
-            const entered = bodyEl.querySelector('#modal-pin-input').value.trim();
-            if (entered !== user.pin) {
-              showToast('Incorrect PIN! Try again.', 'error');
+          confirmText: 'Unlock Profile',
+          onConfirm: () => {
+            const val = document.getElementById('modal-pin-input').value.trim();
+            if (val !== user.pin) {
+              document.getElementById('modal-pin-error').classList.remove('hidden');
               return false;
             }
             completeLogin(username);
@@ -983,7 +1106,7 @@
         setTimeout(() => {
           const inp = document.getElementById('modal-pin-input');
           if (inp) inp.focus();
-        }, 50);
+        }, 60);
       } else {
         completeLogin(username);
       }
@@ -991,30 +1114,123 @@
 
     function completeLogin(username) {
       db.activeUsername = username;
-      saveDB();
       const user = getActiveUser();
+      if (!user) return;
+
       selectedDay = getCurrentTimelineDay(user);
+      ensureDayExists(user, selectedDay);
+      saveDB();
+
       document.getElementById('auth-screen').classList.add('hidden');
       document.getElementById('app-screen').classList.remove('hidden');
+      switchMainTab('checklist');
       renderDashboard();
-      showToast(`Welcome back, ${user.name}! 💪`);
+      showToast(`Welcome, ${user.name}! Day ${selectedDay} loaded 🚀`);
     }
 
     // =========================================================
-    // 5. DASHBOARD RENDERING (PER ACTIVE USER)
+    // 6. LIFETIME BANNER & STAGE 1 -> STAGE 2 UNLOCK LOGIC
     // =========================================================
-    function applyTheme() {
-      const html = document.documentElement;
-      const icons = document.querySelectorAll('.theme-icon-label');
-      if (db.theme === 'dark') {
-        html.classList.add('dark');
-        icons.forEach((el) => (el.textContent = '☀️'));
+    function renderLifetimeBanner(user, stats) {
+      const banner = document.getElementById('lifetime-banner');
+
+      if (user.lifetimeUnlocked) {
+        const unlockedDateStr = user.unlockedAt
+          ? formatDateShort(new Date(user.unlockedAt))
+          : 'Earned';
+        banner.className =
+          'rounded-2xl p-4 sm:p-5 border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-emerald-500/10 shadow-sm gold-glow';
+        banner.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-amber-500 text-gray-950 text-xl font-black flex items-center justify-center shrink-0 shadow">
+                👑
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-500">Lifetime Mode Unlocked ∞</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-500">Permanent Pass</span>
+                </div>
+                <p class="text-xs text-slate-700 dark:text-gray-300 mt-0.5">
+                  30-Day Foundation conquered (${stats.stage1Percent}% score)! Unlimited days, rolling blocks & milestone badges active (${unlockedDateStr}).
+                </p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-xs font-extrabold text-emerald-500 block">${stats.allStrongDays} Total Strong Days</span>
+              <span class="text-[11px] text-slate-500 dark:text-gray-400">Next badge: ${
+                (BADGE_LEVELS.find((b) => b.days > stats.allStrongDays) || { title: 'Maxed 👑' }).title
+              }</span>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Stage 1: Foundation Trial (Days 1–30)
+      const pctProgress = Math.min(100, Math.round((stats.stage1Percent / UNLOCK_MIN_PERCENT) * 100));
+      const daysProgress = Math.min(100, Math.round((stats.stage1StrongDays / UNLOCK_MIN_STRONG_DAYS) * 100));
+      const gateBarPct = Math.max(pctProgress, daysProgress);
+
+      if (stats.isEligibleToUnlock) {
+        banner.className =
+          'rounded-2xl p-4 sm:p-5 border border-amber-500/50 bg-gradient-to-r from-emerald-500/15 via-amber-500/15 to-amber-500/5 shadow-sm gold-glow';
+        banner.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🎉</span>
+                <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-500">
+                  Stage 1 Complete! Lifetime Mode Ready
+                </span>
+              </div>
+              <p class="text-xs text-slate-700 dark:text-gray-300">
+                You hit <strong>${stats.stage1Percent}%</strong> overall (${stats.stage1StrongDays}/30 strong days). Claim your permanent Lifetime Pass now!
+              </p>
+            </div>
+            <button id="btn-claim-lifetime" type="button" class="px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 transition shrink-0">
+              Verify & Unlock Lifetime Mode 👑
+            </button>
+          </div>
+        `;
+
+        document.getElementById('btn-claim-lifetime').onclick = () => {
+          user.lifetimeUnlocked = true;
+          user.unlockedAt = new Date().toISOString();
+          for (let d = 31; d <= 40; d++) {
+            ensureDayExists(user, d);
+          }
+          saveDB();
+          renderDashboard();
+          showToast('👑 Lifetime Mode Unlocked! Unlimited days active ∞', 'gold');
+        };
       } else {
-        html.classList.remove('dark');
-        icons.forEach((el) => (el.textContent = '🌙'));
+        banner.className =
+          'rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm space-y-2.5';
+        banner.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🔒</span>
+              <span class="text-xs sm:text-sm font-extrabold">Stage 1: 30-Day Foundation Gate</span>
+            </div>
+            <span class="text-[11px] font-bold text-amber-500">
+              Goal: ≥${UNLOCK_MIN_PERCENT}% Score OR ≥${UNLOCK_MIN_STRONG_DAYS} Strong Days
+            </span>
+          </div>
+          <div class="w-full h-2 bg-slate-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full transition-all duration-300" style="width: ${gateBarPct}%"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-gray-400">
+            <span>Current: <strong class="text-emerald-500">${stats.stage1Percent}%</strong> score • <strong class="text-emerald-500">${stats.stage1StrongDays}/${UNLOCK_MIN_STRONG_DAYS}</strong> strong days</span>
+            <span>Unlocks Lifetime ∞</span>
+          </div>
+        `;
       }
     }
 
+    // =========================================================
+    // 7. MAIN DASHBOARD RENDERING
+    // =========================================================
     function renderDashboard() {
       const user = getActiveUser();
       if (!user) {
@@ -1022,333 +1238,246 @@
         return;
       }
 
-      applyTheme();
-      ensureDayExists(user, selectedDay);
+      const stats = computeUserStats(user);
+      const timelineDay = getCurrentTimelineDay(user);
 
       // Header Info
-      const initials = user.name.slice(0, 2).toUpperCase();
-      const currentDayNum = getCurrentTimelineDay(user);
-      const startObj = getDateForUserDay(user, 1);
-      const endObj = getDateForUserDay(user, STAGE1_DAYS);
-
-      const avatarEl = document.getElementById('header-avatar');
-      const stageBadgeEl = document.getElementById('header-stage-badge');
-
-      if (user.lifetimeUnlocked) {
-        avatarEl.textContent = '👑';
-        avatarEl.className = 'w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-emerald-500 text-white font-extrabold text-base flex items-center justify-center shrink-0 shadow-sm';
-        stageBadgeEl.textContent = `👑 LIFETIME • Day ${currentDayNum}`;
-        stageBadgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-500 border border-amber-500/30 shrink-0';
-        document.getElementById('header-date-range').textContent = `Started ${formatDateShort(startObj)} • Unlimited ∞`;
-      } else {
-        avatarEl.textContent = initials;
-        avatarEl.className = 'w-10 h-10 rounded-xl bg-emerald-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0 shadow-sm';
-        stageBadgeEl.textContent = `Stage 1 • Day ${currentDayNum}/30`;
-        stageBadgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0';
-        document.getElementById('header-date-range').textContent = `${formatDateShort(startObj)} – ${formatDateShort(endObj)}`;
-      }
-
+      document.getElementById('header-avatar').textContent = (user.name || user.username)
+        .slice(0, 2)
+        .toUpperCase();
       document.getElementById('header-user-name').textContent = user.name;
 
-      // Render Stage Banner + Stats Cards
-      const s1 = evaluateStage1Metrics(user);
-      const life = evaluateLifetimeMetrics(user);
-      renderLifetimeBanner(user, s1, life);
-
-      if (!user.lifetimeUnlocked) {
-        // Stage 1 Stats Focus
-        document.getElementById('stat-label-1').textContent = '30-Day Progress';
-        document.getElementById('stat-percent').textContent = `${s1.percent30}%`;
-        document.getElementById('stat-tasks-ratio').textContent = `${s1.done30}/${s1.total30}`;
-        document.getElementById('stat-progress-bar').style.width = `${s1.percent30}%`;
-        document.getElementById('stat-progress-bar').className = 'h-full bg-emerald-500 rounded-full transition-all duration-300';
-
-        document.getElementById('stat-label-2').textContent = 'Best Streak';
-        document.getElementById('stat-streak').textContent = life.bestStreak;
-        document.getElementById('stat-sub-2').textContent = 'Consecutive ≥80% days';
-
-        document.getElementById('stat-label-3').textContent = 'Strong Days (≥80%)';
-        document.getElementById('stat-perfect-days').textContent = s1.strongDays30;
-        document.getElementById('stat-denom-3').textContent = `/ ${UNLOCK_MIN_STRONG_DAYS} goal`;
-        document.getElementById('stat-sub-3').textContent = 'Unlocks Lifetime Mode';
-
-        document.getElementById('stat-label-4').textContent = 'Stage 1 Trial';
-        document.getElementById('stat-current-day').textContent = `Day ${currentDayNum}`;
-        document.getElementById('stat-denom-4').textContent = 'of 30';
-        document.getElementById('stat-days-left').textContent = `${Math.max(0, STAGE1_DAYS - currentDayNum)} days remaining`;
+      const stageBadge = document.getElementById('header-stage-badge');
+      if (user.lifetimeUnlocked) {
+        stageBadge.textContent = `👑 Lifetime ∞ • Day ${timelineDay}`;
+        stageBadge.className =
+          'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-500 shrink-0';
       } else {
-        // Stage 2 Lifetime Stats Focus
+        stageBadge.textContent = `Stage 1 • Day ${timelineDay}/30`;
+        stageBadge.className =
+          'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0';
+      }
+
+      const startFmt = formatDateShort(parseLocalDate(user.startDate));
+      const end30Fmt = formatDateShort(getDateForUserDay(user, 30));
+      document.getElementById('header-date-range').textContent = user.lifetimeUnlocked
+        ? `@${user.username} • Started ${startFmt} • Unlimited Mode`
+        : `@${user.username} • ${startFmt} – ${end30Fmt}`;
+
+      // Lifetime Gate Banner
+      renderLifetimeBanner(user, stats);
+
+      // Top 4 Stats Cards
+      if (user.lifetimeUnlocked) {
         document.getElementById('stat-label-1').textContent = 'Lifetime Consistency';
-        document.getElementById('stat-percent').textContent = `${life.lifetimePct}%`;
-        document.getElementById('stat-tasks-ratio').textContent = `${life.totalDone}/${life.totalPossible}`;
-        document.getElementById('stat-progress-bar').style.width = `${life.lifetimePct}%`;
-        document.getElementById('stat-progress-bar').className = 'h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full transition-all duration-300';
+        document.getElementById('stat-percent').textContent = `${stats.lifetimePercent}%`;
+        document.getElementById('stat-tasks-ratio').textContent = `${stats.allCompletedTasks} done`;
+        document.getElementById('stat-progress-bar').style.width = `${stats.lifetimePercent}%`;
 
-        document.getElementById('stat-label-2').textContent = 'All-Time Best Streak';
-        document.getElementById('stat-streak').textContent = life.bestStreak;
-        document.getElementById('stat-sub-2').textContent = `Current: ${life.currentStreak} days 🔥`;
-
-        document.getElementById('stat-label-3').textContent = 'Lifetime Strong Days';
-        document.getElementById('stat-perfect-days').textContent = life.strongDays;
-        document.getElementById('stat-denom-3').textContent = 'days ✅';
+        document.getElementById('stat-streak').textContent = stats.bestStreak;
+        document.getElementById('stat-label-3').textContent = 'Total Strong Days';
+        document.getElementById('stat-perfect-days').textContent = stats.allStrongDays;
+        document.getElementById('stat-denom-3').textContent = 'days ∞';
         document.getElementById('stat-sub-3').textContent = '≥80% habits completed';
 
-        document.getElementById('stat-label-4').textContent = 'Lifetime Journey';
-        document.getElementById('stat-current-day').textContent = `Day ${currentDayNum}`;
+        document.getElementById('stat-current-day').textContent = `Day ${timelineDay}`;
         document.getElementById('stat-denom-4').textContent = '∞';
-        document.getElementById('stat-days-left').textContent = 'Unlimited Forever';
+        document.getElementById('stat-days-left').textContent = 'Lifetime Member';
+      } else {
+        document.getElementById('stat-label-1').textContent = '30-Day Progress';
+        document.getElementById('stat-percent').textContent = `${stats.stage1Percent}%`;
+        document.getElementById('stat-tasks-ratio').textContent = `${stats.stage1CompletedTasks}/${stats.stage1TotalTasks}`;
+        document.getElementById('stat-progress-bar').style.width = `${stats.stage1Percent}%`;
+
+        document.getElementById('stat-streak').textContent = stats.bestStreak;
+        document.getElementById('stat-label-3').textContent = 'Strong Days (≥80%)';
+        document.getElementById('stat-perfect-days').textContent = stats.stage1StrongDays;
+        document.getElementById('stat-denom-3').textContent = `/ ${UNLOCK_MIN_STRONG_DAYS} goal`;
+        document.getElementById('stat-sub-3').textContent = 'Needed for Lifetime';
+
+        document.getElementById('stat-current-day').textContent = `Day ${timelineDay}`;
+        document.getElementById('stat-denom-4').textContent = 'of 30';
+        const left = Math.max(0, STAGE1_DAYS - timelineDay);
+        document.getElementById('stat-days-left').textContent =
+          left === 0 ? 'Final Day!' : `${left} days remaining`;
       }
 
-      renderDayNavigationControls(user);
-      renderDailyChecklist(user);
-      renderMilestoneBadges(life);
-      renderCalendarGrid(user);
+      renderChecklistSection(user, stats);
+      renderProgressMapSection(user, stats);
     }
 
-    function renderLifetimeBanner(user, s1, life) {
-      const banner = document.getElementById('lifetime-banner');
+    function renderChecklistSection(user, stats) {
+      const maxDay = stats.maxDay;
+      if (selectedDay < 1) selectedDay = 1;
+      if (selectedDay > maxDay) selectedDay = maxDay;
 
-      if (user.lifetimeUnlocked) {
-        banner.className = 'rounded-2xl p-4 sm:p-5 border shadow-sm bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-amber-500/10 border-amber-500/35';
-        banner.innerHTML = `
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shrink-0">
-                👑
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs sm:text-sm font-extrabold text-amber-500 uppercase tracking-wider">Lifetime Mode Active</span>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">∞ UNLOCKED</span>
-                </div>
-                <p class="text-xs text-slate-600 dark:text-gray-300 mt-0.5">
-                  30-Day Foundation conquered (${s1.percent30}% score)! Tracking continues unlimited beyond Day 30.
-                </p>
-              </div>
-            </div>
-            <button id="btn-jump-day31" type="button" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-amber-500 text-gray-950 hover:bg-amber-400 transition shrink-0">
-              Jump to Day ${Math.max(31, getCurrentTimelineDay(user))} →
-            </button>
-          </div>
-        `;
-        const jumpBtn = document.getElementById('btn-jump-day31');
-        if (jumpBtn) {
-          jumpBtn.onclick = () => {
-            selectedDay = Math.max(31, getCurrentTimelineDay(user));
-            ensureDayExists(user, selectedDay);
-            switchTab('checklist');
-            renderDashboard();
-          };
-        }
-        return;
-      }
+      ensureDayExists(user, selectedDay);
 
-      // Stage 1: Locked Lifetime Mode with Live Unlock Meter
-      banner.className = 'rounded-2xl p-4 sm:p-5 border shadow-sm bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-800 space-y-3';
-      banner.innerHTML = `
-        <div class="flex flex-wrap items-start justify-between gap-2">
-          <div class="flex items-start gap-2.5">
-            <span class="text-xl mt-0.5">${s1.isEligible ? '🔓' : '🔒'}</span>
-            <div>
-              <div class="flex flex-wrap items-center gap-2">
-                <h2 class="text-xs sm:text-sm font-extrabold uppercase tracking-wider ${s1.isEligible ? 'text-emerald-500' : 'text-slate-800 dark:text-gray-200'}">
-                  ${s1.isEligible ? 'Lifetime Mode Ready to Unlock!' : 'Stage 1: 30-Day Trial (Lifetime Locked)'}
-                </h2>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-500">
-                  Goal: ≥${UNLOCK_MIN_PERCENT}% Score or ${UNLOCK_MIN_STRONG_DAYS} Strong Days
-                </span>
-              </div>
-              <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-                Complete your first 30 days with strong consistency to unlock <strong>Lifetime Unlimited Mode (∞)</strong>.
-              </p>
-            </div>
-          </div>
-
-          ${s1.isEligible ? `
-            <button id="btn-unlock-lifetime" type="button" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-emerald-500 to-amber-500 text-white shadow-md hover:opacity-95 transition animate-pulse shrink-0">
-              🏆 Verify & Unlock Lifetime Mode
-            </button>
-          ` : `
-            <span class="text-xs font-extrabold text-emerald-500 shrink-0">${s1.unlockProgressPct}% to Unlock</span>
-          `}
-        </div>
-
-        <div class="space-y-1">
-          <div class="w-full h-2.5 bg-slate-100 dark:bg-gray-800 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-500 rounded-full transition-all duration-500" style="width: ${s1.unlockProgressPct}%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-slate-400 dark:text-gray-500 font-medium">
-            <span>Overall 30-Day Score: <strong class="text-slate-700 dark:text-gray-300">${s1.percent30}%</strong> / ${UNLOCK_MIN_PERCENT}%</span>
-            <span>Strong Days (≥80%): <strong class="text-slate-700 dark:text-gray-300">${s1.strongDays30}</strong> / ${UNLOCK_MIN_STRONG_DAYS}</span>
-          </div>
-        </div>
-      `;
-
-      const unlockBtn = document.getElementById('btn-unlock-lifetime');
-      if (unlockBtn) {
-        unlockBtn.onclick = () => unlockLifetimeMode(user);
-      }
-    }
-
-    function renderDayNavigationControls(user) {
       const stage1Controls = document.getElementById('stage1-week-controls');
       const stage2Controls = document.getElementById('stage2-block-controls');
-      const strip = document.getElementById('week-days-strip');
-      strip.innerHTML = '';
+      const stripEl = document.getElementById('week-days-strip');
+      stripEl.innerHTML = '';
 
-      let daysToShow = [];
+      let blockStart = 1;
+      let blockEnd = 7;
 
-      if (!user.lifetimeUnlocked) {
+      if (!user.lifetimeUnlocked || selectedDay <= 30) {
         stage1Controls.classList.remove('hidden');
         stage2Controls.classList.add('hidden');
 
-        const currentWeek = getWeekForDay(selectedDay);
+        const activeWeek = selectedDay <= 7 ? 1 : selectedDay <= 14 ? 2 : selectedDay <= 21 ? 3 : 4;
+        blockStart = (activeWeek - 1) * 7 + 1;
+        blockEnd = activeWeek === 4 ? 30 : activeWeek * 7;
+
         document.querySelectorAll('.week-btn').forEach((btn) => {
           const w = Number(btn.dataset.week);
-          if (w === currentWeek) {
-            btn.className = 'week-btn py-2 rounded-xl text-xs font-extrabold border border-emerald-500 bg-emerald-500 text-white shadow-sm transition';
+          if (w === activeWeek) {
+            btn.className =
+              'week-btn py-2 rounded-xl text-xs font-extrabold border border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 transition';
           } else {
-            btn.className = 'week-btn py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-600 dark:text-gray-400 hover:border-emerald-500/40 transition';
+            btn.className =
+              'week-btn py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-500 dark:text-gray-400 hover:border-slate-300 dark:hover:border-gray-700 transition';
           }
         });
 
-        const milestone = WEEK_MILESTONES[currentWeek];
+        const milestone = WEEK_MILESTONES[activeWeek];
         document.getElementById('milestone-icon').textContent = '🎯';
         document.getElementById('week-title').textContent = milestone.title;
         document.getElementById('week-desc').textContent = milestone.desc;
-        daysToShow = getDaysInWeek(currentWeek);
       } else {
+        // Stage 2 Lifetime Rolling 10-Day Blocks (31-40, 41-50, etc.)
         stage1Controls.classList.add('hidden');
         stage2Controls.classList.remove('hidden');
 
-        daysToShow = getLifetimeBlockDays(selectedDay);
-        const firstD = daysToShow[0];
-        const lastD = daysToShow[daysToShow.length - 1];
-        document.getElementById('lifetime-block-label').textContent = `Days ${firstD} – ${lastD}`;
+        const blockIdx = Math.floor((selectedDay - 31) / 10);
+        blockStart = 31 + blockIdx * 10;
+        blockEnd = blockStart + 9;
+        for (let d = blockStart; d <= blockEnd; d++) ensureDayExists(user, d);
+
+        document.getElementById('lifetime-block-label').textContent = `Days ${blockStart} – ${blockEnd}`;
         document.getElementById('milestone-icon').textContent = '👑';
-        document.getElementById('week-title').textContent = selectedDay <= 30
-          ? 'Stage 1 Archive (Days 1–30 Foundation)'
-          : `Lifetime Mode • Day ${selectedDay} Consistency`;
-        document.getElementById('week-desc').textContent = selectedDay <= 30
-          ? 'Your completed foundation days that unlocked Lifetime Mode.'
-          : 'Discipline is now a lifestyle. Keep hitting ≥80% daily to build your 60, 90, 180 & 365-day milestone badges!';
-      }
+        document.getElementById('week-title').textContent = `Lifetime Mode ∞ • Block ${blockIdx + 1}`;
+        document.getElementById('week-desc').textContent =
+          'Consistency is now part of your identity. Keep logging ≥80% days to earn permanent 60, 90, 180 & 365-day badges.';
 
-      daysToShow.forEach((dayNum) => {
-        ensureDayExists(user, dayNum);
-        const st = getDayCompletionStats(user, dayNum);
-        const isSelected = dayNum === selectedDay;
-
-        let pillStyle = 'bg-slate-50 dark:bg-gray-950 border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300';
-        if (st.isFull) {
-          pillStyle = 'bg-emerald-500/15 border-emerald-500/50 text-emerald-600 dark:text-emerald-400';
-        } else if (st.isStrong) {
-          pillStyle = 'bg-emerald-500/10 border-emerald-500/35 text-emerald-600 dark:text-emerald-400';
-        } else if (st.done > 0) {
-          pillStyle = 'bg-amber-500/10 border-amber-500/40 text-amber-600 dark:text-amber-400';
-        }
-
-        if (isSelected) {
-          pillStyle += ' ring-2 ring-emerald-500 ring-offset-1 dark:ring-offset-gray-900 font-extrabold';
-        }
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = `flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-xs transition ${pillStyle}`;
-        btn.innerHTML = `
-          <span class="text-[10px] opacity-75">D${dayNum}</span>
-          <span class="mt-0.5 text-xs font-bold">${st.isFull ? '✅' : `${st.done}/${st.total}`}</span>
-        `;
-        btn.onclick = () => {
-          selectedDay = dayNum;
+        document.getElementById('btn-prev-block').onclick = () => {
+          selectedDay = Math.max(1, blockStart - 10);
           renderDashboard();
         };
-        strip.appendChild(btn);
-      });
-    }
+        document.getElementById('btn-next-block').onclick = () => {
+          selectedDay = blockEnd + 1;
+          ensureDayExists(user, selectedDay);
+          saveDB();
+          renderDashboard();
+        };
+      }
 
-    function renderDailyChecklist(user) {
-      const dateObj = getDateForUserDay(user, selectedDay);
-      const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+      // Render Day Pills inside the strip
+      const habits = user.habits || DEFAULT_HABITS;
+      for (let d = blockStart; d <= blockEnd; d++) {
+        ensureDayExists(user, d);
+        const tasks = user.days[d].tasks || {};
+        const doneCount = habits.filter((h) => tasks[h.id]).length;
+        const isStrong = doneCount / habits.length >= 0.8;
+        const isSelected = d === selectedDay;
+
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = `py-2 px-1 rounded-xl text-center border transition flex flex-col items-center justify-center ${
+          isSelected
+            ? 'border-emerald-500 bg-emerald-500 text-white shadow-sm'
+            : isStrong
+            ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+            : doneCount > 0
+            ? 'border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400'
+            : 'border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-600 dark:text-gray-400'
+        }`;
+        pill.innerHTML = `
+          <span class="text-[10px] font-bold opacity-80">D${d}</span>
+          <span class="text-xs font-extrabold mt-0.5">${isStrong ? '✅' : `${doneCount}/${habits.length}`}</span>
+        `;
+        pill.onclick = () => {
+          selectedDay = d;
+          renderDashboard();
+        };
+        stripEl.appendChild(pill);
+      }
+
+      // Active Day Header & Progress
+      const dayDate = getDateForUserDay(user, selectedDay);
+      const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
       const dayData = user.days[selectedDay];
-      const st = getDayCompletionStats(user, selectedDay);
-      const dayPct = st.total > 0 ? Math.round((st.done / st.total) * 100) : 0;
+      const doneCount = habits.filter((h) => dayData.tasks[h.id]).length;
+      const dayPct = Math.round((doneCount / habits.length) * 100);
 
       document.getElementById('selected-day-title').textContent = `Day ${selectedDay}`;
-      document.getElementById('selected-day-date').textContent = formatDateLong(dateObj);
+      document.getElementById('selected-day-date').textContent = formatDateLong(dayDate);
 
       const typeBadge = document.getElementById('selected-day-type-badge');
-      typeBadge.textContent = isWeekend ? '🌴 Weekend' : '🏫 School Day';
+      typeBadge.textContent = isWeekend ? '🌴 Weekend Routine' : '🏫 School Day';
       typeBadge.className = isWeekend
-        ? 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-amber-500/15 text-amber-600 dark:text-amber-400'
+        ? 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-amber-500/15 text-amber-500'
         : 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
 
-      const statusBadge = document.getElementById('selected-day-badge');
-      statusBadge.textContent = st.isFull ? `${st.done}/${st.total} Complete ✅` : `${st.done}/${st.total} Done`;
-      statusBadge.className = st.isFull
-        ? 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-        : 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
+      const countBadge = document.getElementById('selected-day-badge');
+      countBadge.textContent = `${doneCount}/${habits.length} Done (${dayPct}%)`;
+      countBadge.className =
+        doneCount / habits.length >= 0.8
+          ? 'px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/20 text-emerald-500'
+          : 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
 
       document.getElementById('day-progress-bar').style.width = `${dayPct}%`;
 
-      const listEl = document.getElementById('task-list');
-      listEl.innerHTML = '';
+      // Render Checklist Habit Rows
+      const taskListEl = document.getElementById('task-list');
+      taskListEl.innerHTML = '';
 
-      user.habits.forEach((habit) => {
+      habits.forEach((habit) => {
         const isChecked = Boolean(dayData.tasks[habit.id]);
-        const title = habit.isCustom
-          ? habit.title
-          : (isWeekend ? habit.weekendTitle : habit.weekdayTitle);
-        const time = habit.isCustom
-          ? habit.time
-          : (isWeekend ? habit.weekendTime : habit.weekdayTime);
-        const subtitle = habit.isCustom
-          ? habit.subtitle
-          : (isWeekend ? habit.weekendSub : habit.weekdaySub);
+        const titleText = isWeekend && habit.weekendTitle ? habit.weekendTitle : habit.weekdayTitle;
+        const timeText = isWeekend && habit.weekendTime ? habit.weekendTime : habit.weekdayTime;
+        const subText = isWeekend && habit.weekendSub ? habit.weekendSub : habit.weekdaySub;
 
         const card = document.createElement('div');
-        card.role = 'button';
-        card.tabIndex = 0;
-        card.className = `group flex items-center justify-between gap-3 p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-150 ${
+        card.className = `group flex items-center justify-between gap-3 p-3.5 rounded-2xl border cursor-pointer select-none transition-all ${
           isChecked
-            ? 'bg-emerald-500/10 border-emerald-500/40 dark:bg-emerald-500/10 dark:border-emerald-500/35'
-            : 'bg-slate-50/80 dark:bg-gray-950/70 border-slate-200 dark:border-gray-800 hover:border-emerald-500/40'
+            ? 'bg-emerald-500/10 border-emerald-500/40'
+            : 'bg-slate-50/80 dark:bg-gray-950 border-slate-200 dark:border-gray-800 hover:border-emerald-500/40'
         }`;
 
         card.innerHTML = `
-          <div class="flex items-start gap-3 min-w-0 flex-1">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${
-              isChecked ? 'bg-emerald-500/20' : 'bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800'
-            }">
-              ${habit.emoji || '✨'}
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-sm font-bold leading-snug ${
-                isChecked ? 'line-through text-slate-500 dark:text-gray-400' : 'text-slate-900 dark:text-white'
-              }">
-                ${title}
-              </div>
-              <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
-                <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">${time}</span>
-                ${subtitle ? `<span class="text-[11px] text-slate-400 dark:text-gray-500 hidden sm:inline">• ${subtitle}</span>` : ''}
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 shrink-0">
-            ${habit.isCustom ? `
-              <button type="button" class="remove-habit-btn p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition" title="Remove custom habit">
-                ✕
-              </button>
-            ` : ''}
-            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-base font-bold transition ${
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="w-7 h-7 rounded-xl flex items-center justify-center text-sm font-black shrink-0 mt-0.5 transition ${
               isChecked
-                ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25 check-pop'
-                : 'bg-white dark:bg-gray-900 border-2 border-slate-300 dark:border-gray-700 text-transparent group-hover:border-emerald-500'
+                ? 'bg-emerald-500 text-white check-pop shadow-sm'
+                : 'bg-white dark:bg-gray-900 border-2 border-slate-300 dark:border-gray-700 text-transparent'
             }">
               ✓
             </div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-base">${habit.emoji || '✅'}</span>
+                <span class="text-xs sm:text-sm font-extrabold ${
+                  isChecked ? 'line-through text-slate-500 dark:text-gray-400' : 'text-slate-900 dark:text-white'
+                }">${titleText}</span>
+                ${
+                  timeText
+                    ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200/70 dark:bg-gray-800 text-slate-600 dark:text-gray-300">${timeText}</span>`
+                    : ''
+                }
+              </div>
+              ${
+                subText
+                  ? `<p class="text-[11px] sm:text-xs text-slate-500 dark:text-gray-400 mt-0.5">${subText}</p>`
+                  : ''
+              }
+            </div>
           </div>
+          ${
+            habit.isCustom
+              ? `<button type="button" class="remove-habit-btn p-2 rounded-xl text-xs text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 shrink-0" title="Remove Custom Habit">✕</button>`
+              : ''
+          }
         `;
 
         if (habit.isCustom) {
@@ -1356,232 +1485,340 @@
           removeBtn.onclick = (e) => {
             e.stopPropagation();
             user.habits = user.habits.filter((h) => h.id !== habit.id);
-            for (let d = 1; d <= TOTAL_DAYS; d++) {
-              delete user.days[d].tasks[habit.id];
-            }
+            Object.keys(user.days || {}).forEach((dKey) => {
+              if (user.days[dKey] && user.days[dKey].tasks) {
+                delete user.days[dKey].tasks[habit.id];
+              }
+            });
             saveDB();
             renderDashboard();
             showToast('Custom habit removed.');
           };
         }
 
-        const toggleHabit = () => {
-          dayData.tasks[habit.id] = !dayData.tasks[habit.id];
+        card.onclick = () => {
+          dayData.tasks[habit.id] = !isChecked;
           saveDB();
           renderDashboard();
-          const updated = getDayCompletionStats(user, selectedDay);
-          const s1Now = evaluateStage1Metrics(user);
 
-          if (!user.lifetimeUnlocked && s1Now.isEligible) {
-            showToast('🔓 Eligibility reached! Click "Verify & Unlock Lifetime Mode" above!');
-          } else if (dayData.tasks[habit.id] && updated.isFull) {
-            showToast(`🔥 Day ${selectedDay} 100% Complete! Keep going!`);
+          const updatedDone = habits.filter((h) => dayData.tasks[h.id]).length;
+          if (!isChecked && updatedDone === habits.length) {
+            showToast(`Day ${selectedDay} 100% Complete! ✅🔥`);
           }
         };
 
-        card.onclick = toggleHabit;
-        card.onkeydown = (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggleHabit();
-          }
-        };
-
-        listEl.appendChild(card);
+        taskListEl.appendChild(card);
       });
 
-      document.getElementById('daily-note').value = dayData.note || '';
+      // Daily Notes Input
+      const noteEl = document.getElementById('daily-note');
+      noteEl.value = dayData.note || '';
+      noteEl.oninput = (e) => {
+        dayData.note = e.target.value;
+        saveDB();
+      };
     }
 
-    function renderMilestoneBadges(life) {
-      const container = document.getElementById('milestone-badges-grid');
-      if (!container) return;
-      container.innerHTML = '';
+    function renderProgressMapSection(user, stats) {
+      // 1. Render Milestone Badges
+      const badgesGrid = document.getElementById('milestone-badges-grid');
+      badgesGrid.innerHTML = '';
+      let earnedCount = 0;
 
-      let earned = 0;
-      LIFETIME_MILESTONES.forEach((m) => {
-        const unlocked = life.strongDays >= m.days;
-        if (unlocked) earned++;
+      BADGE_LEVELS.forEach((badge) => {
+        const unlocked = stats.allStrongDays >= badge.days;
+        if (unlocked) earnedCount++;
 
-        const card = document.createElement('div');
-        card.className = `p-2.5 rounded-2xl border flex flex-col items-center text-center transition ${
+        const item = document.createElement('div');
+        item.className = `p-2.5 rounded-xl border text-center transition ${
           unlocked
-            ? 'bg-gradient-to-b from-amber-500/20 to-emerald-500/10 border-amber-500/50 text-slate-900 dark:text-white shadow-sm'
-            : 'bg-slate-50 dark:bg-gray-950 border-slate-200 dark:border-gray-800 opacity-50 grayscale'
+            ? 'border-amber-500/50 bg-amber-500/15 text-amber-500 shadow-sm'
+            : 'border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 opacity-50'
         }`;
-        card.innerHTML = `
-          <span class="text-xl sm:text-2xl">${unlocked ? m.icon : '🔒'}</span>
-          <span class="text-[11px] font-extrabold mt-1">${m.title}</span>
-          <span class="text-[9px] text-slate-500 dark:text-gray-400 leading-tight mt-0.5">${m.desc}</span>
+        item.innerHTML = `
+          <div class="text-xl sm:text-2xl">${unlocked ? badge.icon : '🔒'}</div>
+          <div class="text-[11px] font-extrabold mt-1">${badge.title}</div>
+          <div class="text-[9px] text-slate-500 dark:text-gray-400 truncate">${badge.desc}</div>
         `;
-        container.appendChild(card);
+        badgesGrid.appendChild(item);
       });
 
-      document.getElementById('badge-unlocked-count').textContent = `${earned}/${LIFETIME_MILESTONES.length} Earned`;
-    }
+      document.getElementById('badge-unlocked-count').textContent = `${earnedCount}/${BADGE_LEVELS.length} Earned`;
 
-    function renderCalendarGrid(user) {
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = '';
-
+      // 2. Render Calendar Grid
       const filterBar = document.getElementById('map-filter-bar');
-      const mapTitle = document.getElementById('map-section-title');
-      const mapSub = document.getElementById('map-section-subtitle');
-
       if (user.lifetimeUnlocked) {
         filterBar.classList.remove('hidden');
-        mapTitle.textContent = 'Lifetime Progress Map (∞)';
-        mapSub.textContent = 'Stage 1 Foundation + Unlimited Lifetime Days';
+        document.getElementById('map-section-title').textContent = '30-Day + Lifetime Map ∞';
       } else {
         filterBar.classList.add('hidden');
-        mapTitle.textContent = '30-Day Foundation Map';
-        mapSub.textContent = 'Complete with ≥75% consistency to unlock Lifetime Map';
+        document.getElementById('map-section-title').textContent = '30-Day Foundation Map';
       }
 
-      const maxDay = user.lifetimeUnlocked ? getMaxAccessibleDay(user) : STAGE1_DAYS;
+      document.querySelectorAll('.map-filter-btn').forEach((btn) => {
+        const f = btn.dataset.mapfilter;
+        btn.className =
+          f === mapFilter
+            ? 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white'
+            : 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
+      });
+
+      const gridEl = document.getElementById('calendar-grid');
+      gridEl.innerHTML = '';
+      const habits = user.habits || DEFAULT_HABITS;
+      const maxDay = stats.maxDay;
+
       let startD = 1;
       let endD = maxDay;
-
-      if (user.lifetimeUnlocked && mapFilter === 'foundation') {
-        startD = 1;
-        endD = STAGE1_DAYS;
-      } else if (user.lifetimeUnlocked && mapFilter === 'lifetime') {
-        startD = 31;
-        endD = Math.max(40, maxDay);
+      if (user.lifetimeUnlocked) {
+        if (mapFilter === 'foundation') {
+          startD = 1;
+          endD = 30;
+        } else if (mapFilter === 'lifetime') {
+          startD = 31;
+          endD = maxDay;
+        }
       }
 
       for (let d = startD; d <= endD; d++) {
         ensureDayExists(user, d);
-        const st = getDayCompletionStats(user, d);
-        const dateObj = getDateForUserDay(user, d);
-        const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
-        const isSelected = d === selectedDay;
+        const tasks = user.days[d].tasks || {};
+        const doneCount = habits.filter((h) => tasks[h.id]).length;
+        const isStrong = doneCount / habits.length >= 0.8;
+        const isPartial = doneCount > 0 && !isStrong;
+        const dDate = getDateForUserDay(user, d);
 
-        let tileClass = 'bg-slate-50 dark:bg-gray-950 border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300';
-        if (st.isFull) {
-          tileClass = d > 30
-            ? 'bg-gradient-to-br from-emerald-500 to-amber-500 text-white border-amber-400 shadow-sm'
-            : 'bg-emerald-500 text-white border-emerald-400 shadow-sm shadow-emerald-500/20';
-        } else if (st.isStrong) {
-          tileClass = 'bg-emerald-500/20 border-emerald-500/50 text-emerald-700 dark:text-emerald-300';
-        } else if (st.done > 0) {
-          tileClass = 'bg-amber-500/15 border-amber-500/50 text-amber-700 dark:text-amber-300';
-        }
+        const tile = document.createElement('button');
+        tile.type = 'button';
+        tile.className = `p-2.5 rounded-2xl border text-left transition flex flex-col justify-between min-h-[74px] ${
+          isStrong
+            ? 'bg-emerald-500 text-white border-emerald-400 shadow-sm'
+            : isPartial
+            ? 'bg-amber-500/15 border-amber-500/40 text-amber-600 dark:text-amber-400'
+            : 'bg-slate-50 dark:bg-gray-950 border-slate-200 dark:border-gray-800 text-slate-600 dark:text-gray-400 hover:border-emerald-500/40'
+        }`;
 
-        if (isSelected) {
-          tileClass += ' ring-2 ring-offset-2 ring-emerald-500 dark:ring-offset-gray-900';
-        }
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = `p-2.5 rounded-2xl border flex flex-col items-center justify-between min-h-[78px] transition hover:scale-[1.03] ${tileClass}`;
-        btn.innerHTML = `
-          <span class="text-[10px] font-semibold opacity-80">${formatDateShort(dateObj)} ${isWeekend ? '🌴' : ''}</span>
-          <span class="text-sm font-extrabold">Day ${d}</span>
-          <span class="text-xs font-bold">${st.isFull ? '✅' : `${st.done}/${st.total}`}</span>
+        tile.innerHTML = `
+          <div class="flex items-center justify-between w-full">
+            <span class="text-xs font-extrabold">Day ${d}</span>
+            <span class="text-xs">${isStrong ? '✅' : isPartial ? '⏳' : ''}</span>
+          </div>
+          <div class="mt-2">
+            <div class="text-[10px] opacity-80">${formatDateShort(dDate)}</div>
+            <div class="text-[11px] font-bold">${doneCount}/${habits.length}</div>
+          </div>
         `;
-        btn.onclick = () => {
+
+        tile.onclick = () => {
           selectedDay = d;
-          switchTab('checklist');
+          switchMainTab('checklist');
           renderDashboard();
         };
-        grid.appendChild(btn);
+
+        gridEl.appendChild(tile);
       }
     }
 
-    function switchTab(tabName) {
-      ['checklist', 'grid', 'timetable'].forEach((v) => {
+    function switchMainTab(tabName) {
+      const views = ['checklist', 'grid', 'timetable', 'settings'];
+      views.forEach((v) => {
         const el = document.getElementById(`view-${v}`);
-        if (v === tabName) el.classList.remove('hidden');
-        else el.classList.add('hidden');
+        if (el) {
+          if (v === tabName) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
       });
 
       document.querySelectorAll('.tab-btn').forEach((btn) => {
         if (btn.dataset.tab === tabName) {
-          btn.className = 'tab-btn py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
+          btn.className =
+            'tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
         } else {
-          btn.className = 'tab-btn py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition';
+          btn.className =
+            'tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition';
         }
       });
     }
 
     // =========================================================
-    // 6. EVENT WIRING
+    // 8. BACKUP & IMPORT MODAL
     // =========================================================
-    document.addEventListener('DOMContentLoaded', () => {
+    function openBackupModal() {
+      const jsonStr = JSON.stringify(db, null, 2);
+      openCustomModal({
+        title: 'JSON Backup & Restore',
+        desc: 'Copy your JSON backup to save it, or paste a backup below to restore.',
+        bodyHTML: `
+          <textarea id="modal-json-area" rows="6" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 p-3 text-[11px] font-mono focus:outline-none focus:border-emerald-500">${jsonStr}</textarea>
+          <div class="flex justify-between items-center">
+            <button id="modal-copy-json" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
+              📋 Copy Backup
+            </button>
+            <span class="text-[11px] text-slate-400">Click "Restore JSON" to load pasted data</span>
+          </div>
+        `,
+        confirmText: 'Restore JSON',
+        onConfirm: () => {
+          try {
+            const raw = document.getElementById('modal-json-area').value.trim();
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object' || !parsed.users) {
+              showToast('Invalid backup JSON format.', 'error');
+              return false;
+            }
+            db.users = parsed.users;
+            db.activeUsername = parsed.activeUsername || null;
+            db.theme = parsed.theme || db.theme;
+            saveDB();
+            applyTheme();
+            if (getActiveUser()) {
+              renderDashboard();
+            } else {
+              renderAuthScreen();
+            }
+            showToast('Backup restored successfully! ✅');
+            return true;
+          } catch (err) {
+            showToast('Invalid JSON text. Check formatting.', 'error');
+            return false;
+          }
+        }
+      });
+
+      setTimeout(() => {
+        const copyBtn = document.getElementById('modal-copy-json');
+        if (copyBtn) {
+          copyBtn.onclick = () => {
+            const area = document.getElementById('modal-json-area');
+            area.select();
+            try {
+              document.execCommand('copy');
+              showToast('Backup copied to clipboard! 📋');
+            } catch (e) {
+              showToast('Select all & copy manually.');
+            }
+          };
+        }
+      }, 50);
+    }
+
+    // =========================================================
+    // 9. INITIALIZATION & EVENT WIRING
+    // =========================================================
+    window.addEventListener('DOMContentLoaded', () => {
       loadDB();
       applyTheme();
 
-      // Decide initial screen
-      if (db.activeUsername && db.users[db.activeUsername]) {
-        const user = getActiveUser();
-        selectedDay = getCurrentTimelineDay(user);
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('app-screen').classList.remove('hidden');
-        renderDashboard();
-      } else {
-        renderAuthScreen();
-      }
+      // Theme Buttons
+      document.getElementById('auth-theme-btn').onclick = toggleTheme;
+      document.getElementById('app-theme-btn').onclick = toggleTheme;
 
-      // Theme Toggle Buttons (Auth & App)
-      const handleThemeToggle = () => {
-        db.theme = db.theme === 'dark' ? 'light' : 'dark';
-        saveDB();
-        applyTheme();
+      // Auth Panel Switchers
+      document.getElementById('auth-tab-register').onclick = () => switchAuthPanel('register');
+      document.getElementById('auth-tab-signin').onclick = () => switchAuthPanel('signin');
+      document.getElementById('btn-auth-import').onclick = openBackupModal;
+
+      // Inline Error Helpers
+      const showAuthError = (msg) => {
+        const box = document.getElementById('auth-error-msg');
+        if (box) {
+          box.textContent = msg;
+          box.classList.remove('hidden');
+        }
+        showToast(msg, 'error');
       };
-      document.getElementById('auth-theme-btn').onclick = handleThemeToggle;
-      document.getElementById('app-theme-btn').onclick = handleThemeToggle;
 
-      // Register New User Form
+      const clearAuthError = () => {
+        const box = document.getElementById('auth-error-msg');
+        if (box) {
+          box.textContent = '';
+          box.classList.add('hidden');
+        }
+      };
+
+      // Register New User Form ("Start My Day 1 Now 🚀")
       document.getElementById('register-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        const name = document.getElementById('reg-name').value.trim();
-        const rawUsername = document.getElementById('reg-username').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-        const startDate = document.getElementById('reg-start-date').value || getTodayISO();
-        const pin = document.getElementById('reg-pin').value.trim();
+        clearAuthError();
 
-        if (!name || !rawUsername) {
-          showToast('Please enter a valid Name and Username.', 'error');
-          return;
-        }
-        if (db.users[rawUsername]) {
-          showToast(`Username "@${rawUsername}" already exists! Choose another or click Enter above.`, 'error');
-          return;
-        }
-        if (pin && !/^\d{4}$/.test(pin)) {
-          showToast('PIN must be exactly 4 digits (or leave empty).', 'error');
-          return;
-        }
+        try {
+          const name = document.getElementById('reg-name').value.trim();
+          const rawUsername = document.getElementById('reg-username').value.trim().toLowerCase();
+          const cleanUsername =
+            rawUsername.replace(/[^a-z0-9_]/g, '') ||
+            name.toLowerCase().replace(/[^a-z0-9_]/g, '');
+          const startDate = document.getElementById('reg-start-date').value || getTodayISO();
+          const pin = document.getElementById('reg-pin').value.trim();
 
-        const newUser = createNewUserObject(name, rawUsername, pin, startDate);
-        db.users[rawUsername] = newUser;
-        document.getElementById('register-form').reset();
-        document.getElementById('reg-start-date').value = getTodayISO();
-        completeLogin(rawUsername);
+          if (!name) {
+            showAuthError('Please enter your Name or Nickname.');
+            return;
+          }
+          if (!cleanUsername) {
+            showAuthError('Please enter a Username using letters or numbers.');
+            return;
+          }
+          if (db.users[cleanUsername]) {
+            showAuthError(
+              `Username "@${cleanUsername}" already exists! Pick another username or sign in under "Sign In".`
+            );
+            return;
+          }
+          if (pin && !/^\d{4}$/.test(pin)) {
+            showAuthError('PIN must be 4 digits (or leave it empty).');
+            return;
+          }
+
+          const newUser = createNewUserObject(name, cleanUsername, pin, startDate);
+          db.users[cleanUsername] = newUser;
+
+          document.getElementById('register-form').reset();
+          document.getElementById('reg-start-date').value = getTodayISO();
+
+          completeLogin(cleanUsername);
+        } catch (err) {
+          console.error('Profile creation error:', err);
+          showAuthError('Could not start Day 1. Please check your details and try again.');
+        }
       });
 
-      // Switch User / Logout
-      document.getElementById('btn-logout').onclick = () => {
+      // Logout / Switch User
+      const handleLogout = () => {
         db.activeUsername = null;
         saveDB();
         renderAuthScreen();
+        if (Object.keys(db.users).length > 0) {
+          switchAuthPanel('signin');
+        }
+      };
+      document.getElementById('btn-logout').onclick = handleLogout;
+      document.getElementById('btn-switch-from-settings').onclick = handleLogout;
+
+      // Today Jump Button
+      document.getElementById('btn-today').onclick = () => {
+        const user = getActiveUser();
+        if (!user) return;
+        selectedDay = getCurrentTimelineDay(user);
+        switchMainTab('checklist');
+        renderDashboard();
+        showToast(`Jumped to Today (Day ${selectedDay})`);
       };
 
-      // Tabs
+      // Main Navigation Tabs
       document.querySelectorAll('.tab-btn').forEach((btn) => {
-        btn.onclick = () => switchTab(btn.dataset.tab);
+        btn.onclick = () => switchMainTab(btn.dataset.tab);
       });
 
-      // Week Buttons
+      // Stage 1 Week Buttons
       document.querySelectorAll('.week-btn').forEach((btn) => {
         btn.onclick = () => {
           const w = Number(btn.dataset.week);
-          selectedDay = getDaysInWeek(w)[0];
+          selectedDay = (w - 1) * 7 + 1;
           renderDashboard();
         };
       });
 
-      // Prev / Next Day
+      // Prev / Next Day Navigation
       document.getElementById('prev-day').onclick = () => {
         if (selectedDay > 1) {
           selectedDay--;
@@ -1591,114 +1828,57 @@
       document.getElementById('next-day').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
-        const limit = user.lifetimeUnlocked ? 9999 : STAGE1_DAYS;
-        if (selectedDay < limit) {
+        const maxD = getMaxAccessibleDay(user);
+        if (selectedDay < maxD) {
           selectedDay++;
           ensureDayExists(user, selectedDay);
+          saveDB();
           renderDashboard();
-        } else if (!user.lifetimeUnlocked) {
-          showToast('🔒 Unlock Lifetime Mode first to track beyond Day 30!', 'error');
         }
       };
 
-      // Stage 2 Prev / Next 10-Day Block Buttons
-      document.getElementById('btn-prev-block').onclick = () => {
-        const user = getActiveUser();
-        if (!user) return;
-        selectedDay = Math.max(1, selectedDay - 10);
-        ensureDayExists(user, selectedDay);
-        renderDashboard();
-      };
-      document.getElementById('btn-next-block').onclick = () => {
-        const user = getActiveUser();
-        if (!user) return;
-        selectedDay = selectedDay + 10;
-        ensureDayExists(user, selectedDay);
-        renderDashboard();
-      };
-
-      // Map Filter Pills (Lifetime Mode)
-      document.querySelectorAll('.map-filter-btn').forEach((btn) => {
-        btn.onclick = () => {
-          mapFilter = btn.dataset.mapfilter;
-          document.querySelectorAll('.map-filter-btn').forEach((b) => {
-            if (b.dataset.mapfilter === mapFilter) {
-              b.className = 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white';
-            } else {
-              b.className = 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
-            }
-          });
-          const user = getActiveUser();
-          if (user) renderCalendarGrid(user);
-        };
-      });
-
-      // Today Jump Button
-      document.getElementById('btn-today').onclick = () => {
-        const user = getActiveUser();
-        if (!user) return;
-        selectedDay = getCurrentTimelineDay(user);
-        switchTab('checklist');
-        renderDashboard();
-        showToast(`Jumped to Day ${selectedDay}`);
-      };
-
-      // Mark All Complete for Selected Day
+      // Complete All for Selected Day
       document.getElementById('btn-complete-all').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
-        user.habits.forEach((h) => {
+        ensureDayExists(user, selectedDay);
+        (user.habits || DEFAULT_HABITS).forEach((h) => {
           user.days[selectedDay].tasks[h.id] = true;
         });
         saveDB();
         renderDashboard();
-        const s1Now = evaluateStage1Metrics(user);
-        if (!user.lifetimeUnlocked && s1Now.isEligible) {
-          showToast('🔓 Lifetime Mode eligible! Click "Verify & Unlock" at the top!');
-        } else {
-          showToast(`Day ${selectedDay} marked 100% ✅`);
-        }
+        showToast(`All habits marked ✅ for Day ${selectedDay}!`);
       };
-
-      // Auto-save Note
-      document.getElementById('daily-note').addEventListener('input', (e) => {
-        const user = getActiveUser();
-        if (!user) return;
-        user.days[selectedDay].note = e.target.value;
-        saveDB();
-      });
 
       // Add Custom Habit Modal
       document.getElementById('btn-add-habit').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
 
-        openModal({
-          title: '➕ Add Custom Daily Habit',
-          desc: 'Add an extra personal goal to your 30-day checklist.',
+        openCustomModal({
+          title: 'Add Custom Daily Habit',
+          desc: 'Add an extra daily habit to your checklist (e.g., 3L Water, No Junk Food, Reading).',
           bodyHTML: `
-            <div class="space-y-2.5">
-              <div class="grid grid-cols-4 gap-2">
-                <div>
-                  <label class="block text-[11px] font-bold mb-1">Icon</label>
-                  <input id="custom-habit-emoji" type="text" maxlength="2" value="💧" class="w-full text-center rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 py-2 text-sm" />
-                </div>
-                <div class="col-span-3">
-                  <label class="block text-[11px] font-bold mb-1">Habit Title *</label>
-                  <input id="custom-habit-title" type="text" maxlength="40" placeholder="e.g., Drink 3L Water" class="w-full rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 px-3 py-2 text-sm" />
-                </div>
+            <div class="grid grid-cols-4 gap-2">
+              <div class="col-span-1">
+                <label class="block text-[11px] font-bold mb-1">Emoji</label>
+                <input id="custom-habit-emoji" type="text" maxlength="4" value="💧" class="w-full text-center rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-2 py-2.5 text-base" />
               </div>
-              <div>
-                <label class="block text-[11px] font-bold mb-1">Target Time / Note</label>
-                <input id="custom-habit-time" type="text" maxlength="30" placeholder="e.g., All Day / 6:00 AM" class="w-full rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 px-3 py-2 text-sm" />
+              <div class="col-span-3">
+                <label class="block text-[11px] font-bold mb-1">Habit Title *</label>
+                <input id="custom-habit-title" type="text" maxlength="40" placeholder="e.g., Drink 3L Water" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
               </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold mb-1">Short Subtitle / Goal (Optional)</label>
+              <input id="custom-habit-sub" type="text" maxlength="60" placeholder="e.g., Stay hydrated throughout school" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
             </div>
           `,
           confirmText: 'Add Habit',
-          onConfirm: (bodyEl) => {
-            const emoji = bodyEl.querySelector('#custom-habit-emoji').value.trim() || '✨';
-            const title = bodyEl.querySelector('#custom-habit-title').value.trim();
-            const time = bodyEl.querySelector('#custom-habit-time').value.trim() || 'Daily Goal';
+          onConfirm: () => {
+            const emoji = document.getElementById('custom-habit-emoji').value.trim() || '✅';
+            const title = document.getElementById('custom-habit-title').value.trim();
+            const sub = document.getElementById('custom-habit-sub').value.trim();
             if (!title) {
               showToast('Please enter a habit title.', 'error');
               return false;
@@ -1707,12 +1887,17 @@
             user.habits.push({
               id,
               emoji,
-              title,
-              time,
-              subtitle: 'Custom personal habit',
-              isCustom: true
+              isCustom: true,
+              weekdayTitle: title,
+              weekdayTime: '',
+              weekdaySub: sub,
+              weekendTitle: title,
+              weekendTime: '',
+              weekendSub: sub
             });
-            for (let d = 1; d <= TOTAL_DAYS; d++) {
+            const maxDayToUpdate = getMaxAccessibleDay(user);
+            for (let d = 1; d <= maxDayToUpdate; d++) {
+              ensureDayExists(user, d);
               user.days[d].tasks[id] = false;
             }
             saveDB();
@@ -1723,23 +1908,33 @@
         });
       };
 
-      // Change Start Date Modal
+      // Map Filter Pills
+      document.querySelectorAll('.map-filter-btn').forEach((btn) => {
+        btn.onclick = () => {
+          mapFilter = btn.dataset.mapfilter;
+          renderDashboard();
+        };
+      });
+
+      // Backup, Change Start Date & Reset Buttons
+      document.getElementById('btn-export-backup').onclick = openBackupModal;
+
       document.getElementById('btn-change-start').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
-        openModal({
-          title: '📅 Change Challenge Start Date',
-          desc: 'Adjust Day 1 of your 30-day schedule. Your checkmarks stay intact.',
+        openCustomModal({
+          title: 'Change Day 1 Start Date',
+          desc: 'Pick the calendar date that corresponds to your Day 1.',
           bodyHTML: `
-            <input id="modal-new-start" type="date" value="${user.startDate}" class="w-full rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 px-3.5 py-2.5 text-sm" />
+            <input id="modal-start-date" type="date" value="${user.startDate}" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm" />
           `,
           confirmText: 'Update Date',
-          onConfirm: (bodyEl) => {
-            const val = bodyEl.querySelector('#modal-new-start').value;
+          onConfirm: () => {
+            const val = document.getElementById('modal-start-date').value;
             if (!val) return false;
             user.startDate = val;
-            saveDB();
             selectedDay = getCurrentTimelineDay(user);
+            saveDB();
             renderDashboard();
             showToast('Start date updated!');
             return true;
@@ -1747,88 +1942,40 @@
         });
       };
 
-      // Export & Restore JSON Backup Modal (Dashboard)
-      const openBackupModal = () => {
-        const jsonBackup = JSON.stringify(db, null, 2);
-        openModal({
-          title: '📤 Backup & Restore LocalStorage Data',
-          desc: 'Copy your JSON backup to save it safely, or paste an existing JSON backup below to restore.',
-          bodyHTML: `
-            <div class="space-y-2">
-              <textarea id="backup-json-area" rows="6" class="w-full rounded-xl bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 p-3 text-[11px] font-mono focus:outline-none">${jsonBackup}</textarea>
-              <div class="flex justify-between gap-2">
-                <button id="btn-copy-json" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-gray-700 hover:bg-slate-300 dark:hover:bg-gray-600 transition">
-                  📋 Copy Backup JSON
-                </button>
-                <button id="btn-restore-json" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-500/30 transition">
-                  📥 Restore Pasted JSON
-                </button>
-              </div>
-            </div>
-          `,
-          confirmText: 'Done',
-          onConfirm: () => true
-        });
-
-        setTimeout(() => {
-          const copyBtn = document.getElementById('btn-copy-json');
-          const restoreBtn = document.getElementById('btn-restore-json');
-          const area = document.getElementById('backup-json-area');
-
-          if (copyBtn) {
-            copyBtn.onclick = () => {
-              area.select();
-              document.execCommand('copy');
-              showToast('Backup JSON copied to clipboard! 📋');
-            };
-          }
-          if (restoreBtn) {
-            restoreBtn.onclick = () => {
-              try {
-                const parsed = JSON.parse(area.value);
-                if (!parsed || typeof parsed.users !== 'object') {
-                  showToast('Invalid backup JSON format.', 'error');
-                  return;
-                }
-                db = parsed;
-                saveDB();
-                if (db.activeUsername && db.users[db.activeUsername]) {
-                  renderDashboard();
-                } else {
-                  renderAuthScreen();
-                }
-                showToast('Backup restored successfully! ✅');
-              } catch (err) {
-                showToast('Could not parse JSON backup.', 'error');
-              }
-            };
-          }
-        }, 40);
-      };
-
-      document.getElementById('btn-export-backup').onclick = openBackupModal;
-      document.getElementById('btn-auth-import').onclick = openBackupModal;
-
-      // Reset Active User Progress
       document.getElementById('btn-reset-user').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
-        openModal({
-          title: `Reset ${user.name}'s Progress?`,
-          desc: 'All your ✅ checkmarks and daily notes will be cleared back to Day 1.',
-          confirmText: 'Yes, Reset My Progress',
-          isDanger: true,
+        openCustomModal({
+          title: `Reset All Progress for ${user.name}?`,
+          desc: 'All daily checkmarks and notes will be cleared back to Day 1.',
+          confirmText: 'Yes, Reset Everything',
+          confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
           onConfirm: () => {
-            const fresh = createNewUserObject(user.name, user.username, user.pin, user.startDate);
-            fresh.habits = user.habits;
-            db.users[user.username] = fresh;
-            saveDB();
+            user.days = {};
+            user.lifetimeUnlocked = false;
+            user.unlockedAt = null;
+            for (let d = 1; d <= STAGE1_DAYS; d++) {
+              ensureDayExists(user, d);
+            }
             selectedDay = 1;
+            saveDB();
             renderDashboard();
-            showToast('Your progress has been reset.', 'error');
+            showToast('Progress reset to Day 1.');
+            return true;
           }
         });
       };
+
+      // Boot: Check Active Session vs Auth Screen
+      const activeUser = getActiveUser();
+      if (activeUser) {
+        selectedDay = getCurrentTimelineDay(activeUser);
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        renderDashboard();
+      } else {
+        renderAuthScreen();
+      }
     });
   </script>
 </body>
