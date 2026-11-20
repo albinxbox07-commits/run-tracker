@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>30-Day & Lifetime Discipline Tracker</title>
+  <title>30-Day & Lifetime Physique & Discipline Tracker</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter & Noto Sans Malayalam -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Inter', 'Noto Sans Malayalam', 'sans-serif'],
           },
         },
       },
@@ -24,7 +24,7 @@
   </script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Noto Sans Malayalam', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
     ::-webkit-scrollbar {
@@ -35,7 +35,7 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.35);
+      background: rgba(156, 163, 175, 0.3);
       border-radius: 9999px;
     }
     .check-pop {
@@ -47,16 +47,16 @@
       100% { transform: scale(1); }
     }
     .gold-glow {
-      box-shadow: 0 0 28px -6px rgba(245, 158, 11, 0.35);
+      box-shadow: 0 0 28px rgba(245, 158, 11, 0.16);
     }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
-  <!-- Toast Notification Banner (Replaces alert) -->
+  <!-- Toast Notification Container (Never uses alert/confirm) -->
   <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 w-11/12 max-w-sm"></div>
 
-  <!-- Custom Modal (Confirmations, PIN Prompt, Add Habit, Backup/Restore) -->
+  <!-- Universal Custom Modal (PIN Lock, Add Habit, JSON Backup, Reset) -->
   <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
     <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
       <div>
@@ -76,141 +76,134 @@
   </div>
 
   <!-- =========================================================
-       VIEW 1: MULTI-USER LOGIN & PROFILE CREATION SCREEN
+       VIEW 1: MULTI-USER LOGIN & BODY TRANSFORMATION SETUP
        ========================================================= -->
-  <section id="auth-screen" class="min-h-screen flex flex-col justify-between px-4 py-6 sm:py-10">
-    <!-- Top Header -->
-    <div class="max-w-lg mx-auto w-full flex items-center justify-between">
+  <section id="auth-screen" class="min-h-screen flex flex-col justify-between px-4 py-5 sm:py-8">
+    <!-- Top Header Bar with Language Toggle right next to Theme Toggle -->
+    <div class="max-w-xl mx-auto w-full flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-xl">
-          🏃‍♂️
+          💪
         </div>
         <div>
-          <span class="font-extrabold text-base tracking-tight block leading-none">Discipline OS</span>
-          <span class="text-[11px] text-slate-500 dark:text-gray-400">30-Day Foundation → Lifetime ∞</span>
+          <span class="font-extrabold text-sm sm:text-base tracking-tight block leading-none" data-i18n="brandTitle">Physique & Streak</span>
+          <span class="text-[11px] text-slate-500 dark:text-gray-400" data-i18n="brandSub">30-Day Body Set → 2–4 Mo Physique ∞</span>
         </div>
       </div>
 
-      <button id="auth-theme-btn" type="button" aria-label="Toggle Theme" class="p-2.5 rounded-xl bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-600 dark:text-gray-300 hover:border-emerald-500/40 transition">
-        <span class="theme-icon-label">☀️</span>
-      </button>
+      <!-- Language Toggle + Dark/Light Theme Toggle Side-by-Side -->
+      <div class="flex items-center gap-1.5">
+        <button id="auth-lang-btn" type="button" aria-label="Switch Language" class="px-3 py-2 rounded-xl bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 hover:border-emerald-500/50 transition">
+          EN | മലയാളം
+        </button>
+        <button id="auth-theme-btn" type="button" aria-label="Toggle Theme" class="p-2 rounded-xl bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-600 dark:text-gray-300 hover:border-emerald-500/50 transition">
+          <span class="theme-icon-label">☀️</span>
+        </button>
+      </div>
     </div>
 
     <!-- Main Auth Container -->
-    <div class="max-w-lg mx-auto w-full my-6 space-y-5">
-      <div class="text-center space-y-2">
+    <div class="max-w-xl mx-auto w-full my-5 space-y-4">
+      <div class="text-center space-y-1.5">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-[11px] font-bold">
-          <span>🏆 Complete 30 Days</span>
-          <span>→</span>
-          <span>👑 Unlock Lifetime Mode ∞</span>
+          <span data-i18n="stagePill">🏆 Stage 1: 30-Day Body Set → Stage 2: 2–4 Month Physique ∞</span>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Start Your Streak Today</h1>
-        <p class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 max-w-md mx-auto">
-          Day 1 begins the moment you join. Every user gets their own profile, daily ✅ checklist, and permanent progress saved locally.
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight" data-i18n="authHeading">Build Your Physique & Discipline</h1>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 max-w-md mx-auto" data-i18n="authDesc">
+          Day 1 starts on your join date. Select your body type & goal to unlock a personalized home workout + daily routine.
         </p>
       </div>
 
-      <!-- Auth Mode Switcher Tabs (New Profile / Sign In) -->
+      <!-- Auth Mode Switcher Tabs -->
       <div class="grid grid-cols-2 gap-1.5 bg-slate-200/75 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
         <button id="auth-tab-register" type="button" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
-          ✨ New Profile (Day 1)
+          <span data-i18n="tabNewUser">✨ New Profile (Day 1)</span>
         </button>
         <button id="auth-tab-signin" type="button" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
-          👤 Sign In (<span id="auth-user-count">0</span>)
+          <span data-i18n="tabSignIn">👤 Sign In</span> (<span id="auth-user-count">0</span>)
         </button>
       </div>
 
-      <!-- PANEL A: CREATE NEW PROFILE -->
+      <!-- PANEL A: CREATE NEW PROFILE WITH BODY & GOAL ASSESSMENT -->
       <div id="auth-panel-register" class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-3">
-          <div>
-            <h2 class="text-base sm:text-lg font-extrabold">Create Your Profile</h2>
-            <p class="text-xs text-slate-500 dark:text-gray-400">Your 30-day journey starts from your selected Day 1 date</p>
-          </div>
-          <span class="text-xl">🚀</span>
-        </div>
-
-        <form id="register-form" class="space-y-3.5" novalidate>
+        <form id="register-form" class="space-y-4" novalidate>
+          <!-- Name & Username -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label for="reg-name" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Full Name / Nickname *</label>
-              <input
-                id="reg-name"
-                type="text"
-                maxlength="24"
-                placeholder="e.g., Arjun"
-                class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
-              />
+              <label for="reg-name" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1" data-i18n="lblName">Full Name / Nickname *</label>
+              <input id="reg-name" type="text" maxLength="24" placeholder="e.g., Arjun" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition" />
             </div>
             <div>
-              <label for="reg-username" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Username (Unique ID) *</label>
-              <input
-                id="reg-username"
-                type="text"
-                maxlength="18"
-                placeholder="e.g., arjun_run"
-                class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
-              />
+              <label for="reg-username" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1" data-i18n="lblUsername">Username (Unique ID) *</label>
+              <input id="reg-username" type="text" maxLength="18" placeholder="e.g., arjun_fit" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition" />
             </div>
           </div>
 
+          <!-- 1. Current Body Type Assessment -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300" data-i18n="lblBodyType">
+              1. Your Current Body Type (ഇപ്പോഴത്തെ ശരീര പ്രകൃതം) *
+            </label>
+            <div id="body-type-options" class="grid grid-cols-2 gap-2"></div>
+          </div>
+
+          <!-- 2. Target Physique Goal Assessment -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300" data-i18n="lblTargetGoal">
+              2. Desired Physique Goal (എങ്ങനത്തെ ബോഡി ആക്കണം?) *
+            </label>
+            <div id="target-goal-options" class="grid grid-cols-2 gap-2"></div>
+          </div>
+
+          <!-- 3. Fitness Experience Level -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-gray-300" data-i18n="lblExpLevel">
+              3. Current Home Workout Experience *
+            </label>
+            <div id="exp-level-options" class="grid grid-cols-2 gap-2"></div>
+          </div>
+
+          <!-- Start Date & Optional PIN -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label for="reg-start-date" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">Day 1 Start Date *</label>
-              <input
-                id="reg-start-date"
-                type="date"
-                class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
-              />
+              <label for="reg-start-date" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1" data-i18n="lblStartDate">Day 1 Start Date *</label>
+              <input id="reg-start-date" type="date" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition" />
             </div>
             <div>
-              <label for="reg-pin" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1">4-Digit PIN (Optional Lock)</label>
-              <input
-                id="reg-pin"
-                type="password"
-                inputmode="numeric"
-                maxlength="4"
-                placeholder="e.g., 1234 (or blank)"
-                class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition"
-              />
+              <label for="reg-pin" class="block text-xs font-bold text-slate-700 dark:text-gray-300 mb-1" data-i18n="lblPin">4-Digit PIN (Optional Lock)</label>
+              <input id="reg-pin" type="password" inputmode="numeric" maxLength="4" placeholder="e.g., 1234 (or blank)" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition" />
             </div>
           </div>
 
-          <button
-            type="submit"
-            id="btn-start-day1"
-            class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 mt-1"
-          >
-            <span>Start My Day 1 Now 🚀</span>
+          <button type="submit" id="btn-start-day1" class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.99] text-white font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+            <span data-i18n="btnStartDay1">Start My Day 1 Now 🚀</span>
           </button>
 
-          <!-- Inline Validation Error Box -->
           <div id="auth-error-msg" class="hidden rounded-xl bg-rose-500/15 border border-rose-500/35 px-3.5 py-2.5 text-xs font-semibold text-rose-600 dark:text-rose-400"></div>
         </form>
 
         <div class="pt-2 border-t border-slate-100 dark:border-gray-800 flex items-center justify-between text-xs">
-          <span class="text-slate-500 dark:text-gray-400">Already have a JSON backup?</span>
-          <button id="btn-auth-import" type="button" class="font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+          <span class="text-slate-500 dark:text-gray-400" data-i18n="haveBackup">Have a saved JSON backup?</span>
+          <button id="btn-auth-import" type="button" class="font-bold text-emerald-600 dark:text-emerald-400 hover:underline" data-i18n="importBackup">
             📥 Import Backup
           </button>
         </div>
       </div>
 
-      <!-- PANEL B: EXISTING PROFILES SIGN IN -->
+      <!-- PANEL B: SIGN IN TO SAVED PROFILES -->
       <div id="auth-panel-signin" class="hidden bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-3">
           <div>
-            <h2 class="text-base sm:text-lg font-extrabold">Saved Profiles on Device</h2>
-            <p class="text-xs text-slate-500 dark:text-gray-400">Select your profile to continue your streak</p>
+            <h2 class="text-base sm:text-lg font-extrabold" data-i18n="savedProfilesTitle">Saved Profiles on This Device</h2>
+            <p class="text-xs text-slate-500 dark:text-gray-400" data-i18n="savedProfilesSub">Tap Enter to continue your transformation</p>
           </div>
           <span class="text-xl">🔐</span>
         </div>
-
         <div id="saved-profiles-list" class="space-y-2.5"></div>
       </div>
     </div>
 
-    <footer class="text-center text-[11px] text-slate-400 dark:text-gray-600">
+    <footer class="text-center text-[11px] text-slate-400 dark:text-gray-600" data-i18n="footerPrivacy">
       100% Offline-Capable • Stored privately in your browser's localStorage
     </footer>
   </section>
@@ -222,7 +215,7 @@
     <!-- Sticky Header -->
     <header class="sticky top-0 z-30 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-slate-200 dark:border-gray-800">
       <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-        <!-- User Info -->
+        <!-- User Avatar & Stage Badge -->
         <div class="flex items-center gap-2.5 min-w-0">
           <div id="header-avatar" class="w-10 h-10 rounded-xl bg-emerald-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0 shadow-sm">
             AR
@@ -238,16 +231,19 @@
           </div>
         </div>
 
-        <!-- Header Buttons -->
-        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <button id="btn-today" type="button" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition">
+        <!-- Right Controls: Today + Language Toggle + Theme Toggle + Switch User -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="btn-today" type="button" class="px-2.5 py-2 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition" data-i18n="btnToday">
             Today
           </button>
-          <button id="app-theme-btn" type="button" aria-label="Toggle Theme" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-600 dark:text-gray-300 hover:border-emerald-500/40 transition">
+          <button id="app-lang-btn" type="button" aria-label="Switch Language" class="px-2.5 py-2 rounded-xl text-xs font-extrabold bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-emerald-600 dark:text-emerald-400 hover:border-emerald-500/50 transition">
+            EN | മലയാളം
+          </button>
+          <button id="app-theme-btn" type="button" aria-label="Toggle Theme" class="p-2 rounded-xl bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-600 dark:text-gray-300 hover:border-emerald-500/50 transition">
             <span class="theme-icon-label">☀️</span>
           </button>
-          <button id="btn-logout" type="button" title="Switch User / Logout" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300 hover:border-rose-500/40 hover:text-rose-500 transition">
-            Switch 👤
+          <button id="btn-logout" type="button" title="Switch User / Logout" class="px-2.5 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-gray-300 hover:border-rose-500/40 hover:text-rose-500 transition">
+            👤
           </button>
         </div>
       </div>
@@ -255,7 +251,7 @@
 
     <main class="max-w-3xl mx-auto px-4 pt-5 space-y-5">
 
-      <!-- Stage 1 -> Stage 2 Lifetime Unlock Banner -->
+      <!-- Stage 1 (30-Day Body Set) -> Stage 2 (2–4 Month Physique & Lifetime ∞) Banner -->
       <section id="lifetime-banner" class="rounded-2xl p-4 sm:p-5 border shadow-sm transition-all duration-300 bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-800"></section>
 
       <!-- 4-Card Summary Stats -->
@@ -264,7 +260,7 @@
           <div id="stat-label-1" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400">30-Day Score</div>
           <div class="flex items-baseline justify-between mt-1">
             <span id="stat-percent" class="text-xl sm:text-2xl font-extrabold text-emerald-500">0%</span>
-            <span id="stat-tasks-ratio" class="text-[11px] font-semibold text-slate-400">0/150</span>
+            <span id="stat-tasks-ratio" class="text-[11px] font-semibold text-slate-400">0/180</span>
           </div>
           <div class="w-full h-1.5 bg-slate-100 dark:bg-gray-800 rounded-full mt-2 overflow-hidden">
             <div id="stat-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -272,12 +268,12 @@
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-sm">
-          <div id="stat-label-2" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400">Best Streak</div>
+          <div id="stat-label-2" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400" data-i18n="statStreak">Best Streak</div>
           <div class="flex items-center gap-1.5 mt-1">
             <span id="stat-streak" class="text-xl sm:text-2xl font-extrabold">0</span>
             <span class="text-lg">🔥</span>
           </div>
-          <div id="stat-sub-2" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Consecutive ≥80% days</div>
+          <div id="stat-sub-2" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1" data-i18n="statStreakSub">Consecutive ≥80% days</div>
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-sm">
@@ -286,32 +282,35 @@
             <span id="stat-perfect-days" class="text-xl sm:text-2xl font-extrabold">0</span>
             <span id="stat-denom-3" class="text-sm font-bold text-emerald-500">/ 22 goal</span>
           </div>
-          <div id="stat-sub-3" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Unlocks Lifetime Mode</div>
+          <div id="stat-sub-3" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Unlocks 2–4 Mo Physique</div>
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-sm">
-          <div id="stat-label-4" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400">Active Journey</div>
+          <div id="stat-label-4" class="text-[11px] font-semibold text-slate-500 dark:text-gray-400" data-i18n="statJourney">Active Journey</div>
           <div class="flex items-baseline gap-1 mt-1">
             <span id="stat-current-day" class="text-xl sm:text-2xl font-extrabold text-amber-500">Day 1</span>
             <span id="stat-denom-4" class="text-xs text-slate-400">of 30</span>
           </div>
-          <div id="stat-days-left" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Stage 1 Foundation</div>
+          <div id="stat-days-left" class="text-[11px] text-slate-400 dark:text-gray-500 mt-1">Stage 1 Body Set</div>
         </div>
       </section>
 
-      <!-- Navigation Tabs (4 Tabs) -->
-      <nav class="grid grid-cols-4 gap-1.5 bg-slate-200/70 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
-        <button data-tab="checklist" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
-          ✅ Checklist
+      <!-- Navigation Tabs (5 Tabs: Daily, Workout, Map, Routine, Profile) -->
+      <nav class="grid grid-cols-5 gap-1 bg-slate-200/70 dark:bg-gray-900 p-1.5 rounded-2xl border border-slate-200 dark:border-gray-800">
+        <button data-tab="checklist" type="button" class="tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm">
+          <span data-i18n="navDaily">✅ Daily</span>
         </button>
-        <button data-tab="grid" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
-          🗺️ Map
+        <button data-tab="workout" type="button" class="tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          <span data-i18n="navWorkout">💪 Workout</span>
         </button>
-        <button data-tab="timetable" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
-          ⏰ Timetable
+        <button data-tab="grid" type="button" class="tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          <span data-i18n="navMap">📅 Map</span>
         </button>
-        <button data-tab="settings" type="button" class="tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
-          💾 Backup
+        <button data-tab="timetable" type="button" class="tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          <span data-i18n="navRoutine">⏰ Routine</span>
+        </button>
+        <button data-tab="settings" type="button" class="tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition">
+          <span data-i18n="navProfile">⚙️ Profile</span>
         </button>
       </nav>
 
@@ -319,7 +318,6 @@
            TAB 1: DAILY CHECKLIST VIEW
            ===================================== -->
       <div id="view-checklist" class="space-y-4">
-        <!-- Stage 1 Week Selector OR Stage 2 Lifetime Block Selector -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
           <div id="stage1-week-controls" class="grid grid-cols-4 gap-1.5">
             <button data-week="1" type="button" class="week-btn py-2 rounded-xl text-xs font-bold border transition">Week 1</button>
@@ -334,7 +332,7 @@
             </button>
             <div class="text-center">
               <span id="lifetime-block-label" class="text-xs sm:text-sm font-extrabold text-amber-500">Days 31 – 40</span>
-              <span class="block text-[10px] text-slate-400">Lifetime Unlimited Tracking ∞</span>
+              <span class="block text-[10px] text-slate-400">2–4 Month Physique & Lifetime ∞</span>
             </div>
             <button id="btn-next-block" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
               Next 10 ▶
@@ -349,7 +347,6 @@
             </div>
           </div>
 
-          <!-- Day Pills Strip -->
           <div id="week-days-strip" class="grid grid-cols-5 sm:grid-cols-8 gap-1.5 pt-1"></div>
         </div>
 
@@ -364,7 +361,7 @@
                     Weekday
                   </span>
                   <span id="selected-day-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">
-                    0/5 Done
+                    0/6 Done
                   </span>
                 </div>
                 <p id="selected-day-date" class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 mt-0.5"></p>
@@ -380,62 +377,142 @@
               </div>
             </div>
 
-            <!-- Day Progress Bar -->
             <div class="w-full h-2 bg-slate-100 dark:bg-gray-800 rounded-full overflow-hidden">
               <div id="day-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
 
-          <!-- Habit List -->
           <div id="task-list" class="space-y-2.5"></div>
 
-          <!-- Custom Habit & Complete All -->
           <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <button id="btn-add-habit" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-200 hover:border-emerald-500/40 border border-transparent transition">
+            <button id="btn-add-habit" type="button" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-200 hover:border-emerald-500/40 border border-transparent transition" data-i18n="btnAddHabit">
               ➕ Add Custom Habit
             </button>
-            <button id="btn-complete-all" type="button" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline px-2 py-1.5">
+            <button id="btn-complete-all" type="button" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline px-2 py-1.5" data-i18n="btnMarkAll">
               Mark all ✅ for this day
             </button>
           </div>
 
-          <!-- Daily Journal / Notes -->
           <div class="pt-3 border-t border-slate-100 dark:border-gray-800">
-            <label for="daily-note" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1.5">
-              📝 Daily Run, Study & Mood Log (Auto-saved)
+            <label for="daily-note" class="block text-xs font-bold text-slate-600 dark:text-gray-400 mb-1.5" data-i18n="lblDailyNote">
+              📝 Daily Run, Workout & Study Log (Auto-saved)
             </label>
-            <textarea
-              id="daily-note"
-              rows="2"
-              placeholder="e.g., Ran 2.2 km at 5:30 AM! Finished Maths revision before 8:45 PM..."
-              class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 p-3 text-sm text-slate-800 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-emerald-500 transition"
-            ></textarea>
+            <textarea id="daily-note" rows="2" placeholder="e.g., Ran 2 km at 5:30 AM! Did 3x10 Push-ups & 3x15 Squats..." class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 p-3 text-sm text-slate-800 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-emerald-500 transition"></textarea>
           </div>
         </div>
       </div>
 
       <!-- =====================================
-           TAB 2: VISUAL PROGRESS MAP & BADGES
+           TAB 2: FULL-BODY HOME WORKOUT TAB
+           ===================================== -->
+      <div id="view-workout" class="hidden space-y-4">
+        <!-- Body Profile & Stage Transformation Banner -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span id="workout-stage-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                Stage 1 • 30-Day Body Conditioning
+              </span>
+              <h2 id="workout-plan-title" class="text-base sm:text-lg font-extrabold mt-1">Full-Body Home Conditioning</h2>
+            </div>
+
+            <!-- Rest Timer Widget -->
+            <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 rounded-xl px-2.5 py-1.5">
+              <span class="text-xs font-bold text-slate-500">⏱️</span>
+              <span id="rest-timer-display" class="text-xs sm:text-sm font-black tabular-nums text-emerald-500 w-10 text-center">00:45</span>
+              <button id="btn-timer-start" type="button" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-emerald-500 text-white hover:bg-emerald-600 transition">45s</button>
+              <button id="btn-timer-60" type="button" class="px-2 py-1 rounded-lg text-[10px] font-extrabold bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-500/30 transition">60s</button>
+            </div>
+          </div>
+
+          <!-- Personalized Coach Nutrition & Form Note -->
+          <div id="workout-coach-card" class="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-slate-700 dark:text-gray-300 leading-relaxed"></div>
+
+          <!-- Stage 1 vs Stage 2 (2–4 Month Physique) Split Selector -->
+          <div id="stage2-split-bar" class="hidden space-y-2 pt-1">
+            <div class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider" data-i18n="stage2SplitHeader">
+              👑 Stage 2: 2–4 Month Physique Transformation Split
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button type="button" data-split="upper" class="split-btn py-2 px-2 rounded-xl text-xs font-extrabold border transition">
+                💥 Upper Push/Pull
+              </button>
+              <button type="button" data-split="lower" class="split-btn py-2 px-2 rounded-xl text-xs font-extrabold border transition">
+                🦵 Lower & Core
+              </button>
+              <button type="button" data-split="full" class="split-btn py-2 px-2 rounded-xl text-xs font-extrabold border transition">
+                🔥 Athletic HIIT
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exercise Checklist for Selected Day -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-gray-800 pb-3">
+            <div>
+              <h3 id="workout-day-heading" class="text-base font-extrabold">Day 1 Home Workout</h3>
+              <p class="text-[11px] text-slate-500 dark:text-gray-400" data-i18n="workoutSyncHint">
+                Checking all exercises automatically marks "Full-Body Home Workout ✅" on your Daily Checklist!
+              </p>
+            </div>
+            <span id="workout-done-badge" class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 shrink-0">
+              0/6 Done
+            </span>
+          </div>
+
+          <div id="workout-exercise-list" class="space-y-2.5"></div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-gray-800">
+            <span class="text-[11px] text-slate-400" data-i18n="noGymHint">Zero gym equipment needed • Pull-up bar or sturdy doorframe/towel</span>
+            <button id="btn-complete-all-workout" type="button" class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 hover:underline" data-i18n="btnFinishWorkout">
+              Complete Workout ✅
+            </button>
+          </div>
+        </div>
+
+        <!-- 2–4 Month Physique Transformation Roadmap Card -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+          <h3 class="text-sm sm:text-base font-extrabold text-amber-500" data-i18n="roadmapTitle">
+            📈 30-Day Body Set → 2–4 Month Physique Roadmap
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
+              <div class="font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="roadStage1Title">Month 1 (Days 1–30): Body Set & Stamina</div>
+              <p class="text-slate-600 dark:text-gray-300" data-i18n="roadStage1Desc">
+                Joints, tendons & lungs adapt via 5:30 AM running + foundational Push-ups, Pull-ups/Rows, Squats & Planks. Eliminates soreness & builds habit.
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-1">
+              <div class="font-extrabold text-amber-600 dark:text-amber-400" data-i18n="roadStage2Title">Months 2–4 (Days 31–120+): Visible Physique</div>
+              <p class="text-slate-600 dark:text-gray-300" data-i18n="roadStage2Desc">
+                Unlocks progressive hypertrophy splits: Decline/Diamond Push-ups, Wide Pull-ups, Bulgarian Split Squats, Pike Push-ups & Core sculpting for a sharp athletic V-taper.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================
+           TAB 3: VISUAL PROGRESS MAP & BADGES
            ===================================== -->
       <div id="view-grid" class="hidden space-y-4">
-        <!-- Milestone Badges -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
             <div>
-              <h2 class="text-sm sm:text-base font-extrabold">🏅 Permanent Discipline Badges</h2>
-              <p class="text-[11px] text-slate-500 dark:text-gray-400">Earned by completing strong days (≥80% habits)</p>
+              <h2 class="text-sm sm:text-base font-extrabold" data-i18n="badgesTitle">🏅 Permanent Transformation Badges</h2>
+              <p class="text-[11px] text-slate-500 dark:text-gray-400" data-i18n="badgesSub">Earned by completing strong days (≥80% habits)</p>
             </div>
             <span id="badge-unlocked-count" class="text-xs font-bold text-amber-500">0/5 Earned</span>
           </div>
           <div id="milestone-badges-grid" class="grid grid-cols-5 gap-2"></div>
         </div>
 
-        <!-- Calendar Heatmap Grid -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 id="map-section-title" class="text-base sm:text-lg font-extrabold">30-Day Foundation Map</h2>
-              <p id="map-section-subtitle" class="text-xs text-slate-500 dark:text-gray-400">Tap any day tile to open its checklist</p>
+              <p class="text-xs text-slate-500 dark:text-gray-400" data-i18n="mapSub">Tap any day tile to open its checklist & workout</p>
             </div>
             <div class="flex items-center gap-3 text-[11px] font-medium text-slate-500 dark:text-gray-400">
               <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 inline-block"></span> 0%</span>
@@ -446,8 +523,8 @@
 
           <div id="map-filter-bar" class="hidden flex flex-wrap items-center gap-1.5">
             <button data-mapfilter="all" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white">All Days</button>
-            <button data-mapfilter="foundation" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Stage 1 (1–30)</button>
-            <button data-mapfilter="lifetime" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Lifetime (31+)</button>
+            <button data-mapfilter="foundation" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Month 1 (1–30)</button>
+            <button data-mapfilter="lifetime" type="button" class="map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300">Months 2–4+ (31+)</button>
           </div>
 
           <div id="calendar-grid" class="grid grid-cols-5 sm:grid-cols-6 gap-2.5"></div>
@@ -455,91 +532,63 @@
       </div>
 
       <!-- =====================================
-           TAB 3: FULL DAY TIMETABLE REFERENCE
+           TAB 4: FULL DAY TIMETABLE REFERENCE
            ===================================== -->
       <div id="view-timetable" class="hidden space-y-4">
-        <!-- Weekday Schedule -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="text-base sm:text-lg font-extrabold text-emerald-600 dark:text-emerald-400">🏫 School Days (Mon – Fri)</h2>
+            <h2 class="text-base sm:text-lg font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="ttWeekdayTitle">🏫 School Days (Mon – Fri)</h2>
             <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Core Routine</span>
           </div>
-          <div class="divide-y divide-slate-100 dark:divide-gray-800 text-xs sm:text-sm">
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">5:30 – 5:55 AM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🏃‍♂️ Warm-up Walk, Morning Run & Stretch</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">5:55 – 7:15 AM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🚿 Bath, Refresh & Healthy Breakfast</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">7:15 – 8:00 AM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🎒 Final Prep & Clear Departure for School</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">8:00 AM – 6:30 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🚌 School Hours & Evening Return</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">6:30 – 7:15 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">☕ Freshen Up, Light Snack & Mind Reset</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">7:15 – 8:45 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">📚 Focused Study Block (1.5 Hrs, Phone Away)</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">8:45 – 9:45 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">💬 Lover / Mag Time (Strict 9:45 PM Cut-off)</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">9:45 – 10:15 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🍽️ Dinner + Pack School Bag & Running Gear</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">10:15 – 10:30 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">😴 Lights Out & Sleep (7 Hrs Rest)</span>
-            </div>
-          </div>
+          <div id="timetable-weekday-rows" class="divide-y divide-slate-100 dark:divide-gray-800 text-xs sm:text-sm"></div>
         </div>
 
-        <!-- Weekend Schedule -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="text-base sm:text-lg font-extrabold text-amber-500">🌴 Weekends (Sat – Sun)</h2>
+            <h2 class="text-base sm:text-lg font-extrabold text-amber-500" data-i18n="ttWeekendTitle">🌴 Weekends (Sat – Sun)</h2>
             <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500">Recharge & Backlog</span>
           </div>
-          <div class="divide-y divide-slate-100 dark:divide-gray-800 text-xs sm:text-sm">
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-amber-500 whitespace-nowrap">5:30 – 6:05 AM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🏃‍♂️ Longer Easy-Pace Run (25–30 mins)</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-amber-500 whitespace-nowrap">8:30 – 11:30 AM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">📖 Deep Study & Weekly Backlog Clearance</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-slate-600 dark:text-gray-400 whitespace-nowrap">Afternoon / Eve</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">🎮 Revision, Extra Personal Time & Rest</span>
-            </div>
-            <div class="py-2.5 flex justify-between gap-3">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">Before 10:30 PM</span>
-              <span class="text-slate-700 dark:text-gray-300 text-right">😴 Sleep on Time (Ready for Monday 5:30 AM)</span>
-            </div>
-          </div>
+          <div id="timetable-weekend-rows" class="divide-y divide-slate-100 dark:divide-gray-800 text-xs sm:text-sm"></div>
         </div>
       </div>
 
       <!-- =====================================
-           TAB 4: BACKUP, EXPORT & PROFILE SETTINGS
+           TAB 5: BODY PROFILE, BACKUP & SETTINGS
            ===================================== -->
       <div id="view-settings" class="hidden space-y-4">
+        <!-- Update Body Type & Physique Goal -->
         <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
           <div>
-            <h2 class="text-base sm:text-lg font-extrabold">💾 Data Backup & Profile Controls</h2>
+            <h2 class="text-base sm:text-lg font-extrabold" data-i18n="settingsPhysiqueTitle">🧬 My Body Type & Physique Goal</h2>
+            <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5" data-i18n="settingsPhysiqueSub">
+              Update your body profile anytime to recalculate your sets, reps & nutrition focus.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label for="set-body-type" class="block text-[11px] font-bold mb-1">Current Body Type</label>
+              <select id="set-body-type" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-xs font-bold"></select>
+            </div>
+            <div>
+              <label for="set-target-goal" class="block text-[11px] font-bold mb-1">Target Physique Goal</label>
+              <select id="set-target-goal" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-xs font-bold"></select>
+            </div>
+            <div>
+              <label for="set-exp-level" class="block text-[11px] font-bold mb-1">Experience Level</label>
+              <select id="set-exp-level" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-xs font-bold"></select>
+            </div>
+          </div>
+          <button id="btn-save-physique" type="button" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 hover:bg-emerald-600 text-white transition">
+            Save Physique Profile ✅
+          </button>
+        </div>
+
+        <!-- Backup & Profile Controls -->
+        <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold" data-i18n="settingsBackupTitle">💾 Data Backup & Profile Controls</h2>
             <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-              All profiles, checklists, and Lifetime unlocks are stored in <code class="text-emerald-500">localStorage</code>. Export a JSON copy anytime to keep your streak safe across devices.
+              All profiles, checklists, workouts & Lifetime unlocks are saved in <code class="text-emerald-500">localStorage</code>.
             </p>
           </div>
 
@@ -572,122 +621,291 @@
 
   <script>
     // =========================================================
-    // 1. CORE CONSTANTS & CONFIGURATION
+    // 1. CONSTANTS, BILINGUAL DICTIONARY & WORKOUT ENGINE
     // =========================================================
-    const DB_KEY = 'routine_tracker_pro_v3';
+    const DB_KEY = 'physique_discipline_tracker_v4';
     const STAGE1_DAYS = 30;
     const UNLOCK_MIN_PERCENT = 75;
     const UNLOCK_MIN_STRONG_DAYS = 22;
+
+    const BODY_TYPES = [
+      { id: 'skinny', emoji: '🦴', en: 'Skinny / Lean', ml: 'മെലിഞ്ഞ ശരീരം', descEn: 'Fast metabolism, need size', descMl: 'തൂക്കവും മസിലും കൂട്ടണം' },
+      { id: 'average', emoji: '🧍', en: 'Average / Normal', ml: 'സാധാരണ ശരീരം', descEn: 'Balanced starting frame', descMl: 'ഫിറ്റ് & ഷേപ്പ് ആക്കണം' },
+      { id: 'skinnyfat', emoji: '⚖️', en: 'Skinny-Fat / Belly', ml: 'വയറുള്ള / മിതമായ ശരീരം', descEn: 'Slim arms, stubborn belly', descMl: 'വയറ് കുറച്ച് മസിൽ കൂട്ടണം' },
+      { id: 'overweight', emoji: '🔥', en: 'Overweight / Heavy', ml: 'ഭാരം കൂടിയ ശരീരം', descEn: 'Focus on fat burn & stamina', descMl: 'തടി കുറച്ച് ഫിറ്റ് ആകണം' }
+    ];
+
+    const TARGET_GOALS = [
+      { id: 'athletic', emoji: '⚡', en: 'Lean & Athletic', ml: 'ഫിറ്റ് & അത്‌ലറ്റിക്', descEn: 'Sharp abs, stamina & agility', descMl: 'നല്ല സ്റ്റാമിനയും ഫിറ്റ് ബോഡിയും' },
+      { id: 'muscle', emoji: '💪', en: 'Muscle & Broad', ml: 'മസിൽ & കരുത്ത്', descEn: 'Wider chest, back & arms', descMl: 'നെഞ്ചും തോളും കൈകളും വീതി വെക്കാൻ' },
+      { id: 'fatloss', emoji: '🏃', en: 'Fat Loss & Toned', ml: 'വണ്ണം കുറച്ച് ഷേപ്പ്', descEn: 'Burn belly fat & tighten core', descMl: 'കൊഴുപ്പ് കുറച്ച് നല്ല ഷേപ്പ് ആക്കാൻ' },
+      { id: 'calisthenics', emoji: '🤸', en: 'Calisthenics Power', ml: 'പുഷ്/പുൾ-അപ്പ് കരുത്ത്', descEn: 'Master bodyweight strength', descMl: 'പുഷ്-അപ്പ്, പുൾ-അപ്പ് മാസ്റ്റർ ചെയ്യാൻ' }
+    ];
+
+    const EXP_LEVELS = [
+      { id: 'beginner', emoji: '🌱', en: 'Beginner', ml: 'തുടക്കക്കാരൻ', descEn: '0–10 push-ups max', descMl: 'ഇപ്പോഴാണ് തുടങ്ങുന്നത്' },
+      { id: 'intermediate', emoji: '🔥', en: 'Intermediate', ml: 'കുറച്ച് പരിചയമുള്ളവർ', descEn: '12+ push-ups comfortably', descMl: 'നേരത്തെ വർക്കൗട്ട് ചെയ്തിട്ടുണ്ട്' }
+    ];
+
+    const I18N = {
+      en: {
+        brandTitle: 'Physique & Streak',
+        brandSub: '30-Day Body Set → 2–4 Mo Physique ∞',
+        stagePill: '🏆 Stage 1: 30-Day Body Set → Stage 2: 2–4 Month Physique ∞',
+        authHeading: 'Build Your Physique & Discipline',
+        authDesc: 'Day 1 starts on your join date. Select your body type & goal to unlock a personalized home workout + daily routine.',
+        tabNewUser: '✨ New Profile (Day 1)',
+        tabSignIn: '👤 Sign In',
+        lblName: 'Full Name / Nickname *',
+        lblUsername: 'Username (Unique ID) *',
+        lblBodyType: '1. Your Current Body Type *',
+        lblTargetGoal: '2. Desired Physique Goal *',
+        lblExpLevel: '3. Current Home Workout Experience *',
+        lblStartDate: 'Day 1 Start Date *',
+        lblPin: '4-Digit PIN (Optional Lock)',
+        btnStartDay1: 'Start My Day 1 Now 🚀',
+        haveBackup: 'Have a saved JSON backup?',
+        importBackup: '📥 Import Backup',
+        savedProfilesTitle: 'Saved Profiles on This Device',
+        savedProfilesSub: 'Tap Enter to continue your transformation',
+        footerPrivacy: "100% Offline-Capable • Stored privately in your browser's localStorage",
+        btnToday: 'Today',
+        statStreak: 'Best Streak',
+        statStreakSub: 'Consecutive ≥80% days',
+        statJourney: 'Active Journey',
+        navDaily: '✅ Daily',
+        navWorkout: '💪 Workout',
+        navMap: '📅 Map',
+        navRoutine: '⏰ Routine',
+        navProfile: '⚙️ Profile',
+        btnAddHabit: '➕ Add Custom Habit',
+        btnMarkAll: 'Mark all ✅ for this day',
+        lblDailyNote: '📝 Daily Run, Workout & Study Log (Auto-saved)',
+        stage2SplitHeader: '👑 Stage 2: 2–4 Month Physique Transformation Split',
+        workoutSyncHint: 'Checking all exercises automatically marks "Full-Body Home Workout ✅" on your Daily Checklist!',
+        noGymHint: 'Zero gym equipment needed • Pull-up bar or sturdy doorframe/towel',
+        btnFinishWorkout: 'Complete Workout ✅',
+        roadmapTitle: '📈 30-Day Body Set → 2–4 Month Physique Roadmap',
+        roadStage1Title: 'Month 1 (Days 1–30): Body Set & Stamina',
+        roadStage1Desc: 'Joints, tendons & lungs adapt via 5:30 AM running + foundational Push-ups, Pull-ups/Rows, Squats & Planks. Eliminates soreness & builds habit.',
+        roadStage2Title: 'Months 2–4 (Days 31–120+): Visible Physique',
+        roadStage2Desc: 'Unlocks progressive hypertrophy splits: Decline/Diamond Push-ups, Wide Pull-ups, Bulgarian Split Squats, Pike Push-ups & Core sculpting for a sharp athletic V-taper.',
+        badgesTitle: '🏅 Permanent Transformation Badges',
+        badgesSub: 'Earned by completing strong days (≥80% habits)',
+        mapSub: 'Tap any day tile to open its checklist & workout',
+        ttWeekdayTitle: '🏫 School Days (Mon – Fri)',
+        ttWeekendTitle: '🌴 Weekends (Sat – Sun)',
+        settingsPhysiqueTitle: '🧬 My Body Type & Physique Goal',
+        settingsPhysiqueSub: 'Update your body profile anytime to recalculate your sets, reps & nutrition focus.',
+        settingsBackupTitle: '💾 Data Backup & Profile Controls'
+      },
+      ml: {
+        brandTitle: 'ഫിസിക് & സ്ട്രീക്ക്',
+        brandSub: '30 ദിവസം ബോഡി സെറ്റ് → 2–4 മാസം ഫിസിക് ∞',
+        stagePill: '🏆 ഘട്ടം 1: 30 ദിവസം ബോഡി സെറ്റ് → ഘട്ടം 2: 2–4 മാസം ഫിസിക് ∞',
+        authHeading: 'നല്ല ശരീരവും അച്ചടക്കവും വളർത്താം',
+        authDesc: 'ജോയിൻ ചെയ്യുന്ന ദിവസം തന്നെ Day 1 തുടങ്ങും. നിങ്ങളുടെ ശരീര പ്രകൃതവും ലക്ഷ്യവും തിരഞ്ഞെടുത്ത് ഹോം വർക്കൗട്ട് തുടങ്ങൂ.',
+        tabNewUser: '✨ പുതിയ പ്രൊഫൈൽ (Day 1)',
+        tabSignIn: '👤 സൈൻ ഇൻ',
+        lblName: 'പേര് / വിളിപ്പേര് *',
+        lblUsername: 'യൂസർനെയിം (Unique ID) *',
+        lblBodyType: '1. ഇപ്പോഴത്തെ ശരീര പ്രകൃതം *',
+        lblTargetGoal: '2. എങ്ങനത്തെ ബോഡി ആക്കണം? *',
+        lblExpLevel: '3. വർക്കൗട്ട് പരിചയം *',
+        lblStartDate: 'Day 1 തുടങ്ങുന്ന തീയതി *',
+        lblPin: '4-അക്ക PIN (ലോക്ക് വേണമെങ്കിൽ)',
+        btnStartDay1: 'എന്റെ Day 1 ഇപ്പോൾ തുടങ്ങാം 🚀',
+        haveBackup: 'പഴയ JSON ബാക്കപ്പ് ഉണ്ടോ?',
+        importBackup: '📥 ബാക്കപ്പ് എടുക്കുക',
+        savedProfilesTitle: 'ഈ ഫോണിലുള്ള പ്രൊഫൈലുകൾ',
+        savedProfilesSub: 'തുടരാൻ Enter അമർത്തുക',
+        footerPrivacy: '100% ഓഫ്‌ലൈൻ • നിങ്ങളുടെ ഫോണിലെ localStorage-ൽ സുരക്ഷിതം',
+        btnToday: 'ഇന്ന്',
+        statStreak: 'മികച്ച സ്ട്രീക്ക്',
+        statStreakSub: 'തുടർച്ചയായ ≥80% ദിവസങ്ങൾ',
+        statJourney: 'ഇപ്പോഴത്തെ ദിവസം',
+        navDaily: '✅ ഡെയ്‌ലി',
+        navWorkout: '💪 വർക്കൗട്ട്',
+        navMap: '📅 മാപ്പ്',
+        navRoutine: '⏰ ടൈംടേബിൾ',
+        navProfile: '⚙️ പ്രൊഫൈൽ',
+        btnAddHabit: '➕ പുതിയ ശീലം ചേർക്കുക',
+        btnMarkAll: 'ഇന്നത്തെ എല്ലാം ✅ ആക്കുക',
+        lblDailyNote: '📝 ഇന്നത്തെ ഓട്ടം, വർക്കൗട്ട് & പഠിത്തം കുറിപ്പുകൾ',
+        stage2SplitHeader: '👑 ഘട്ടം 2: 2–4 മാസം ഫിസിക് ട്രാൻസ്ഫോർമേഷൻ വർക്കൗട്ട്',
+        workoutSyncHint: 'എല്ലാ എക്സർസൈസും ടിക്ക് ചെയ്താൽ Daily Checklist-ൽ "Full-Body Home Workout ✅" തനിയെ ആകും!',
+        noGymHint: 'ജിം ഉപകരണങ്ങൾ ആവശ്യമില്ല • വീട്ടിൽ തന്നെ ചെയ്യാം',
+        btnFinishWorkout: 'വർക്കൗട്ട് പൂർത്തിയാക്കി ✅',
+        roadmapTitle: '📈 30 ദിവസം ബോഡി സെറ്റ് → 2–4 മാസം ഫിസിക് പ്ലാൻ',
+        roadStage1Title: 'ആദ്യ മാസം (Days 1–30): ബോഡി സെറ്റ് & സ്റ്റാമിന',
+        roadStage1Desc: '5:30 AM ഓട്ടവും ബേസിക് Push-ups, Pull-ups/Rows, Squats, Plank എന്നിവയിലൂടെ ശരീരം വേദനയില്ലാതെ വർക്കൗട്ടിന് പാകമാകുന്നു.',
+        roadStage2Title: '2–4 മാസങ്ങൾ (Days 31–120+): നല്ല ഫിസിക് രൂപപ്പെടുന്നു',
+        roadStage2Desc: 'അൺലോക്ക് ആകുമ്പോൾ Decline/Diamond Push-ups, Wide Pull-ups, Bulgarian Split Squats, Pike Push-ups എന്നിവ വഴി നെഞ്ചും തോളും വയറും നല്ല ഷേപ്പ് ആകുന്നു.',
+        badgesTitle: '🏅 സ്ഥിരമായ നേട്ടങ്ങളുടെ ബാഡ്ജുകൾ',
+        badgesSub: '≥80% പൂർത്തിയാക്കുന്ന ദിവസങ്ങളിലൂടെ നേടാം',
+        mapSub: 'ഏതെങ്കിലും ദിവസത്തിൽ തൊട്ടാൽ ആ ദിവസത്തെ ലിസ്റ്റ് തുറക്കാം',
+        ttWeekdayTitle: '🏫 സ്കൂൾ ദിവസങ്ങൾ (തിങ്കൾ – വെള്ളി)',
+        ttWeekendTitle: '🌴 അവധി ദിവസങ്ങൾ (ശനി – ഞായർ)',
+        settingsPhysiqueTitle: '🧬 എന്റെ ബോഡി ടൈപ്പും ലക്ഷ്യവും',
+        settingsPhysiqueSub: 'എപ്പോൾ വേണമെങ്കിലും നിങ്ങളുടെ ബോഡി ടൈപ്പും ലക്ഷ്യവും മാറ്റാം.',
+        settingsBackupTitle: '💾 ബാക്കപ്പ് & പ്രൊഫൈൽ നിയന്ത്രണങ്ങൾ'
+      }
+    };
 
     const DEFAULT_HABITS = [
       {
         id: 'run',
         emoji: '🏃‍♂️',
         weekdayTitle: '5:30 AM Morning Run & Warm-up',
-        weekdayTime: '5:30 – 5:55 AM',
-        weekdaySub: '5 min warm-up walk + 15–20 min easy jog/run & stretch',
+        weekdayTitleMl: '5:30 AM മോണിംഗ് റൺ & വാം-അപ്പ്',
+        weekdayTime: '5:30 – 5:50 AM',
+        weekdaySub: '5 min walk warm-up + 15 min easy jog/run',
+        weekdaySubMl: '5 മിനിറ്റ് നടത്തം + 15 മിനിറ്റ് പതുക്കെ ഓട്ടം',
         weekendTitle: '5:30 AM Longer Easy-Pace Run',
-        weekendTime: '5:30 – 6:05 AM',
-        weekendSub: '25–30 min steady run + full leg stretch'
+        weekendTitleMl: '5:30 AM ലോംഗ് ഈസി റൺ',
+        weekendTime: '5:30 – 6:00 AM',
+        weekendSub: '25–30 min steady run + stretch',
+        weekendSubMl: '25–30 മിനിറ്റ് ഓട്ടം + സ്ട്രെച്ച്'
+      },
+      {
+        id: 'workout',
+        emoji: '💪',
+        weekdayTitle: 'Full-Body Home Workout (Push/Pull/Squats)',
+        weekdayTitleMl: 'ഫുൾ-ബോഡി ഹോം വർക്കൗട്ട് (Push/Pull/Squats)',
+        weekdayTime: '20 – 25 Mins',
+        weekdaySub: 'Complete today’s sets in the Workout tab (Morning or 6:30 PM)',
+        weekdaySubMl: 'Workout ടാബിലെ ഇന്നത്തെ എക്സർസൈസുകൾ പൂർത്തിയാക്കുക',
+        weekendTitle: 'Full-Body Strength & Core Session',
+        weekendTitleMl: 'ഫുൾ-ബോഡി സ്ട്രെങ്ത് & കോർ വർക്കൗട്ട്',
+        weekendTime: '25 – 30 Mins',
+        weekendSub: 'Complete today’s full-body sets in the Workout tab',
+        weekendSubMl: 'Workout ടാബിലെ ഇന്നത്തെ സെറ്റുകൾ പൂർത്തിയാക്കുക'
       },
       {
         id: 'school',
         emoji: '🎒',
-        weekdayTitle: '8:00 AM School On-Time & Ready',
+        weekdayTitle: '8:00 AM School On-Time & Protein Breakfast',
+        weekdayTitleMl: '8:00 AM കൃത്യസമയത്ത് സ്കൂളിലേക്ക് + നല്ല ഭക്ഷണം',
         weekdayTime: '8:00 AM Sharp',
-        weekdaySub: 'Bath, healthy breakfast, uniform & bag ready on time',
+        weekdaySub: 'Bath, eggs/milk/banana breakfast & leave on time',
+        weekdaySubMl: 'കുളി, മുട്ട/പാൽ/പഴം ബ്രേക്ക്ഫാസ്റ്റ് & കൃത്യസമയത്ത് യാത്ര',
         weekendTitle: 'Morning Deep Study / Backlog Session',
+        weekendTitleMl: 'രാവിലത്തെ ഡീപ് സ്റ്റഡി & റിവിഷൻ',
         weekendTime: '8:30 – 11:30 AM',
-        weekendSub: 'Clear tough topics, pending notes & revision'
+        weekendSub: 'Clear tough topics, pending notes & revision',
+        weekendSubMl: 'പ്രയാസമുള്ള പാഠങ്ങളും നോട്ട്സും തീർക്കുക'
       },
       {
         id: 'study',
         emoji: '📚',
         weekdayTitle: '7:15 PM – 8:45 PM Focused Study',
+        weekdayTitleMl: '7:15 – 8:45 PM പഠിത്തം (ഫോൺ മാറ്റി വെച്ച്)',
         weekdayTime: '7:15 – 8:45 PM',
-        weekdaySub: '1.5 hrs daily homework & revision (phone away)',
-        weekendTitle: 'Afternoon / Evening Revision & Practice',
+        weekdaySub: '1.5 hrs daily revision & homework (phone away)',
+        weekdaySubMl: '1.5 മണിക്കൂർ പഠിത്തം & ഹോംവർക്ക്',
+        weekendTitle: 'Evening Revision & Next-Week Prep',
+        weekendTitleMl: 'വൈകുന്നേരത്തെ റിവിഷൻ',
         weekendTime: '5:00 – 6:30 PM',
-        weekendSub: 'Quick review & prepare for upcoming school week'
+        weekendSub: 'Quick review & prepare for upcoming school week',
+        weekendSubMl: 'അടുത്ത ആഴ്ചയിലേക്കുള്ള തയ്യാറെടുപ്പ്'
       },
       {
         id: 'chill',
         emoji: '💬',
-        weekdayTitle: '9:45 PM Lover / Chill Cut-off',
+        weekdayTitle: '9:45 PM Lover / Mag Cut-off',
+        weekdayTitleMl: '9:45 PM ലവർ / പേഴ്സണൽ ടൈം കട്ട്-ഓഫ്',
         weekdayTime: '8:45 – 9:45 PM',
-        weekdaySub: 'Dedicated personal/screen time — strict stop at 9:45 PM',
+        weekdaySub: 'Dedicated personal/chill time — strict stop at 9:45 PM',
+        weekdaySubMl: 'സംസാരിക്കാനും റിലാക്സ് ചെയ്യാനും — 9:45 PM-ന് നിർത്തണം',
         weekendTitle: 'Balanced Chill Time (10:00 PM Cut-off)',
+        weekendTitleMl: 'ബാലൻസ്ഡ് ചിൽ ടൈം (10:00 PM കട്ട്-ഓഫ്)',
         weekendTime: 'Evening Chill',
-        weekendSub: 'Relax & unwind without hurting sleep schedule'
+        weekendSub: 'Relax & unwind without ruining sleep schedule',
+        weekendSubMl: 'ഉറക്കം വൈകാതെ റിലാക്സ് ചെയ്യുക'
       },
       {
         id: 'sleep',
         emoji: '😴',
-        weekdayTitle: '10:30 PM Lights Out & Prep',
+        weekdayTitle: '10:30 PM Lights Out (Muscle Recovery)',
+        weekdayTitleMl: '10:30 PM ഉറക്കം & നാളത്തെ ഒരുക്കം',
         weekdayTime: 'Before 10:30 PM',
-        weekdaySub: 'Next day running gear ready + 7 hrs quality sleep',
-        weekendTitle: 'Early Sleep for 5:30 AM Run',
+        weekdaySub: 'Pack bag/shoes + 7 hrs deep sleep for muscle & brain recovery',
+        weekdaySubMl: 'ബാഗ്/ഷൂ റെഡി + മസിൽ വളരാൻ 7 മണിക്കൂർ നല്ല ഉറക്കം',
+        weekendTitle: 'Early Sleep for Monday 5:30 AM Run',
+        weekendTitleMl: 'തിങ്കളാഴ്ച 5:30 AM ഓട്ടത്തിനായി നേരത്തെ ഉറക്കം',
         weekendTime: 'Before 10:30 PM',
-        weekendSub: 'Protect your 5:30 AM wake-up rhythm'
+        weekendSub: 'Protect your 5:30 AM wake-up rhythm',
+        weekendSubMl: 'രാവിലെ 5:30-ന് എഴുന്നേൽക്കാൻ നേരത്തെ ഉറങ്ങുക'
       }
     ];
 
     const WEEK_MILESTONES = {
       1: {
-        title: 'Week 1 (Days 1–7): Habit & Body Adjustment',
-        desc: 'Focus on waking up at 5:30 AM and showing up. Keep running slow & easy so your legs adapt without soreness.'
+        titleEn: 'Week 1 (Days 1–7): Joint & Habit Activation',
+        titleMl: 'ആഴ്ച 1 (Days 1–7): ശരീരം പാകപ്പെടുത്തൽ',
+        descEn: 'Keep running slow and focus on clean form in Push-ups, Rows & Squats. Your body is adapting to 5:30 AM wake-ups.',
+        descMl: 'പതുക്കെ ഓടുക, Push-ups, Rows, Squats എന്നിവ ശരിയായ രീതിയിൽ ചെയ്യുക. ശരീരം 5:30 AM-മായി പൊരുത്തപ്പെടുന്ന ആഴ്ചയാണിത്.'
       },
       2: {
-        title: 'Week 2 (Days 8–14): Steady Evening Rhythm',
-        desc: 'Increase continuous jogging slightly. Lock in your 7:15–8:45 PM study block right after freshening up.'
+        titleEn: 'Week 2 (Days 8–14): Stamina & Evening Rhythm',
+        titleMl: 'ആഴ്ച 2 (Days 8–14): സ്റ്റാമിന & പഠിത്തം ബാലൻസ്',
+        descEn: 'Add +2 reps per set on workouts and lock in your 7:15–8:45 PM study block without phone distractions.',
+        descMl: 'വർക്കൗട്ടിൽ ഓരോ സെറ്റിലും 2 എണ്ണം കൂട്ടുക, 7:15–8:45 PM പഠിത്തം കൃത്യമാക്കുക.'
       },
       3: {
-        title: 'Week 3 (Days 15–21): Consistency & Cut-off Control',
-        desc: '20–25 min comfortable run. Respect the 9:45 PM personal/screen cut-off so you always sleep before 10:30 PM.'
+        titleEn: 'Week 3 (Days 15–21): Core & Strength Control',
+        titleMl: 'ആഴ്ച 3 (Days 15–21): കരുത്തും നിയന്ത്രണവും',
+        descEn: 'Your muscles are primed! Hold Planks longer and strictly respect the 9:45 PM personal cut-off for 7 hrs sleep.',
+        descMl: 'മസിലുകൾക്ക് കരുത്ത് വന്നു തുടങ്ങും. 9:45 PM കട്ട്-ഓഫ് പാലിച്ച് 10:30 PM-ന് ഉറങ്ങുക.'
       },
       4: {
-        title: 'Week 4 (Days 22–30): Lock-in & Lifetime Gate',
-        desc: 'Final stretch of Stage 1! Hit ≥75% overall score (or 22+ strong days) to permanently unlock Lifetime Mode ∞.'
+        titleEn: 'Week 4 (Days 22–30): Body Set Complete → Unlock Physique Stage!',
+        titleMl: 'ആഴ്ച 4 (Days 22–30): ബോഡി സെറ്റ് പൂർത്തിയാക്കി ഘട്ടം 2 തുറക്കാം!',
+        descEn: 'Hit ≥75% score (or 22+ strong days) to unlock Stage 2: the 2–4 Month Physique Transformation Split & Lifetime Mode ∞.',
+        descMl: '≥75% സ്കോർ അല്ലെങ്കിൽ 22+ നല്ല ദിവസങ്ങൾ നേടിയാൽ 2–4 മാസത്തെ ഫിസിക് വർക്കൗട്ട് & Lifetime Mode ∞ തുറക്കും!'
       }
     };
 
     const BADGE_LEVELS = [
-      { days: 30, icon: '🏆', title: '30 Days', desc: 'Foundation Complete' },
-      { days: 60, icon: '⚡', title: '60 Days', desc: 'Habit Forged' },
-      { days: 90, icon: '🔥', title: '90 Days', desc: 'Quarter Legend' },
-      { days: 180, icon: '💎', title: '180 Days', desc: 'Half-Year Iron' },
-      { days: 365, icon: '👑', title: '365 Days', desc: '1-Year Titan' }
+      { days: 30, icon: '🏆', title: '30 Days', desc: 'Body Set' },
+      { days: 60, icon: '💪', title: '60 Days', desc: 'Month 2 Shape' },
+      { days: 90, icon: '🔥', title: '90 Days', desc: 'Month 3 Cut' },
+      { days: 120, icon: '⚡', title: '120 Days', desc: '4-Mo Physique' },
+      { days: 365, icon: '👑', title: '365 Days', desc: 'Lifetime Titan' }
     ];
 
-    // =========================================================
-    // 2. SAFE LOCALSTORAGE + IN-MEMORY FALLBACK
-    // =========================================================
-    let memoryFallbackRaw = null;
-
+    // Safe Storage Wrapper
+    let memoryStorageFallback = null;
     function safeReadStorage(key) {
       try {
         return window.localStorage.getItem(key);
-      } catch (err) {
-        return memoryFallbackRaw;
+      } catch (e) {
+        return memoryStorageFallback;
       }
     }
-
-    function safeWriteStorage(key, value) {
+    function safeWriteStorage(key, val) {
       try {
-        window.localStorage.setItem(key, value);
-      } catch (err) {
-        memoryFallbackRaw = value;
+        window.localStorage.setItem(key, val);
+      } catch (e) {
+        memoryStorageFallback = val;
       }
     }
 
     let db = {
       users: {},
       activeUsername: null,
-      theme: 'dark'
+      theme: 'dark',
+      lang: 'en'
     };
 
     let selectedDay = 1;
     let mapFilter = 'all';
+    let regBodyType = 'average';
+    let regTargetGoal = 'athletic';
+    let regExpLevel = 'beginner';
+    let stage2SplitOverride = null;
+    let restTimerInterval = null;
+    let restSecondsLeft = 45;
 
     function saveDB() {
       safeWriteStorage(DB_KEY, JSON.stringify(db));
@@ -702,33 +920,349 @@
             db.users = parsed.users || {};
             db.activeUsername = parsed.activeUsername || null;
             db.theme = parsed.theme || 'dark';
+            db.lang = parsed.lang || 'en';
           }
         }
       } catch (err) {
-        console.warn('Could not parse storage:', err);
+        console.warn('Storage parse reset:', err);
       }
     }
 
     // =========================================================
-    // 3. DATE & USER HELPERS
+    // 2. PERSONALIZED FULL-BODY WORKOUT GENERATOR
+    // =========================================================
+    function getWorkoutForDay(user, dayNum) {
+      const bodyType = user.bodyType || 'average';
+      const goal = user.goal || 'athletic';
+      const exp = user.exp || 'beginner';
+      const isInt = exp === 'intermediate';
+      const weekNum = Math.min(4, Math.ceil(dayNum / 7));
+      const progBonus = weekNum - 1; // +0 in W1, +1 in W2, +2 in W3, +3 in W4
+
+      // Coach advice based on Body Type + Goal
+      const coachNotes = {
+        skinny: {
+          en: '🥣 Bulking & Size Focus: Eat eggs, milk, bananas, peanuts & rice daily. Move slowly on the way down (3 sec) in Push-ups & Pull-ups to build muscle.',
+          ml: '🥣 മസിലും തൂക്കവും കൂടാൻ: ദിവസവും മുട്ട, പാൽ, ചെറുപഴം, കടല, ചോറ് എന്നിവ നന്നായി കഴിക്കുക. Push-ups & Pull-ups പതുക്കെ താഴ്ന്ന് ചെയ്യുക.'
+        },
+        average: {
+          en: '⚡ Athletic Recomp Focus: Keep protein high and push for +1 extra clean rep each week to build a sharp V-taper chest, shoulders & abs.',
+          ml: '⚡ ഫിറ്റ് & അത്‌ലറ്റിക് ബോഡി: പ്രോട്ടീൻ ഭക്ഷണം കൂട്ടുക, ഓരോ ആഴ്ചയും 1–2 റെപ്സ് വീതം കൂട്ടി നെഞ്ചും തോളും വയറും ഷേപ്പ് ആക്കുക.'
+        },
+        skinnyfat: {
+          en: '⚖️ Belly Fat + Muscle Focus: Cut sugary drinks & bakery snacks. Build upper-body width with Push-ups/Pull-ups while tightening abs with Planks & Leg Raises.',
+          ml: '⚖️ വയറ് കുറച്ച് മസിൽ കൂട്ടാൻ: പഞ്ചസാരയും ബേക്കറി പലഹാരങ്ങളും കുറയ്ക്കുക. Push-ups/Pull-ups വഴി തോളും നെഞ്ചും വീതി വെപ്പിക്കുക.'
+        },
+        overweight: {
+          en: '🔥 Fat Loss & Stamina Focus: Keep rest times short (30–45s), stay consistent with your 5:30 AM run, and avoid fried foods & sugar.',
+          ml: '🔥 തടി കുറയ്ക്കാൻ: സെറ്റുകൾക്കിടയിലെ വിശ്രമം 30–45 സെക്കൻഡിൽ നിർത്തുക, 5:30 AM ഓട്ടം മുടക്കരുത്, എണ്ണപ്പലഹാരവും മധുരവും ഒഴിവാക്കുക.'
+        }
+      };
+
+      const coachText = coachNotes[bodyType]
+        ? coachNotes[bodyType][db.lang]
+        : coachNotes.average[db.lang];
+
+      // STAGE 1: Days 1–30 (Body Set & Conditioning)
+      if (!user.lifetimeUnlocked || dayNum <= 30) {
+        const pushReps = (isInt ? 12 : 8) + progBonus * 2;
+        const pullReps = (isInt ? 6 : 4) + progBonus;
+        const squatReps = (isInt ? 16 : 12) + progBonus * 3;
+        const lungeReps = (isInt ? 10 : 8) + progBonus;
+        const plankSec = (isInt ? 40 : 25) + progBonus * 5;
+        const jjSec = goal === 'fatloss' || bodyType === 'overweight' ? 45 + progBonus * 5 : 30 + progBonus * 5;
+
+        return {
+          stageBadge: db.lang === 'ml'
+            ? `ഘട്ടം 1 • ആഴ്ച ${weekNum} ബോഡി സെറ്റ് (Day ${dayNum}/30)`
+            : `Stage 1 • Week ${weekNum} Body Conditioning (Day ${dayNum}/30)`,
+          planTitle: db.lang === 'ml'
+            ? 'ഫുൾ-ബോഡി ഹോം കണ്ടീഷനിംഗ് (Full Body)'
+            : 'Full-Body Home Conditioning (No Gym)',
+          coachText,
+          split: 'stage1',
+          exercises: [
+            {
+              id: 'ex_warmup',
+              emoji: '🔥',
+              nameEn: 'Jumping Jacks + Arm Circles',
+              nameMl: 'ജമ്പിംഗ് ജാക്സ് & ആം സർക്കിൾസ് (Warm-up)',
+              setsEn: `3 Sets × ${jjSec} sec`,
+              setsMl: `3 സെറ്റ് × ${jjSec} സെക്കൻഡ്`,
+              tipEn: 'Loosens shoulders, hips & warms up your heart before strength sets.',
+              tipMl: 'തോളും കാലും ഫ്രീ ആക്കാനും ശരീരം ചൂടാക്കാനും.'
+            },
+            {
+              id: 'ex_pushups',
+              emoji: '💪',
+              nameEn: isInt ? 'Standard Full Push-ups' : 'Incline / Knee or Full Push-ups',
+              nameMl: isInt ? 'ഫുൾ പുഷ്-അപ്സ് (Push-ups)' : 'ഇൻക്ലൈൻ / നീ അല്ലെങ്കിൽ ഫുൾ പുഷ്-അപ്സ്',
+              setsEn: `3 Sets × ${pushReps} reps (Rest 45s)`,
+              setsMl: `3 സെറ്റ് × ${pushReps} എണ്ണം (45s വിശ്രമം)`,
+              tipEn: 'Chest, shoulders & triceps. Keep body straight like a plank; chest near floor.',
+              tipMl: 'നെഞ്ച്, തോൾ, കൈകൾ എന്നിവയ്ക്ക്. നടുവ് വളയാതെ നെഞ്ച് താഴെ വരെ കൊണ്ടുപോകുക.'
+            },
+            {
+              id: 'ex_pullups',
+              emoji: '🦍',
+              nameEn: 'Pull-ups / Doorway Towel Rows',
+              nameMl: 'പുൾ-അപ്സ് / ടവൽ അല്ലെങ്കിൽ ടേബിൾ റോസ്',
+              setsEn: `3 Sets × ${pullReps} reps (Rest 60s)`,
+              setsMl: `3 സെറ്റ് × ${pullReps} എണ്ണം (60s വിശ്രമം)`,
+              tipEn: 'Back width & biceps. Use a pull-up bar, sturdy table edge inverted rows, or towel rows.',
+              tipMl: 'മുതുകിന് വീതിയും കൈകൾക്ക് ബലവും വരാൻ. ബാർ ഇല്ലെങ്കിൽ ടേബിളിനടിയിൽ കിടന്ന് മുകളിലേക്ക് വലിക്കുക.'
+            },
+            {
+              id: 'ex_squats',
+              emoji: '🦵',
+              nameEn: 'Bodyweight Deep Squats',
+              nameMl: 'ബോഡിവെയ്റ്റ് സ്ക്വാട്ട്സ് (Squats)',
+              setsEn: `3 Sets × ${squatReps} reps (Rest 45s)`,
+              setsMl: `3 സെറ്റ് × ${squatReps} എണ്ണം (45s വിശ്രമം)`,
+              tipEn: 'Quads, glutes & legs. Keep heels flat on ground and chest upright.',
+              tipMl: 'തുടകൾക്കും കാലിനും നല്ല കരുത്ത് വരാൻ. ഉപ്പൂറ്റി നിലത്ത് ഉറപ്പിച്ചു താഴുക.'
+            },
+            {
+              id: 'ex_lunges',
+              emoji: '⚡',
+              nameEn: 'Alternating Reverse Lunges + Glute Bridge',
+              nameMl: 'റിവേഴ്സ് ലഞ്ചസ് + ഗ്ലൂട്ട് ബ്രിഡ്ജ്',
+              setsEn: `3 Sets × ${lungeReps} each leg`,
+              setsMl: `3 സെറ്റ് × ${lungeReps} വീതം ഓരോ കാലും`,
+              tipEn: 'Fixes leg imbalances and strengthens lower back after sitting in school.',
+              tipMl: 'സ്കൂളിൽ ഇരുന്നുണ്ടാകുന്ന നടുവേദന മാറ്റാനും കാലുകൾക്ക് ഷേപ്പ് വരാനും.'
+            },
+            {
+              id: 'ex_plank',
+              emoji: '🧱',
+              nameEn: 'Forearm Plank + Crunches',
+              nameMl: 'പ്ലാങ്ക് ഹോൾഡ് + ക്രഞ്ചസ് (Abs & Core)',
+              setsEn: `3 Sets × ${plankSec}s Plank + 12 Crunches`,
+              setsMl: `3 സെറ്റ് × ${plankSec}s പ്ലാങ്ക് + 12 ക്രഞ്ചസ്`,
+              tipEn: 'Tighten abs & glutes; builds core stability and flattens stomach.',
+              tipMl: 'വയറിലെ മസിലുകൾ മുറുക്കി പിടിക്കുക — വയറ് കുറഞ്ഞ് ഉറപ്പ് വരും.'
+            }
+          ]
+        };
+      }
+
+      // STAGE 2: Days 31+ (2–4 Month Physique Transformation Split!)
+      const monthNum = Math.min(4, Math.ceil(dayNum / 30));
+      const splits = ['upper', 'lower', 'full'];
+      const activeSplit = stage2SplitOverride || splits[(dayNum - 31) % 3];
+
+      if (activeSplit === 'upper') {
+        return {
+          stageBadge: db.lang === 'ml'
+            ? `👑 ഘട്ടം 2 • മാസം ${monthNum} ഫിസിക് (Day ${dayNum})`
+            : `👑 Stage 2 • Month ${monthNum} Physique Split (Day ${dayNum})`,
+          planTitle: db.lang === 'ml'
+            ? 'അപ്പർ ബോഡി: ചെസ്റ്റ്, ബാക്ക്, ഷോൾഡർ & ആംസ് (V-Taper)'
+            : 'Upper Body Hypertrophy: Chest, Back, Shoulders & Arms',
+          coachText,
+          split: 'upper',
+          exercises: [
+            {
+              id: 's2_decline_push',
+              emoji: '🔥',
+              nameEn: 'Decline Push-ups (Feet on Bed/Chair)',
+              nameMl: 'ഡിക്ലൈൻ പുഷ്-അപ്സ് (കാൽ കട്ടിലിൽ വെച്ച്)',
+              setsEn: '4 Sets × 12–15 reps (Rest 45s)',
+              setsMl: '4 സെറ്റ് × 12–15 എണ്ണം (45s വിശ്രമം)',
+              tipEn: 'Builds upper chest & front shoulders for an aesthetic V-taper.',
+              tipMl: 'മുകളിലത്തെ ചെസ്റ്റിനും ഷോൾഡറിനും നല്ല വീതി വരാൻ.'
+            },
+            {
+              id: 's2_wide_pull',
+              emoji: '🦍',
+              nameEn: 'Wide-Grip Pull-ups / Inverted Table Rows',
+              nameMl: 'വൈഡ്-ഗ്രിപ്പ് പുൾ-അപ്സ് / ടേബിൾ റോസ്',
+              setsEn: '4 Sets × 8–12 reps (Rest 60s)',
+              setsMl: '4 സെറ്റ് × 8–12 എണ്ണം (60s വിശ്രമം)',
+              tipEn: 'Pull chest toward bar/table edge; widens lats & upper back.',
+              tipMl: 'മുതുകിന് നല്ല V-ഷേപ്പ് വീതി നൽകുന്നു.'
+            },
+            {
+              id: 's2_pike_push',
+              emoji: '🏔️',
+              nameEn: 'Pike Push-ups (Shoulder Boulder Builder)',
+              nameMl: 'പൈക്ക് പുഷ്-അപ്സ് (ഷോൾഡർ വീതി വരാൻ)',
+              setsEn: '3 Sets × 10–12 reps (Rest 45s)',
+              setsMl: '3 സെറ്റ് × 10–12 എണ്ണം (45s വിശ്രമം)',
+              tipEn: 'Hips raised high in inverted V; targets deltoids like overhead press.',
+              tipMl: 'അരക്കെട്ട് ഉയർത്തി V ആകൃതിയിൽ നിന്ന് തല താഴ്ത്തുക — തോളിന് നല്ല ഷേപ്പ് വരും.'
+            },
+            {
+              id: 's2_diamond_push',
+              emoji: '💎',
+              nameEn: 'Diamond Push-ups + Chair Tricep Dips',
+              nameMl: 'ഡയമണ്ട് പുഷ്-അപ്സ് + ചെയർ ഡിപ്സ് (Arms)',
+              setsEn: '3 Sets × 10 Diamond + 12 Dips',
+              setsMl: '3 സെറ്റ് × 10 ഡയമണ്ട് + 12 ഡിപ്സ്',
+              tipEn: 'Blasts inner chest & triceps so shirt sleeves fit tight.',
+              tipMl: 'കൈകൾക്ക് നല്ല വണ്ണവും ഷേപ്പും വരാൻ.'
+            },
+            {
+              id: 's2_chinups',
+              emoji: '💪',
+              nameEn: 'Underhand Chin-ups / Backpack Bicep Curls',
+              nameMl: 'ചിൻ-അപ്സ് / ബാഗിൽ ബുക്ക് വെച്ച് Bicep Curls',
+              setsEn: '3 Sets × 10–14 reps (Rest 45s)',
+              setsMl: '3 സെറ്റ് × 10–14 എണ്ണം (45s വിശ്രമം)',
+              tipEn: 'Use underhand pull-ups or curl a heavy school backpack for biceps.',
+              tipMl: 'ബൈസെപ്സ് മസിൽ വളരാൻ സ്കൂൾ ബാഗിൽ ബുക്ക് നിറച്ച് Curls ചെയ്യാം.'
+            },
+            {
+              id: 's2_hollow',
+              emoji: '🧱',
+              nameEn: 'Hollow Body Hold + Side Planks',
+              nameMl: 'ഹോളോ ബോഡി ഹോൾഡ് + സൈഡ് പ്ലാങ്ക്',
+              setsEn: '3 Sets × 35s Hollow + 25s/side',
+              setsMl: '3 സെറ്റ് × 35s ഹോളോ + 25s വശങ്ങൾ',
+              tipEn: 'Carves deep six-pack abs & tightens waist.',
+              tipMl: 'വയറിന്റെ വശങ്ങളിലെ കൊഴുപ്പ് കുറച്ച് ആബ്സ് തെളിയിക്കാൻ.'
+            }
+          ]
+        };
+      }
+
+      if (activeSplit === 'lower') {
+        return {
+          stageBadge: db.lang === 'ml'
+            ? `👑 ഘട്ടം 2 • മാസം ${monthNum} ഫിസിക് (Day ${dayNum})`
+            : `👑 Stage 2 • Month ${monthNum} Physique Split (Day ${dayNum})`,
+          planTitle: db.lang === 'ml'
+            ? 'ലോവർ ബോഡി & സിക്സ്-പാക്ക് കോർ പവർ'
+            : 'Lower Body Power, Athleticism & Six-Pack Core',
+          coachText,
+          split: 'lower',
+          exercises: [
+            {
+              id: 's2_bulgarian',
+              emoji: '🔥',
+              nameEn: 'Bulgarian Split Squats (Rear Foot on Bed)',
+              nameMl: 'ബൾഗേറിയൻ സ്പ്ലിറ്റ് സ്ക്വാട്ട്സ് (ഒരു കാൽ കട്ടിലിൽ)',
+              setsEn: '4 Sets × 10–12 each leg (Rest 60s)',
+              setsMl: '4 സെറ്റ് × 10–12 വീതം ഓരോ കാലും',
+              tipEn: 'King of home leg exercises—builds strong quads & boosts natural growth hormones.',
+              tipMl: 'വീട്ടിൽ ചെയ്യാവുന്ന ഏറ്റവും മികച്ച ലെഗ് എക്സർസൈസ് — കാലുകൾക്ക് നല്ല കരുത്തും ഷേപ്പും വരും.'
+            },
+            {
+              id: 's2_jumpsquat',
+              emoji: '⚡',
+              nameEn: 'Explosive Jump Squats + Wall Sit',
+              nameMl: 'ജമ്പ് സ്ക്വാട്ട്സ് + വാൾ സിറ്റ് (Wall Sit)',
+              setsEn: '3 Sets × 12 Jumps + 40s Wall Sit',
+              setsMl: '3 സെറ്റ് × 12 ജമ്പ് + 40s വാൾ സിറ്റ്',
+              tipEn: 'Increases running speed, leg endurance & calorie burn.',
+              tipMl: 'ഓട്ടത്തിന്റെ സ്പീഡും സ്റ്റാമിനയും ഇരട്ടിയാക്കും.'
+            },
+            {
+              id: 's2_hamstring',
+              emoji: '🦵',
+              nameEn: 'Single-Leg Glute Bridges + Calf Raises',
+              nameMl: 'സിംഗിൾ-ലെഗ് ഗ്ലൂട്ട് ബ്രിഡ്ജ് + കാൽഫ് റെയ്സസ്',
+              setsEn: '3 Sets × 12/leg + 20 Calf Raises',
+              setsMl: '3 സെറ്റ് × 12 വീതം + 20 കാൽഫ് റെയ്സസ്',
+              tipEn: 'Sculpts hamstrings, glutes & athletic calves.',
+              tipMl: 'കാലിന്റെ പിൻഭാഗത്തിനും കാൽഫിനും നല്ല ഷേപ്പ് നൽകുന്നു.'
+            },
+            {
+              id: 's2_legraises',
+              emoji: '🍫',
+              nameEn: 'Lying Leg Raises (Lower Abs)',
+              nameMl: 'ലയിംഗ് ലെഗ് റെയ്സസ് (താഴത്തെ വയറ് കുറയാൻ)',
+              setsEn: '4 Sets × 14–16 reps (Rest 30s)',
+              setsMl: '4 സെറ്റ് × 14–16 എണ്ണം (30s വിശ്രമം)',
+              tipEn: 'Targets stubborn lower belly fat; keep lower back pressed to floor.',
+              tipMl: 'അടിവയറിലെ കൊഴുപ്പ് കുറച്ച് ലോവർ ആബ്സ് തെളിയിക്കാൻ.'
+            },
+            {
+              id: 's2_bicycle',
+              emoji: '🚴',
+              nameEn: 'Slow Bicycle Crunches + Mountain Climbers',
+              nameMl: 'ബൈസിക്കിൾ ക്രഞ്ചസ് + മൗണ്ടൻ ക്ലൈംബേഴ്സ്',
+              setsEn: '3 Sets × 20 Crunches + 35s Climbers',
+              setsMl: '3 സെറ്റ് × 20 ക്രഞ്ചസ് + 35s ക്ലൈംബേഴ്സ്',
+              tipEn: 'Shreds obliques & finishes core with high heart rate.',
+              tipMl: 'വയറിന്റെ വശങ്ങളിലെ മസിലുകൾക്ക് നല്ല ഷേപ്പ് നൽകുന്നു.'
+            }
+          ]
+        };
+      }
+
+      // Active Split: 'full' (Athletic Conditioning & Calisthenics Flow)
+      return {
+        stageBadge: db.lang === 'ml'
+          ? `👑 ഘട്ടം 2 • മാസം ${monthNum} ഫിസിക് (Day ${dayNum})`
+          : `👑 Stage 2 • Month ${monthNum} Physique Split (Day ${dayNum})`,
+        planTitle: db.lang === 'ml'
+          ? 'അത്‌ലറ്റിക് ഫുൾ-ബോഡി & കാലിസ്തെനിക്സ് ഫ്ലോ'
+          : 'Athletic Full-Body Conditioning & Calisthenics Flow',
+        coachText,
+        split: 'full',
+        exercises: [
+          {
+            id: 's2_burpees',
+            emoji: '🔥',
+            nameEn: 'Chest-to-Floor Burpees',
+            nameMl: 'ഫുൾ ബർപീസ് (Burpees)',
+            setsEn: '4 Sets × 10–12 reps (Rest 45s)',
+            setsMl: '4 സെറ്റ് × 10–12 എണ്ണം (45s വിശ്രമം)',
+            tipEn: 'Full-body explosive conditioning for lean, shredded athletics.',
+            tipMl: 'ശരീരത്തിലെ കൊഴുപ്പ് വേഗം കുറയ്ക്കാനും സ്റ്റാമിന കൂട്ടാനും.'
+          },
+          {
+            id: 's2_archer',
+            emoji: '🏹',
+            nameEn: 'Archer / Wide-to-Close Push-ups',
+            nameMl: 'ആർച്ചർ / വൈഡ് പുഷ്-അപ്സ്',
+            setsEn: '3 Sets × 12–15 reps (Rest 45s)',
+            setsMl: '3 സെറ്റ് × 12–15 എണ്ണം (45s വിശ്രമം)',
+            tipEn: 'Builds unilateral chest & shoulder strength.',
+            tipMl: 'നെഞ്ചിനും ഷോൾഡറിനും നല്ല വീതിയും ബലവും നൽകുന്നു.'
+          },
+          {
+            id: 's2_pull_hold',
+            emoji: '🦍',
+            nameEn: 'Pull-ups + Top Chin-over-Bar Hold',
+            nameMl: 'പുൾ-അപ്സ് + ടോപ്പ് ഹോൾഡ്',
+            setsEn: '3 Sets × 8 reps + 10s Hold',
+            setsMl: '3 സെറ്റ് × 8 എണ്ണം + 10s ഹോൾഡ്',
+            tipEn: 'Maximizes back & bicep time under tension.',
+            tipMl: 'മസിൽ വളർച്ച വേഗത്തിലാക്കാൻ.'
+          },
+          {
+            id: 's2_plank_taps',
+            emoji: '🧱',
+            nameEn: 'Plank Shoulder Taps + Superman Back Hold',
+            nameMl: 'പ്ലാങ്ക് ഷോൾഡർ ടാപ്സ് + സൂപ്പർമാൻ ഹോൾഡ്',
+            setsEn: '3 Sets × 20 Taps + 30s Superman',
+            setsMl: '3 സെറ്റ് × 20 ടാപ്സ് + 30s സൂപ്പർമാൻ',
+            tipEn: 'Balances front core and posterior chain posture.',
+            tipMl: 'നട്ടെല്ലിനും വയറിനും ഒരുപോലെ ബലം നൽകുന്നു.'
+          }
+        ]
+      };
+    }
+
+    // =========================================================
+    // 3. DATE & STATS COMPUTATION
     // =========================================================
     function getTodayISO() {
       const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const d = String(now.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     }
 
     function parseLocalDate(isoStr) {
       if (!isoStr || typeof isoStr !== 'string') {
-        const now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const n = new Date();
+        return new Date(n.getFullYear(), n.getMonth(), n.getDate());
       }
       const parts = isoStr.split('-').map(Number);
       if (parts.length !== 3 || parts.some(isNaN)) {
-        const now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const n = new Date();
+        return new Date(n.getFullYear(), n.getMonth(), n.getDate());
       }
       return new Date(parts[0], parts[1] - 1, parts[2]);
     }
@@ -744,19 +1278,14 @@
     }
 
     function formatDateLong(dateObj) {
-      return dateObj.toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      });
+      return dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
     }
 
     function getCurrentTimelineDay(user) {
       const start = parseLocalDate(user.startDate);
       const now = new Date();
-      const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const diff = Math.floor((todayMidnight - start) / (1000 * 60 * 60 * 24)) + 1;
+      const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diff = Math.floor((todayMid - start) / (1000 * 60 * 60 * 24)) + 1;
       if (diff < 1) return 1;
       if (!user.lifetimeUnlocked && diff > STAGE1_DAYS) return STAGE1_DAYS;
       return diff;
@@ -765,7 +1294,7 @@
     function getMaxAccessibleDay(user) {
       if (!user.lifetimeUnlocked) return STAGE1_DAYS;
       const timelineDay = getCurrentTimelineDay(user);
-      const loggedKeys = Object.keys(user.days || {}).map(Number).filter((n) => !isNaN(n));
+      const loggedKeys = Object.keys(user.days || {}).map(Number);
       const maxLogged = loggedKeys.length > 0 ? Math.max(...loggedKeys) : STAGE1_DAYS;
       return Math.max(STAGE1_DAYS + 10, timelineDay + 5, maxLogged);
     }
@@ -777,7 +1306,10 @@
         (user.habits || DEFAULT_HABITS).forEach((h) => {
           taskMap[h.id] = false;
         });
-        user.days[dayNum] = { tasks: taskMap, note: '' };
+        user.days[dayNum] = { tasks: taskMap, workouts: {}, note: '' };
+      }
+      if (!user.days[dayNum].workouts) {
+        user.days[dayNum].workouts = {};
       }
     }
 
@@ -786,100 +1318,73 @@
       return db.users[db.activeUsername] || null;
     }
 
-    function createNewUserObject(name, username, pin, startDate) {
-      const userObj = {
-        username,
-        name,
-        pin: pin || '',
-        startDate: startDate || getTodayISO(),
-        lifetimeUnlocked: false,
-        unlockedAt: null,
-        habits: JSON.parse(JSON.stringify(DEFAULT_HABITS)),
-        days: {},
-        createdAt: new Date().toISOString()
-      };
-      for (let d = 1; d <= STAGE1_DAYS; d++) {
-        ensureDayExists(userObj, d);
-      }
-      return userObj;
-    }
-
     function computeUserStats(user) {
       const habits = user.habits || DEFAULT_HABITS;
-      const totalHabitsPerDay = Math.max(1, habits.length);
-      const maxDay = getMaxAccessibleDay(user);
+      const habitCount = habits.length || 6;
 
-      // Stage 1 (Days 1–30) Metrics
       let stage1CompletedTasks = 0;
-      const stage1TotalTasks = STAGE1_DAYS * totalHabitsPerDay;
+      const stage1TotalTasks = STAGE1_DAYS * habitCount;
       let stage1StrongDays = 0;
 
       for (let d = 1; d <= STAGE1_DAYS; d++) {
-        ensureDayExists(user, d);
-        const tasks = user.days[d].tasks || {};
-        let dayDone = 0;
-        habits.forEach((h) => {
-          if (tasks[h.id]) dayDone++;
-        });
-        stage1CompletedTasks += dayDone;
-        if (dayDone / totalHabitsPerDay >= 0.8) {
-          stage1StrongDays++;
-        }
+        const dayObj = user.days && user.days[d];
+        if (!dayObj || !dayObj.tasks) continue;
+        const done = habits.filter((h) => Boolean(dayObj.tasks[h.id])).length;
+        stage1CompletedTasks += done;
+        if (done / habitCount >= 0.8) stage1StrongDays++;
       }
 
       const stage1Percent = Math.round((stage1CompletedTasks / stage1TotalTasks) * 100);
       const isEligibleToUnlock =
         stage1Percent >= UNLOCK_MIN_PERCENT || stage1StrongDays >= UNLOCK_MIN_STRONG_DAYS;
 
-      // Overall Metrics (including Day 31+ if Lifetime Unlocked)
+      const maxDay = getMaxAccessibleDay(user);
       let allCompletedTasks = 0;
       let allStrongDays = 0;
+      let activeDaysCount = 0;
+      let currentRun = 0;
       let bestStreak = 0;
-      let runningStreak = 0;
 
-      const scanLimit = user.lifetimeUnlocked ? maxDay : STAGE1_DAYS;
-      for (let d = 1; d <= scanLimit; d++) {
-        ensureDayExists(user, d);
-        const tasks = user.days[d].tasks || {};
-        let dayDone = 0;
-        habits.forEach((h) => {
-          if (tasks[h.id]) dayDone++;
-        });
-        allCompletedTasks += dayDone;
-        const isStrong = dayDone / totalHabitsPerDay >= 0.8;
-        if (isStrong) {
+      for (let d = 1; d <= maxDay; d++) {
+        const dayObj = user.days && user.days[d];
+        const done = dayObj && dayObj.tasks
+          ? habits.filter((h) => Boolean(dayObj.tasks[h.id])).length
+          : 0;
+
+        if (done > 0 || d <= getCurrentTimelineDay(user)) {
+          activeDaysCount++;
+          allCompletedTasks += done;
+        }
+
+        if (done / habitCount >= 0.8) {
           allStrongDays++;
-          runningStreak++;
-          if (runningStreak > bestStreak) bestStreak = runningStreak;
+          currentRun++;
+          if (currentRun > bestStreak) bestStreak = currentRun;
         } else {
-          runningStreak = 0;
+          currentRun = 0;
         }
       }
 
-      const activeJourneyDays = Math.max(1, getCurrentTimelineDay(user));
-      const allPossibleUpToToday = activeJourneyDays * totalHabitsPerDay;
-      const lifetimePercent = Math.min(
-        100,
-        Math.round((allCompletedTasks / Math.max(1, allPossibleUpToToday)) * 100)
-      );
+      const lifetimeTotalPossible = Math.max(1, activeDaysCount * habitCount);
+      const lifetimePercent = Math.min(100, Math.round((allCompletedTasks / lifetimeTotalPossible) * 100));
 
       return {
-        totalHabitsPerDay,
+        habitCount,
         stage1CompletedTasks,
         stage1TotalTasks,
-        stage1Percent,
         stage1StrongDays,
+        stage1Percent,
         isEligibleToUnlock,
         allCompletedTasks,
         allStrongDays,
-        bestStreak,
         lifetimePercent,
+        bestStreak,
         maxDay
       };
     }
 
     // =========================================================
-    // 4. UI UTILITIES (THEME, TOAST, MODAL)
+    // 4. THEME, LANGUAGE, TIMER, TOAST & MODAL
     // =========================================================
     function applyTheme() {
       const htmlEl = document.documentElement;
@@ -899,6 +1404,61 @@
       applyTheme();
     }
 
+    function applyLanguage() {
+      const lang = db.lang === 'ml' ? 'ml' : 'en';
+      const dict = I18N[lang];
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      const labelText = lang === 'en' ? 'EN | മലയാളം' : 'മലയാളം | EN';
+      const b1 = document.getElementById('auth-lang-btn');
+      const b2 = document.getElementById('app-lang-btn');
+      if (b1) b1.textContent = labelText;
+      if (b2) b2.textContent = labelText;
+
+      renderAssessmentPickers();
+      renderSettingsSelects();
+      renderTimetableRows();
+    }
+
+    function toggleLanguage() {
+      db.lang = db.lang === 'en' ? 'ml' : 'en';
+      saveDB();
+      applyLanguage();
+      if (getActiveUser()) {
+        renderDashboard();
+      } else {
+        renderAuthScreen();
+      }
+      showToast(db.lang === 'ml' ? 'ഭാഷ: മലയാളം / Manglish' : 'Language: English');
+    }
+
+    function startRestTimer(seconds) {
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      restSecondsLeft = seconds;
+      const disp = document.getElementById('rest-timer-display');
+      const updateDisp = () => {
+        const mins = String(Math.floor(restSecondsLeft / 60)).padStart(2, '0');
+        const secs = String(restSecondsLeft % 60).padStart(2, '0');
+        if (disp) disp.textContent = `${mins}:${secs}`;
+      };
+      updateDisp();
+      restTimerInterval = setInterval(() => {
+        restSecondsLeft--;
+        if (restSecondsLeft <= 0) {
+          clearInterval(restTimerInterval);
+          restTimerInterval = null;
+          restSecondsLeft = 45;
+          if (disp) disp.textContent = '00:45';
+          showToast(db.lang === 'ml' ? '⏱️ വിശ്രമം കഴിഞ്ഞു! അടുത്ത സെറ്റ് തുടങ്ങാം 💪' : '⏱️ Rest complete! Start your next set 💪');
+        } else {
+          updateDisp();
+        }
+      }, 1000);
+    }
+
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -913,10 +1473,7 @@
       toast.textContent = message;
       container.appendChild(toast);
 
-      requestAnimationFrame(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      });
-
+      requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
@@ -956,36 +1513,108 @@
 
       confirmBtn.onclick = () => {
         if (onConfirm) {
-          const shouldClose = onConfirm();
-          if (shouldClose === false) return;
+          const ok = onConfirm();
+          if (ok === false) return;
         }
         closeModal();
       };
     }
 
     // =========================================================
-    // 5. AUTH SCREEN & LOGIN / PROFILE FLOW
+    // 5. AUTH SCREEN & BODY ASSESSMENT PICKERS
     // =========================================================
-    function switchAuthPanel(mode) {
-      const regTab = document.getElementById('auth-tab-register');
-      const signTab = document.getElementById('auth-tab-signin');
+    function renderAssessmentPickers() {
+      const isMl = db.lang === 'ml';
+
+      const btWrap = document.getElementById('body-type-options');
+      if (btWrap) {
+        btWrap.innerHTML = '';
+        BODY_TYPES.forEach((bt) => {
+          const active = regBodyType === bt.id;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `p-2.5 rounded-xl border text-left transition ${
+            active
+              ? 'border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+              : 'border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-700 dark:text-gray-300 hover:border-emerald-500/40'
+          }`;
+          btn.innerHTML = `
+            <div class="text-xs font-extrabold">${bt.emoji} ${isMl ? bt.ml : bt.en}</div>
+            <div class="text-[10px] opacity-80 mt-0.5">${isMl ? bt.descMl : bt.descEn}</div>
+          `;
+          btn.onclick = () => {
+            regBodyType = bt.id;
+            renderAssessmentPickers();
+          };
+          btWrap.appendChild(btn);
+        });
+      }
+
+      const tgWrap = document.getElementById('target-goal-options');
+      if (tgWrap) {
+        tgWrap.innerHTML = '';
+        TARGET_GOALS.forEach((tg) => {
+          const active = regTargetGoal === tg.id;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `p-2.5 rounded-xl border text-left transition ${
+            active
+              ? 'border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+              : 'border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-700 dark:text-gray-300 hover:border-emerald-500/40'
+          }`;
+          btn.innerHTML = `
+            <div class="text-xs font-extrabold">${tg.emoji} ${isMl ? tg.ml : tg.en}</div>
+            <div class="text-[10px] opacity-80 mt-0.5">${isMl ? tg.descMl : tg.descEn}</div>
+          `;
+          btn.onclick = () => {
+            regTargetGoal = tg.id;
+            renderAssessmentPickers();
+          };
+          tgWrap.appendChild(btn);
+        });
+      }
+
+      const expWrap = document.getElementById('exp-level-options');
+      if (expWrap) {
+        expWrap.innerHTML = '';
+        EXP_LEVELS.forEach((el) => {
+          const active = regExpLevel === el.id;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `p-2.5 rounded-xl border text-left transition ${
+            active
+              ? 'border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+              : 'border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-700 dark:text-gray-300 hover:border-emerald-500/40'
+          }`;
+          btn.innerHTML = `
+            <div class="text-xs font-extrabold">${el.emoji} ${isMl ? el.ml : el.en}</div>
+            <div class="text-[10px] opacity-80 mt-0.5">${isMl ? el.descMl : el.descEn}</div>
+          `;
+          btn.onclick = () => {
+            regExpLevel = el.id;
+            renderAssessmentPickers();
+          };
+          expWrap.appendChild(btn);
+        });
+      }
+    }
+
+    function switchAuthPanel(panel) {
       const regPanel = document.getElementById('auth-panel-register');
       const signPanel = document.getElementById('auth-panel-signin');
+      const regTab = document.getElementById('auth-tab-register');
+      const signTab = document.getElementById('auth-tab-signin');
 
-      if (mode === 'signin') {
-        signTab.className =
-          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
-        regTab.className =
-          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
-        signPanel.classList.remove('hidden');
-        regPanel.classList.add('hidden');
-      } else {
-        regTab.className =
-          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
-        signTab.className =
-          'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
+      if (panel === 'register') {
         regPanel.classList.remove('hidden');
         signPanel.classList.add('hidden');
+        regTab.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
+        signTab.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
+      } else {
+        regPanel.classList.add('hidden');
+        signPanel.classList.remove('hidden');
+        signTab.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
+        regTab.className = 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white';
       }
     }
 
@@ -994,9 +1623,9 @@
       document.getElementById('app-screen').classList.add('hidden');
 
       const startInput = document.getElementById('reg-start-date');
-      if (startInput && !startInput.value) {
-        startInput.value = getTodayISO();
-      }
+      if (startInput && !startInput.value) startInput.value = getTodayISO();
+
+      renderAssessmentPickers();
 
       const usernames = Object.keys(db.users);
       document.getElementById('auth-user-count').textContent = usernames.length;
@@ -1009,7 +1638,7 @@
           <div class="text-center py-6 space-y-2">
             <div class="text-3xl">🌱</div>
             <p class="text-xs sm:text-sm font-bold text-slate-700 dark:text-gray-300">No profiles on this device yet</p>
-            <p class="text-xs text-slate-500 dark:text-gray-400">Switch to "New Profile (Day 1)" to start your streak!</p>
+            <p class="text-xs text-slate-500 dark:text-gray-400">Create a profile to start your Day 1 transformation!</p>
           </div>
         `;
         switchAuthPanel('register');
@@ -1021,30 +1650,26 @@
         const stats = computeUserStats(u);
         const initials = (u.name || uname).slice(0, 2).toUpperCase();
         const isLifetime = Boolean(u.lifetimeUnlocked);
+        const goalObj = TARGET_GOALS.find((g) => g.id === u.goal) || TARGET_GOALS[0];
 
         const row = document.createElement('div');
-        row.className =
-          'flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 transition';
+        row.className = 'flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 hover:border-emerald-500/50 transition';
 
         row.innerHTML = `
           <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-xl ${
-              isLifetime ? 'bg-amber-500 text-gray-950' : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-            } font-extrabold text-xs flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 rounded-xl ${isLifetime ? 'bg-amber-500 text-gray-950' : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'} font-extrabold text-xs flex items-center justify-center shrink-0">
               ${initials}
             </div>
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
                 <span class="text-sm font-extrabold truncate">${u.name}</span>
                 ${u.pin ? '<span class="text-[11px]" title="PIN Protected">🔒</span>' : ''}
-                ${
-                  isLifetime
-                    ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-extrabold">👑 Lifetime ∞</span>'
-                    : '<span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 text-[10px] font-bold">Stage 1</span>'
-                }
+                ${isLifetime
+                  ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 text-[10px] font-extrabold">👑 Stage 2 ∞</span>'
+                  : '<span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 text-[10px] font-bold">Stage 1</span>'}
               </div>
               <p class="text-[11px] text-slate-500 dark:text-gray-400 truncate">
-                @${u.username} • Day ${getCurrentTimelineDay(u)} • ${stats.allStrongDays} strong days
+                @${u.username} • ${goalObj.emoji} ${goalObj.en} • Day ${getCurrentTimelineDay(u)}
               </p>
             </div>
           </div>
@@ -1129,17 +1754,14 @@
     }
 
     // =========================================================
-    // 6. LIFETIME BANNER & STAGE 1 -> STAGE 2 UNLOCK LOGIC
+    // 6. STAGE 1 -> STAGE 2 (2–4 MONTH PHYSIQUE & LIFETIME) BANNER
     // =========================================================
     function renderLifetimeBanner(user, stats) {
       const banner = document.getElementById('lifetime-banner');
+      const isMl = db.lang === 'ml';
 
       if (user.lifetimeUnlocked) {
-        const unlockedDateStr = user.unlockedAt
-          ? formatDateShort(new Date(user.unlockedAt))
-          : 'Earned';
-        banner.className =
-          'rounded-2xl p-4 sm:p-5 border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-emerald-500/10 shadow-sm gold-glow';
+        banner.className = 'rounded-2xl p-4 sm:p-5 border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-emerald-500/10 shadow-sm gold-glow';
         banner.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3">
@@ -1148,70 +1770,69 @@
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-500">Lifetime Mode Unlocked ∞</span>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-500">Permanent Pass</span>
+                  <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-500">
+                    ${isMl ? 'ഘട്ടം 2 അൺലോക്ക് ആയി: 2–4 മാസം ഫിസിക് & Lifetime ∞' : 'Stage 2 Unlocked: 2–4 Month Physique & Lifetime ∞'}
+                  </span>
                 </div>
                 <p class="text-xs text-slate-700 dark:text-gray-300 mt-0.5">
-                  30-Day Foundation conquered (${stats.stage1Percent}% score)! Unlimited days, rolling blocks & milestone badges active (${unlockedDateStr}).
+                  ${isMl
+                    ? `ആദ്യ 30 ദിവസം പൂർത്തിയാക്കി (${stats.stage1Percent}%)! ഇനി 2–4 മാസം കൊണ്ട് നല്ല ഫിസിക് ഉണ്ടാക്കാനുള്ള അഡ്വാൻസ്ഡ് ഹോം വർക്കൗട്ട് Workout ടാബിൽ ലഭ്യമാണ്.`
+                    : `30-Day Body Set conquered (${stats.stage1Percent}%)! Progressive Upper/Lower/Athletic hypertrophy splits & unlimited days are now active.`}
                 </p>
               </div>
             </div>
             <div class="text-right shrink-0">
-              <span class="text-xs font-extrabold text-emerald-500 block">${stats.allStrongDays} Total Strong Days</span>
-              <span class="text-[11px] text-slate-500 dark:text-gray-400">Next badge: ${
-                (BADGE_LEVELS.find((b) => b.days > stats.allStrongDays) || { title: 'Maxed 👑' }).title
-              }</span>
+              <span class="text-xs font-extrabold text-emerald-500 block">${stats.allStrongDays} Strong Days</span>
+              <span class="text-[11px] text-slate-500 dark:text-gray-400">Next badge: ${(BADGE_LEVELS.find((b) => b.days > stats.allStrongDays) || { title: 'Maxed 👑' }).title}</span>
             </div>
           </div>
         `;
         return;
       }
 
-      // Stage 1: Foundation Trial (Days 1–30)
       const pctProgress = Math.min(100, Math.round((stats.stage1Percent / UNLOCK_MIN_PERCENT) * 100));
       const daysProgress = Math.min(100, Math.round((stats.stage1StrongDays / UNLOCK_MIN_STRONG_DAYS) * 100));
       const gateBarPct = Math.max(pctProgress, daysProgress);
 
       if (stats.isEligibleToUnlock) {
-        banner.className =
-          'rounded-2xl p-4 sm:p-5 border border-amber-500/50 bg-gradient-to-r from-emerald-500/15 via-amber-500/15 to-amber-500/5 shadow-sm gold-glow';
+        banner.className = 'rounded-2xl p-4 sm:p-5 border border-amber-500/50 bg-gradient-to-r from-emerald-500/15 via-amber-500/15 to-amber-500/5 shadow-sm gold-glow';
         banner.innerHTML = `
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="space-y-1">
               <div class="flex items-center gap-2">
                 <span class="text-lg">🎉</span>
                 <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-500">
-                  Stage 1 Complete! Lifetime Mode Ready
+                  ${isMl ? 'ആദ്യ 30 ദിവസം പൂർത്തിയായി! 2–4 മാസം ഫിസിക് സ്റ്റേജ് തുറക്കാം' : 'Month 1 Body Set Complete! Unlock 2–4 Month Physique Stage'}
                 </span>
               </div>
               <p class="text-xs text-slate-700 dark:text-gray-300">
-                You hit <strong>${stats.stage1Percent}%</strong> overall (${stats.stage1StrongDays}/30 strong days). Claim your permanent Lifetime Pass now!
+                ${isMl
+                  ? `നിങ്ങൾ ${stats.stage1Percent}% സ്കോർ നേടി (${stats.stage1StrongDays}/30 നല്ല ദിവസങ്ങൾ). ഇപ്പോൾ തന്നെ ഘട്ടം 2 തുറക്കൂ!`
+                  : `You achieved ${stats.stage1Percent}% overall (${stats.stage1StrongDays}/30 strong days). Claim your Stage 2 Physique & Lifetime Pass!`}
               </p>
             </div>
             <button id="btn-claim-lifetime" type="button" class="px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 transition shrink-0">
-              Verify & Unlock Lifetime Mode 👑
+              ${isMl ? 'ഘട്ടം 2 & Lifetime തുറക്കുക 👑' : 'Unlock 2–4 Mo Physique & Lifetime 👑'}
             </button>
           </div>
         `;
-
         document.getElementById('btn-claim-lifetime').onclick = () => {
           user.lifetimeUnlocked = true;
           user.unlockedAt = new Date().toISOString();
-          for (let d = 31; d <= 40; d++) {
-            ensureDayExists(user, d);
-          }
+          for (let d = 31; d <= 40; d++) ensureDayExists(user, d);
           saveDB();
           renderDashboard();
-          showToast('👑 Lifetime Mode Unlocked! Unlimited days active ∞', 'gold');
+          showToast('👑 Stage 2 Physique & Lifetime Mode Unlocked! ∞', 'gold');
         };
       } else {
-        banner.className =
-          'rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm space-y-2.5';
+        banner.className = 'rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm space-y-2.5';
         banner.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="text-base">🔒</span>
-              <span class="text-xs sm:text-sm font-extrabold">Stage 1: 30-Day Foundation Gate</span>
+              <span class="text-xs sm:text-sm font-extrabold">
+                ${isMl ? 'ഘട്ടം 1: ആദ്യ 30 ദിവസം ബോഡി സെറ്റ് → 2–4 മാസം ഫിസിക്' : 'Stage 1: 30-Day Body Set → Unlocks 2–4 Month Physique'}
+              </span>
             </div>
             <span class="text-[11px] font-bold text-amber-500">
               Goal: ≥${UNLOCK_MIN_PERCENT}% Score OR ≥${UNLOCK_MIN_STRONG_DAYS} Strong Days
@@ -1222,7 +1843,7 @@
           </div>
           <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-gray-400">
             <span>Current: <strong class="text-emerald-500">${stats.stage1Percent}%</strong> score • <strong class="text-emerald-500">${stats.stage1StrongDays}/${UNLOCK_MIN_STRONG_DAYS}</strong> strong days</span>
-            <span>Unlocks Lifetime ∞</span>
+            <span>Unlocks Stage 2 ∞</span>
           </div>
         `;
       }
@@ -1240,36 +1861,27 @@
 
       const stats = computeUserStats(user);
       const timelineDay = getCurrentTimelineDay(user);
+      const btObj = BODY_TYPES.find((b) => b.id === user.bodyType) || BODY_TYPES[1];
+      const tgObj = TARGET_GOALS.find((g) => g.id === user.goal) || TARGET_GOALS[0];
 
-      // Header Info
-      document.getElementById('header-avatar').textContent = (user.name || user.username)
-        .slice(0, 2)
-        .toUpperCase();
+      document.getElementById('header-avatar').textContent = (user.name || user.username).slice(0, 2).toUpperCase();
       document.getElementById('header-user-name').textContent = user.name;
 
       const stageBadge = document.getElementById('header-stage-badge');
       if (user.lifetimeUnlocked) {
-        stageBadge.textContent = `👑 Lifetime ∞ • Day ${timelineDay}`;
-        stageBadge.className =
-          'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-500 shrink-0';
+        stageBadge.textContent = `👑 Physique Stage 2 • Day ${timelineDay}`;
+        stageBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/20 text-amber-500 shrink-0';
       } else {
         stageBadge.textContent = `Stage 1 • Day ${timelineDay}/30`;
-        stageBadge.className =
-          'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0';
+        stageBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0';
       }
 
-      const startFmt = formatDateShort(parseLocalDate(user.startDate));
-      const end30Fmt = formatDateShort(getDateForUserDay(user, 30));
-      document.getElementById('header-date-range').textContent = user.lifetimeUnlocked
-        ? `@${user.username} • Started ${startFmt} • Unlimited Mode`
-        : `@${user.username} • ${startFmt} – ${end30Fmt}`;
+      document.getElementById('header-date-range').textContent = `${btObj.emoji} ${db.lang === 'ml' ? btObj.ml : btObj.en} → ${tgObj.emoji} ${db.lang === 'ml' ? tgObj.ml : tgObj.en}`;
 
-      // Lifetime Gate Banner
       renderLifetimeBanner(user, stats);
 
-      // Top 4 Stats Cards
       if (user.lifetimeUnlocked) {
-        document.getElementById('stat-label-1').textContent = 'Lifetime Consistency';
+        document.getElementById('stat-label-1').textContent = 'Lifetime Score';
         document.getElementById('stat-percent').textContent = `${stats.lifetimePercent}%`;
         document.getElementById('stat-tasks-ratio').textContent = `${stats.allCompletedTasks} done`;
         document.getElementById('stat-progress-bar').style.width = `${stats.lifetimePercent}%`;
@@ -1282,9 +1894,9 @@
 
         document.getElementById('stat-current-day').textContent = `Day ${timelineDay}`;
         document.getElementById('stat-denom-4').textContent = '∞';
-        document.getElementById('stat-days-left').textContent = 'Lifetime Member';
+        document.getElementById('stat-days-left').textContent = 'Physique Stage 2';
       } else {
-        document.getElementById('stat-label-1').textContent = '30-Day Progress';
+        document.getElementById('stat-label-1').textContent = '30-Day Score';
         document.getElementById('stat-percent').textContent = `${stats.stage1Percent}%`;
         document.getElementById('stat-tasks-ratio').textContent = `${stats.stage1CompletedTasks}/${stats.stage1TotalTasks}`;
         document.getElementById('stat-progress-bar').style.width = `${stats.stage1Percent}%`;
@@ -1293,17 +1905,18 @@
         document.getElementById('stat-label-3').textContent = 'Strong Days (≥80%)';
         document.getElementById('stat-perfect-days').textContent = stats.stage1StrongDays;
         document.getElementById('stat-denom-3').textContent = `/ ${UNLOCK_MIN_STRONG_DAYS} goal`;
-        document.getElementById('stat-sub-3').textContent = 'Needed for Lifetime';
+        document.getElementById('stat-sub-3').textContent = 'Unlocks 2–4 Mo Physique';
 
         document.getElementById('stat-current-day').textContent = `Day ${timelineDay}`;
         document.getElementById('stat-denom-4').textContent = 'of 30';
         const left = Math.max(0, STAGE1_DAYS - timelineDay);
-        document.getElementById('stat-days-left').textContent =
-          left === 0 ? 'Final Day!' : `${left} days remaining`;
+        document.getElementById('stat-days-left').textContent = left === 0 ? 'Final Day!' : `${left} days left`;
       }
 
       renderChecklistSection(user, stats);
+      renderWorkoutSection(user);
       renderProgressMapSection(user, stats);
+      renderSettingsSelects(user);
     }
 
     function renderChecklistSection(user, stats) {
@@ -1312,6 +1925,7 @@
       if (selectedDay > maxDay) selectedDay = maxDay;
 
       ensureDayExists(user, selectedDay);
+      const isMl = db.lang === 'ml';
 
       const stage1Controls = document.getElementById('stage1-week-controls');
       const stage2Controls = document.getElementById('stage2-block-controls');
@@ -1331,21 +1945,16 @@
 
         document.querySelectorAll('.week-btn').forEach((btn) => {
           const w = Number(btn.dataset.week);
-          if (w === activeWeek) {
-            btn.className =
-              'week-btn py-2 rounded-xl text-xs font-extrabold border border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 transition';
-          } else {
-            btn.className =
-              'week-btn py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-500 dark:text-gray-400 hover:border-slate-300 dark:hover:border-gray-700 transition';
-          }
+          btn.className = w === activeWeek
+            ? 'week-btn py-2 rounded-xl text-xs font-extrabold border border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 transition'
+            : 'week-btn py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-500 dark:text-gray-400 hover:border-slate-300 dark:hover:border-gray-700 transition';
         });
 
         const milestone = WEEK_MILESTONES[activeWeek];
         document.getElementById('milestone-icon').textContent = '🎯';
-        document.getElementById('week-title').textContent = milestone.title;
-        document.getElementById('week-desc').textContent = milestone.desc;
+        document.getElementById('week-title').textContent = isMl ? milestone.titleMl : milestone.titleEn;
+        document.getElementById('week-desc').textContent = isMl ? milestone.descMl : milestone.descEn;
       } else {
-        // Stage 2 Lifetime Rolling 10-Day Blocks (31-40, 41-50, etc.)
         stage1Controls.classList.add('hidden');
         stage2Controls.classList.remove('hidden');
 
@@ -1356,9 +1965,12 @@
 
         document.getElementById('lifetime-block-label').textContent = `Days ${blockStart} – ${blockEnd}`;
         document.getElementById('milestone-icon').textContent = '👑';
-        document.getElementById('week-title').textContent = `Lifetime Mode ∞ • Block ${blockIdx + 1}`;
-        document.getElementById('week-desc').textContent =
-          'Consistency is now part of your identity. Keep logging ≥80% days to earn permanent 60, 90, 180 & 365-day badges.';
+        document.getElementById('week-title').textContent = isMl
+          ? `ഘട്ടം 2 ഫിസിക് മോഡ് ∞ • ബ്ലോക്ക് ${blockIdx + 1}`
+          : `Stage 2 Physique Mode ∞ • Block ${blockIdx + 1}`;
+        document.getElementById('week-desc').textContent = isMl
+          ? '2–4 മാസത്തെ ഫിസിക് ട്രാൻസ്ഫോർമേഷൻ വർക്കൗട്ടും അച്ചടക്കവും തുടരുക!'
+          : 'Stay consistent with your progressive Upper/Lower/Athletic home workouts & 10:30 PM recovery sleep.';
 
         document.getElementById('btn-prev-block').onclick = () => {
           selectedDay = Math.max(1, blockStart - 10);
@@ -1372,7 +1984,6 @@
         };
       }
 
-      // Render Day Pills inside the strip
       const habits = user.habits || DEFAULT_HABITS;
       for (let d = blockStart; d <= blockEnd; d++) {
         ensureDayExists(user, d);
@@ -1403,7 +2014,6 @@
         stripEl.appendChild(pill);
       }
 
-      // Active Day Header & Progress
       const dayDate = getDateForUserDay(user, selectedDay);
       const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
       const dayData = user.days[selectedDay];
@@ -1414,29 +2024,31 @@
       document.getElementById('selected-day-date').textContent = formatDateLong(dayDate);
 
       const typeBadge = document.getElementById('selected-day-type-badge');
-      typeBadge.textContent = isWeekend ? '🌴 Weekend Routine' : '🏫 School Day';
+      typeBadge.textContent = isWeekend ? (isMl ? '🌴 അവധി ദിവസം' : '🌴 Weekend') : (isMl ? '🏫 സ്കൂൾ ദിവസം' : '🏫 School Day');
       typeBadge.className = isWeekend
         ? 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-amber-500/15 text-amber-500'
         : 'px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
 
       const countBadge = document.getElementById('selected-day-badge');
-      countBadge.textContent = `${doneCount}/${habits.length} Done (${dayPct}%)`;
-      countBadge.className =
-        doneCount / habits.length >= 0.8
-          ? 'px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/20 text-emerald-500'
-          : 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
+      countBadge.textContent = `${doneCount}/${habits.length} (${dayPct}%)`;
+      countBadge.className = doneCount / habits.length >= 0.8
+        ? 'px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/20 text-emerald-500'
+        : 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
 
       document.getElementById('day-progress-bar').style.width = `${dayPct}%`;
 
-      // Render Checklist Habit Rows
       const taskListEl = document.getElementById('task-list');
       taskListEl.innerHTML = '';
 
       habits.forEach((habit) => {
         const isChecked = Boolean(dayData.tasks[habit.id]);
-        const titleText = isWeekend && habit.weekendTitle ? habit.weekendTitle : habit.weekdayTitle;
+        const titleText = isWeekend
+          ? (isMl && habit.weekendTitleMl ? habit.weekendTitleMl : habit.weekendTitle || habit.weekdayTitle)
+          : (isMl && habit.weekdayTitleMl ? habit.weekdayTitleMl : habit.weekdayTitle);
         const timeText = isWeekend && habit.weekendTime ? habit.weekendTime : habit.weekdayTime;
-        const subText = isWeekend && habit.weekendSub ? habit.weekendSub : habit.weekdaySub;
+        const subText = isWeekend
+          ? (isMl && habit.weekendSubMl ? habit.weekendSubMl : habit.weekendSub || habit.weekdaySub)
+          : (isMl && habit.weekdaySubMl ? habit.weekdaySubMl : habit.weekdaySub);
 
         const card = document.createElement('div');
         card.className = `group flex items-center justify-between gap-3 p-3.5 rounded-2xl border cursor-pointer select-none transition-all ${
@@ -1460,35 +2072,31 @@
                 <span class="text-xs sm:text-sm font-extrabold ${
                   isChecked ? 'line-through text-slate-500 dark:text-gray-400' : 'text-slate-900 dark:text-white'
                 }">${titleText}</span>
-                ${
-                  timeText
-                    ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200/70 dark:bg-gray-800 text-slate-600 dark:text-gray-300">${timeText}</span>`
-                    : ''
-                }
+                ${timeText ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200/70 dark:bg-gray-800 text-slate-600 dark:text-gray-300">${timeText}</span>` : ''}
               </div>
-              ${
-                subText
-                  ? `<p class="text-[11px] sm:text-xs text-slate-500 dark:text-gray-400 mt-0.5">${subText}</p>`
-                  : ''
-              }
+              ${subText ? `<p class="text-[11px] sm:text-xs text-slate-500 dark:text-gray-400 mt-0.5">${subText}</p>` : ''}
             </div>
           </div>
-          ${
-            habit.isCustom
-              ? `<button type="button" class="remove-habit-btn p-2 rounded-xl text-xs text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 shrink-0" title="Remove Custom Habit">✕</button>`
-              : ''
-          }
+          ${habit.id === 'workout'
+            ? `<button type="button" class="open-workout-btn px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white transition shrink-0">Sets ▶</button>`
+            : habit.isCustom
+            ? `<button type="button" class="remove-habit-btn p-2 rounded-xl text-xs text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 shrink-0" title="Remove">✕</button>`
+            : ''}
         `;
 
+        if (habit.id === 'workout') {
+          card.querySelector('.open-workout-btn').onclick = (e) => {
+            e.stopPropagation();
+            switchMainTab('workout');
+          };
+        }
+
         if (habit.isCustom) {
-          const removeBtn = card.querySelector('.remove-habit-btn');
-          removeBtn.onclick = (e) => {
+          card.querySelector('.remove-habit-btn').onclick = (e) => {
             e.stopPropagation();
             user.habits = user.habits.filter((h) => h.id !== habit.id);
             Object.keys(user.days || {}).forEach((dKey) => {
-              if (user.days[dKey] && user.days[dKey].tasks) {
-                delete user.days[dKey].tasks[habit.id];
-              }
+              if (user.days[dKey] && user.days[dKey].tasks) delete user.days[dKey].tasks[habit.id];
             });
             saveDB();
             renderDashboard();
@@ -1500,7 +2108,6 @@
           dayData.tasks[habit.id] = !isChecked;
           saveDB();
           renderDashboard();
-
           const updatedDone = habits.filter((h) => dayData.tasks[h.id]).length;
           if (!isChecked && updatedDone === habits.length) {
             showToast(`Day ${selectedDay} 100% Complete! ✅🔥`);
@@ -1510,7 +2117,6 @@
         taskListEl.appendChild(card);
       });
 
-      // Daily Notes Input
       const noteEl = document.getElementById('daily-note');
       noteEl.value = dayData.note || '';
       noteEl.oninput = (e) => {
@@ -1519,8 +2125,111 @@
       };
     }
 
+    // =========================================================
+    // 8. FULL-BODY HOME WORKOUT TAB RENDERING
+    // =========================================================
+    function renderWorkoutSection(user) {
+      ensureDayExists(user, selectedDay);
+      const isMl = db.lang === 'ml';
+      const plan = getWorkoutForDay(user, selectedDay);
+      const dayWorkouts = user.days[selectedDay].workouts || {};
+
+      document.getElementById('workout-stage-pill').textContent = plan.stageBadge;
+      document.getElementById('workout-plan-title').textContent = plan.planTitle;
+      document.getElementById('workout-coach-card').textContent = plan.coachText;
+      document.getElementById('workout-day-heading').textContent = `Day ${selectedDay} • ${isMl ? 'ഇന്നത്തെ ഹോം വർക്കൗട്ട്' : 'Home Workout Sets'}`;
+
+      const splitBar = document.getElementById('stage2-split-bar');
+      if (user.lifetimeUnlocked && selectedDay > 30) {
+        splitBar.classList.remove('hidden');
+        document.querySelectorAll('.split-btn').forEach((btn) => {
+          const isCurrent = btn.dataset.split === plan.split;
+          btn.className = isCurrent
+            ? 'split-btn py-2 px-2 rounded-xl text-xs font-extrabold border border-amber-500 bg-amber-500/20 text-amber-500 transition'
+            : 'split-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-gray-800 bg-slate-50 dark:bg-gray-950 text-slate-600 dark:text-gray-400 transition';
+        });
+      } else {
+        splitBar.classList.add('hidden');
+      }
+
+      const exListEl = document.getElementById('workout-exercise-list');
+      exListEl.innerHTML = '';
+      let completedEx = 0;
+
+      plan.exercises.forEach((ex) => {
+        const isDone = Boolean(dayWorkouts[ex.id]);
+        if (isDone) completedEx++;
+
+        const card = document.createElement('div');
+        card.className = `flex items-start justify-between gap-3 p-3.5 rounded-2xl border cursor-pointer select-none transition-all ${
+          isDone
+            ? 'bg-emerald-500/10 border-emerald-500/40'
+            : 'bg-slate-50/80 dark:bg-gray-950 border-slate-200 dark:border-gray-800 hover:border-emerald-500/40'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="w-7 h-7 rounded-xl flex items-center justify-center text-sm font-black shrink-0 mt-0.5 transition ${
+              isDone
+                ? 'bg-emerald-500 text-white check-pop shadow-sm'
+                : 'bg-white dark:bg-gray-900 border-2 border-slate-300 dark:border-gray-700 text-transparent'
+            }">
+              ✓
+            </div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-base">${ex.emoji}</span>
+                <span class="text-xs sm:text-sm font-extrabold ${
+                  isDone ? 'line-through text-slate-500 dark:text-gray-400' : 'text-slate-900 dark:text-white'
+                }">${isMl ? ex.nameMl : ex.nameEn}</span>
+              </div>
+              <div class="mt-1">
+                <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                  ${isMl ? ex.setsMl : ex.setsEn}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-gray-400 mt-1 leading-relaxed">
+                ${isMl ? ex.tipMl : ex.tipEn}
+              </p>
+            </div>
+          </div>
+        `;
+
+        card.onclick = () => {
+          dayWorkouts[ex.id] = !isDone;
+          const allDoneNow = plan.exercises.every((item) => Boolean(dayWorkouts[item.id]));
+          if (user.days[selectedDay].tasks && 'workout' in user.days[selectedDay].tasks) {
+            user.days[selectedDay].tasks.workout = allDoneNow;
+          }
+          saveDB();
+          renderDashboard();
+          if (!isDone && allDoneNow) {
+            showToast(isMl ? `💪 Day ${selectedDay} വർക്കൗട്ട് പൂർത്തിയായി! ✅` : `💪 Day ${selectedDay} Workout Completed! ✅`);
+          }
+        };
+
+        exListEl.appendChild(card);
+      });
+
+      document.getElementById('workout-done-badge').textContent = `${completedEx}/${plan.exercises.length} Done`;
+
+      document.getElementById('btn-complete-all-workout').onclick = () => {
+        plan.exercises.forEach((ex) => {
+          dayWorkouts[ex.id] = true;
+        });
+        if (user.days[selectedDay].tasks && 'workout' in user.days[selectedDay].tasks) {
+          user.days[selectedDay].tasks.workout = true;
+        }
+        saveDB();
+        renderDashboard();
+        showToast(isMl ? `💪 Day ${selectedDay} എല്ലാ എക്സർസൈസും ✅ ആയി!` : `💪 All exercises marked ✅ for Day ${selectedDay}!`);
+      };
+    }
+
+    // =========================================================
+    // 9. PROGRESS MAP, TIMETABLE & SETTINGS RENDERING
+    // =========================================================
     function renderProgressMapSection(user, stats) {
-      // 1. Render Milestone Badges
       const badgesGrid = document.getElementById('milestone-badges-grid');
       badgesGrid.innerHTML = '';
       let earnedCount = 0;
@@ -1545,22 +2254,20 @@
 
       document.getElementById('badge-unlocked-count').textContent = `${earnedCount}/${BADGE_LEVELS.length} Earned`;
 
-      // 2. Render Calendar Grid
       const filterBar = document.getElementById('map-filter-bar');
       if (user.lifetimeUnlocked) {
         filterBar.classList.remove('hidden');
-        document.getElementById('map-section-title').textContent = '30-Day + Lifetime Map ∞';
+        document.getElementById('map-section-title').textContent = 'Month 1 + 2–4 Month Physique Map ∞';
       } else {
         filterBar.classList.add('hidden');
-        document.getElementById('map-section-title').textContent = '30-Day Foundation Map';
+        document.getElementById('map-section-title').textContent = '30-Day Body Set Map';
       }
 
       document.querySelectorAll('.map-filter-btn').forEach((btn) => {
         const f = btn.dataset.mapfilter;
-        btn.className =
-          f === mapFilter
-            ? 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white'
-            : 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
+        btn.className = f === mapFilter
+          ? 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white'
+          : 'map-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300';
       });
 
       const gridEl = document.getElementById('calendar-grid');
@@ -1619,9 +2326,77 @@
       }
     }
 
+    function renderTimetableRows() {
+      const isMl = db.lang === 'ml';
+      const weekdaySchedule = [
+        { time: '5:30 – 5:50 AM', en: '🏃‍♂️ Warm-up Walk & Morning Run', ml: '🏃‍♂️ വാം-അപ്പ് നടത്തവും മോണിംഗ് റണ്ണും', hi: true },
+        { time: '5:50 – 6:15 AM', en: '💪 Full-Body Home Workout (Push-ups, Pull-ups/Rows, Squats, Core)', ml: '💪 ഫുൾ-ബോഡി ഹോം വർക്കൗട്ട് (Push-ups, Pull-ups, Squats)', hi: true },
+        { time: '6:15 – 7:15 AM', en: '🚿 Bath, Refresh & High-Protein Breakfast (Eggs/Milk/Banana)', ml: '🚿 കുളി, പ്രോട്ടീൻ ബ്രേക്ക്ഫാസ്റ്റ് (മുട്ട/പാൽ/പഴം)', hi: false },
+        { time: '7:15 – 8:00 AM', en: '🎒 Final Prep & Clear Departure for School', ml: '🎒 ബാഗ്/യൂണിഫോം & കൃത്യം 8:00 AM-ന് സ്കൂളിലേക്ക്', hi: false },
+        { time: '8:00 AM – 6:30 PM', en: '🚌 School Hours & Evening Return', ml: '🚌 സ്കൂൾ സമയം & 6:30 PM-ന് തിരിച്ചെത്തൽ', hi: false },
+        { time: '6:30 – 7:15 PM', en: '☕ Freshen Up, Light Snack (or Evening Workout if skipped AM)', ml: '☕ ഫ്രഷ് ആകുക, ലഘുഭക്ഷണം (രാവിലെ വർക്കൗട്ട് വിട്ടുപോയെങ്കിൽ ഇപ്പോൾ ചെയ്യാം)', hi: false },
+        { time: '7:15 – 8:45 PM', en: '📚 Focused Study Block (1.5 Hrs, Phone Away)', ml: '📚 പഠിത്തം (1.5 മണിക്കൂർ, ഫോൺ മാറ്റി വെച്ച്)', hi: true },
+        { time: '8:45 – 9:45 PM', en: '💬 Lover / Mag Time (Strict 9:45 PM Cut-off)', ml: '💬 ലവർ / പേഴ്സണൽ ടൈം (കൃത്യം 9:45 PM-ന് നിർത്തണം)', hi: true },
+        { time: '9:45 – 10:15 PM', en: '🍽️ Dinner + Pack School Bag & Running Shoes', ml: '🍽️ അത്താഴം + നാളത്തെ ബാഗും ഷൂവും റെഡിയാക്കൽ', hi: false },
+        { time: '10:15 – 10:30 PM', en: '😴 Lights Out & Sleep (7 Hrs Muscle & Brain Recovery)', ml: '😴 10:30 PM-ന് ഉറക്കം (7 മണിക്കൂർ വിശ്രമം)', hi: true }
+      ];
+
+      const weekendSchedule = [
+        { time: '5:30 – 6:05 AM', en: '🏃‍♂️ Longer Easy-Pace Run (25–30 mins)', ml: '🏃‍♂️ ലോംഗ് ഈസി റൺ (25–30 മിനിറ്റ്)', hi: true },
+        { time: '6:05 – 6:35 AM', en: '💪 Full-Body Strength & Core Session', ml: '💪 ഫുൾ-ബോഡി സ്ട്രെങ്ത് & കോർ വർക്കൗട്ട്', hi: true },
+        { time: '8:30 – 11:30 AM', en: '📖 Deep Study & Weekly Backlog Clearance', ml: '📖 രാവിലത്തെ ഡീപ് സ്റ്റഡി & പെൻഡിംഗ് നോട്ട്സ്', hi: true },
+        { time: 'Afternoon / Eve', en: '🎮 Revision, Extra Personal Time & Rest', ml: '🎮 റിവിഷൻ, പേഴ്സണൽ ടൈം & വിശ്രമം', hi: false },
+        { time: 'Before 10:30 PM', en: '😴 Sleep on Time (Ready for Monday 5:30 AM)', ml: '😴 തിങ്കളാഴ്ച 5:30 AM ഓട്ടത്തിനായി നേരത്തെ ഉറക്കം', hi: true }
+      ];
+
+      const wBody = document.getElementById('timetable-weekday-rows');
+      if (wBody) {
+        wBody.innerHTML = weekdaySchedule
+          .map(
+            (r) => `
+          <div class="py-2.5 flex justify-between gap-3">
+            <span class="font-bold ${r.hi ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-gray-400'} whitespace-nowrap">${r.time}</span>
+            <span class="text-slate-700 dark:text-gray-300 text-right">${isMl ? r.ml : r.en}</span>
+          </div>`
+          )
+          .join('');
+      }
+
+      const weBody = document.getElementById('timetable-weekend-rows');
+      if (weBody) {
+        weBody.innerHTML = weekendSchedule
+          .map(
+            (r) => `
+          <div class="py-2.5 flex justify-between gap-3">
+            <span class="font-bold ${r.hi ? 'text-amber-500' : 'text-slate-600 dark:text-gray-400'} whitespace-nowrap">${r.time}</span>
+            <span class="text-slate-700 dark:text-gray-300 text-right">${isMl ? r.ml : r.en}</span>
+          </div>`
+          )
+          .join('');
+      }
+    }
+
+    function renderSettingsSelects(user) {
+      const isMl = db.lang === 'ml';
+      const btSel = document.getElementById('set-body-type');
+      const tgSel = document.getElementById('set-target-goal');
+      const expSel = document.getElementById('set-exp-level');
+      if (!btSel || !tgSel || !expSel) return;
+
+      btSel.innerHTML = BODY_TYPES.map((b) => `<option value="${b.id}">${b.emoji} ${isMl ? b.ml : b.en}</option>`).join('');
+      tgSel.innerHTML = TARGET_GOALS.map((g) => `<option value="${g.id}">${g.emoji} ${isMl ? g.ml : g.en}</option>`).join('');
+      expSel.innerHTML = EXP_LEVELS.map((e) => `<option value="${e.id}">${e.emoji} ${isMl ? e.ml : e.en}</option>`).join('');
+
+      const activeU = user || getActiveUser();
+      if (activeU) {
+        btSel.value = activeU.bodyType || 'average';
+        tgSel.value = activeU.goal || 'athletic';
+        expSel.value = activeU.exp || 'beginner';
+      }
+    }
+
     function switchMainTab(tabName) {
-      const views = ['checklist', 'grid', 'timetable', 'settings'];
-      views.forEach((v) => {
+      ['checklist', 'workout', 'grid', 'timetable', 'settings'].forEach((v) => {
         const el = document.getElementById(`view-${v}`);
         if (el) {
           if (v === tabName) el.classList.remove('hidden');
@@ -1630,18 +2405,14 @@
       });
 
       document.querySelectorAll('.tab-btn').forEach((btn) => {
-        if (btn.dataset.tab === tabName) {
-          btn.className =
-            'tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm';
-        } else {
-          btn.className =
-            'tab-btn py-2.5 px-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition';
-        }
+        btn.className = btn.dataset.tab === tabName
+          ? 'tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-bold transition bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
+          : 'tab-btn py-2.5 px-1 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition';
       });
     }
 
     // =========================================================
-    // 8. BACKUP & IMPORT MODAL
+    // 10. BACKUP MODAL & INITIALIZATION
     // =========================================================
     function openBackupModal() {
       const jsonStr = JSON.stringify(db, null, 2);
@@ -1654,7 +2425,7 @@
             <button id="modal-copy-json" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 transition">
               📋 Copy Backup
             </button>
-            <span class="text-[11px] text-slate-400">Click "Restore JSON" to load pasted data</span>
+            <span class="text-[11px] text-slate-400">Tap "Restore JSON" to load pasted data</span>
           </div>
         `,
         confirmText: 'Restore JSON',
@@ -1669,13 +2440,12 @@
             db.users = parsed.users;
             db.activeUsername = parsed.activeUsername || null;
             db.theme = parsed.theme || db.theme;
+            db.lang = parsed.lang || db.lang;
             saveDB();
             applyTheme();
-            if (getActiveUser()) {
-              renderDashboard();
-            } else {
-              renderAuthScreen();
-            }
+            applyLanguage();
+            if (getActiveUser()) renderDashboard();
+            else renderAuthScreen();
             showToast('Backup restored successfully! ✅');
             return true;
           } catch (err) {
@@ -1702,23 +2472,34 @@
       }, 50);
     }
 
-    // =========================================================
-    // 9. INITIALIZATION & EVENT WIRING
-    // =========================================================
     window.addEventListener('DOMContentLoaded', () => {
       loadDB();
       applyTheme();
+      applyLanguage();
 
-      // Theme Buttons
+      // Theme & Language Switchers
       document.getElementById('auth-theme-btn').onclick = toggleTheme;
       document.getElementById('app-theme-btn').onclick = toggleTheme;
+      document.getElementById('auth-lang-btn').onclick = toggleLanguage;
+      document.getElementById('app-lang-btn').onclick = toggleLanguage;
+
+      // Rest Timers
+      document.getElementById('btn-timer-start').onclick = () => startRestTimer(45);
+      document.getElementById('btn-timer-60').onclick = () => startRestTimer(60);
+
+      // Stage 2 Split Selector Buttons
+      document.querySelectorAll('.split-btn').forEach((btn) => {
+        btn.onclick = () => {
+          stage2SplitOverride = btn.dataset.split;
+          renderDashboard();
+        };
+      });
 
       // Auth Panel Switchers
       document.getElementById('auth-tab-register').onclick = () => switchAuthPanel('register');
       document.getElementById('auth-tab-signin').onclick = () => switchAuthPanel('signin');
       document.getElementById('btn-auth-import').onclick = openBackupModal;
 
-      // Inline Error Helpers
       const showAuthError = (msg) => {
         const box = document.getElementById('auth-error-msg');
         if (box) {
@@ -1736,7 +2517,7 @@
         }
       };
 
-      // Register New User Form ("Start My Day 1 Now 🚀")
+      // Register New User Form
       document.getElementById('register-form').addEventListener('submit', (e) => {
         e.preventDefault();
         clearAuthError();
@@ -1751,17 +2532,15 @@
           const pin = document.getElementById('reg-pin').value.trim();
 
           if (!name) {
-            showAuthError('Please enter your Name or Nickname.');
+            showAuthError(db.lang === 'ml' ? 'ദയവായി നിങ്ങളുടെ പേര് നൽകുക.' : 'Please enter your Name or Nickname.');
             return;
           }
           if (!cleanUsername) {
-            showAuthError('Please enter a Username using letters or numbers.');
+            showAuthError(db.lang === 'ml' ? 'ദയവായി ഒരു യൂസർനെയിം നൽകുക.' : 'Please enter a Username using letters or numbers.');
             return;
           }
           if (db.users[cleanUsername]) {
-            showAuthError(
-              `Username "@${cleanUsername}" already exists! Pick another username or sign in under "Sign In".`
-            );
+            showAuthError(`Username "@${cleanUsername}" already exists! Pick another or sign in.`);
             return;
           }
           if (pin && !/^\d{4}$/.test(pin)) {
@@ -1769,27 +2548,39 @@
             return;
           }
 
-          const newUser = createNewUserObject(name, cleanUsername, pin, startDate);
-          db.users[cleanUsername] = newUser;
+          const newUser = {
+            username: cleanUsername,
+            name,
+            pin: pin || '',
+            startDate,
+            bodyType: regBodyType,
+            goal: regTargetGoal,
+            exp: regExpLevel,
+            lifetimeUnlocked: false,
+            unlockedAt: null,
+            habits: JSON.parse(JSON.stringify(DEFAULT_HABITS)),
+            days: {},
+            createdAt: new Date().toISOString()
+          };
+          for (let d = 1; d <= STAGE1_DAYS; d++) ensureDayExists(newUser, d);
 
+          db.users[cleanUsername] = newUser;
           document.getElementById('register-form').reset();
           document.getElementById('reg-start-date').value = getTodayISO();
-
           completeLogin(cleanUsername);
         } catch (err) {
-          console.error('Profile creation error:', err);
-          showAuthError('Could not start Day 1. Please check your details and try again.');
+          console.error(err);
+          showAuthError('Could not start Day 1. Please try again.');
         }
       });
 
-      // Logout / Switch User
+      // Switch User / Logout
       const handleLogout = () => {
         db.activeUsername = null;
         saveDB();
         renderAuthScreen();
-        if (Object.keys(db.users).length > 0) {
-          switchAuthPanel('signin');
-        }
+        if (Object.keys(db.users).length > 0) switchAuthPanel('signin');
+        showToast('Switched to profile screen 👤');
       };
       document.getElementById('btn-logout').onclick = handleLogout;
       document.getElementById('btn-switch-from-settings').onclick = handleLogout;
@@ -1818,7 +2609,7 @@
         };
       });
 
-      // Prev / Next Day Navigation
+      // Prev / Next Day
       document.getElementById('prev-day').onclick = () => {
         if (selectedDay > 1) {
           selectedDay--;
@@ -1845,33 +2636,37 @@
         (user.habits || DEFAULT_HABITS).forEach((h) => {
           user.days[selectedDay].tasks[h.id] = true;
         });
+        const plan = getWorkoutForDay(user, selectedDay);
+        plan.exercises.forEach((ex) => {
+          user.days[selectedDay].workouts[ex.id] = true;
+        });
         saveDB();
         renderDashboard();
-        showToast(`All habits marked ✅ for Day ${selectedDay}!`);
+        showToast(`All habits & workout marked ✅ for Day ${selectedDay}!`);
       };
 
-      // Add Custom Habit Modal
+      // Add Custom Habit
       document.getElementById('btn-add-habit').onclick = () => {
         const user = getActiveUser();
         if (!user) return;
 
         openCustomModal({
           title: 'Add Custom Daily Habit',
-          desc: 'Add an extra daily habit to your checklist (e.g., 3L Water, No Junk Food, Reading).',
+          desc: 'Add an extra daily habit (e.g., 3L Water, 4 Boiled Eggs, No Sugar).',
           bodyHTML: `
             <div class="grid grid-cols-4 gap-2">
               <div class="col-span-1">
                 <label class="block text-[11px] font-bold mb-1">Emoji</label>
-                <input id="custom-habit-emoji" type="text" maxlength="4" value="💧" class="w-full text-center rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-2 py-2.5 text-base" />
+                <input id="custom-habit-emoji" type="text" maxlength="4" value="🥚" class="w-full text-center rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-2 py-2.5 text-base" />
               </div>
               <div class="col-span-3">
                 <label class="block text-[11px] font-bold mb-1">Habit Title *</label>
-                <input id="custom-habit-title" type="text" maxlength="40" placeholder="e.g., Drink 3L Water" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
+                <input id="custom-habit-title" type="text" maxlength="40" placeholder="e.g., Protein Intake / 3L Water" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
               </div>
             </div>
             <div>
-              <label class="block text-[11px] font-bold mb-1">Short Subtitle / Goal (Optional)</label>
-              <input id="custom-habit-sub" type="text" maxlength="60" placeholder="e.g., Stay hydrated throughout school" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
+              <label class="block text-[11px] font-bold mb-1">Short Subtitle (Optional)</label>
+              <input id="custom-habit-sub" type="text" maxlength="60" placeholder="e.g., Fuel muscle growth & recovery" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3 py-2.5 text-sm" />
             </div>
           `,
           confirmText: 'Add Habit',
@@ -1908,6 +2703,18 @@
         });
       };
 
+      // Save Physique Profile in Settings
+      document.getElementById('btn-save-physique').onclick = () => {
+        const user = getActiveUser();
+        if (!user) return;
+        user.bodyType = document.getElementById('set-body-type').value;
+        user.goal = document.getElementById('set-target-goal').value;
+        user.exp = document.getElementById('set-exp-level').value;
+        saveDB();
+        renderDashboard();
+        showToast('Physique profile updated! Workout adapted 💪');
+      };
+
       // Map Filter Pills
       document.querySelectorAll('.map-filter-btn').forEach((btn) => {
         btn.onclick = () => {
@@ -1916,7 +2723,7 @@
         };
       });
 
-      // Backup, Change Start Date & Reset Buttons
+      // Backup, Change Start Date & Reset
       document.getElementById('btn-export-backup').onclick = openBackupModal;
 
       document.getElementById('btn-change-start').onclick = () => {
@@ -1925,9 +2732,7 @@
         openCustomModal({
           title: 'Change Day 1 Start Date',
           desc: 'Pick the calendar date that corresponds to your Day 1.',
-          bodyHTML: `
-            <input id="modal-start-date" type="date" value="${user.startDate}" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm" />
-          `,
+          bodyHTML: `<input id="modal-start-date" type="date" value="${user.startDate}" class="w-full rounded-xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-gray-800 px-3.5 py-2.5 text-sm" />`,
           confirmText: 'Update Date',
           onConfirm: () => {
             const val = document.getElementById('modal-start-date').value;
@@ -1947,16 +2752,14 @@
         if (!user) return;
         openCustomModal({
           title: `Reset All Progress for ${user.name}?`,
-          desc: 'All daily checkmarks and notes will be cleared back to Day 1.',
+          desc: 'All daily checkmarks, workouts, and notes will be cleared back to Day 1.',
           confirmText: 'Yes, Reset Everything',
           confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
           onConfirm: () => {
             user.days = {};
             user.lifetimeUnlocked = false;
             user.unlockedAt = null;
-            for (let d = 1; d <= STAGE1_DAYS; d++) {
-              ensureDayExists(user, d);
-            }
+            for (let d = 1; d <= STAGE1_DAYS; d++) ensureDayExists(user, d);
             selectedDay = 1;
             saveDB();
             renderDashboard();
@@ -1966,7 +2769,7 @@
         });
       };
 
-      // Boot: Check Active Session vs Auth Screen
+      // Boot
       const activeUser = getActiveUser();
       if (activeUser) {
         selectedDay = getCurrentTimelineDay(activeUser);
